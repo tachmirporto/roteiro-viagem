@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Roteiro Detalhado — Editor</title>
+<style>
+:root{--bg:#0e0f11;--surf:#16181c;--surf2:#1e2026;--surf3:#24272e;--bd:#2a2d35;--tx:#e8eaf0;--mut:#7a7f8e;--dim:#4a4f5e;--ok:#00d4aa;--okd:rgba(0,212,170,.12);--ac2:#6c8eff;--ac2d:rgba(108,142,255,.12);--warn:#ffb84d;--warnd:rgba(255,184,77,.12);--bad:#ff6b6b;--badd:rgba(255,107,107,.12);--r:10px;--rs:6px;--f:'Space Grotesk',sans-serif;--m:'Space Mono',monospace}
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;line-height:1.6;padding-bottom:100px}
+.hd{background:var(--surf);border-bottom:1px solid var(--bd);padding:16px 24px;display:flex;gap:16px;align-items:center;position:sticky;top:0;z-index:100}
+.hd .t{font-family:var(--m);font-size:13px;color:var(--ok);letter-spacing:.08em;text-transform:uppercase}
+.hd .s{font-size:12px;color:var(--mut);margin-left:auto}
+.ctn{max-width:980px;margin:0 auto;padding:24px}
+.info{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;font-size:12.5px;color:var(--mut);margin-bottom:20px}
+.info b{color:var(--ok)}
+.sect{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin:24px 0 14px;font-family:var(--m);display:flex;gap:10px;align-items:center}
+.sect:first-child{margin-top:0}
+.pcard{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.pcard.new{border-color:rgba(0,212,170,.4);background:rgba(0,212,170,.04)}
+.ph{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer}
+.ph:hover{background:var(--surf2)}
+.ph .flag{font-size:22px}
+.ph input.nm{background:none;border:none;color:var(--tx);font-family:var(--f);font-size:14px;font-weight:600;width:160px;padding:4px 6px;border-radius:var(--rs)}
+.ph input.nm:focus{background:var(--surf3);outline:1px solid var(--ok)}
+.ph .per{font-family:var(--m);font-size:11px;color:var(--mut);white-space:nowrap}
+.ph .db{font-family:var(--m);font-size:12px;font-weight:700;color:var(--ok);background:var(--okd);padding:3px 10px;border-radius:99px;white-space:nowrap}
+.ph .sg{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;white-space:nowrap}
+.sy{background:var(--okd);color:var(--ok)}.sn{background:var(--ac2d);color:var(--ac2)}
+.ph .chv{color:var(--dim);margin-left:auto;transition:.2s;flex-shrink:0}
+.ph.on .chv{transform:rotate(180deg)}
+.rmv{background:none;border:none;color:var(--dim);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:var(--rs);flex-shrink:0}
+.rmv:hover{color:var(--bad);background:var(--badd)}
+.pb{display:none;padding:0 18px 16px}
+.pb.on{display:block}
+.mrow{display:flex;gap:16px;margin-bottom:14px;padding:10px 0;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.mfld{display:flex;flex-direction:column;gap:3px}
+.mfld label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.mfld input,.mfld select{background:var(--surf2);border:1px solid var(--bd);color:var(--tx);font-family:var(--m);font-size:12px;padding:6px 8px;border-radius:var(--rs);width:130px}
+.mfld input:focus,.mfld select:focus{outline:1px solid var(--ok)}
+.ccard{background:var(--surf2);border:1px solid var(--bd);border-radius:var(--rs);margin-bottom:8px}
+.ch{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer}
+.ch:hover{background:var(--surf3)}
+.ch .icn{font-size:14px;color:var(--dim)}
+.ch input.nm{background:none;border:none;color:var(--tx);font-family:var(--f);font-size:13px;font-weight:500;width:140px;padding:3px 6px;border-radius:var(--rs)}
+.ch input.nm:focus{background:var(--surf3);outline:1px solid var(--ok)}
+.ch input.dd{background:var(--surf3);border:1px solid var(--bd);color:var(--ok);font-family:var(--m);font-size:11px;width:42px;padding:3px 4px;border-radius:var(--rs);text-align:center}
+.ch .dl{font-size:11px;color:var(--dim)}
+.ch .chv{color:var(--dim);margin-left:auto;transition:.2s;font-size:12px}
+.ch.on .chv{transform:rotate(180deg)}
+.cb{display:none;padding:0 14px 12px}
+.cb.on{display:block}
+.poi{display:grid;grid-template-columns:1fr 110px 90px auto;gap:8px;align-items:center;padding:8px 10px;background:var(--surf3);border-radius:var(--rs);margin-bottom:6px}
+.poi input{background:var(--surf);border:1px solid var(--bd);color:var(--tx);font-family:var(--f);font-size:12px;padding:6px 8px;border-radius:var(--rs);width:100%}
+.poi input[type=date]{font-family:var(--m);font-size:11px}
+.poi input.vlr{font-family:var(--m);color:var(--ok)}
+.poi input:focus{outline:1px solid var(--ok)}
+.add{background:none;border:1px dashed var(--bd);color:var(--mut);font-family:var(--f);font-size:12px;padding:8px 14px;border-radius:var(--rs);cursor:pointer;width:100%;text-align:left}
+.add:hover{border-color:var(--ok);color:var(--ok);background:var(--okd)}
+.addpais{margin-top:14px;padding:12px 16px}
+.bar{position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--bd);padding:14px 24px;display:flex;align-items:center;gap:16px;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.bar .info2{font-size:12px;color:var(--mut);flex:1}
+.bar .info2 b{color:var(--tx)}
+.benv{background:var(--ok);color:#08110d;border:none;font-family:var(--f);font-size:14px;font-weight:700;padding:12px 24px;border-radius:var(--rs);cursor:pointer}
+.benv:hover{background:#00e8bb}
+.benv:disabled{background:var(--bd);color:var(--dim);cursor:not-allowed}
+.pend{font-family:var(--m);font-size:11px;background:var(--warnd);color:var(--warn);padding:4px 10px;border-radius:99px;white-space:nowrap}
+.ovl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:24px}
+.ovl.on{display:flex}
+.panel{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:24px}
+.panel h2{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ritem{border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;font-size:12.5px}
+.ritem.ok{border-color:rgba(0,212,170,.3);background:rgba(0,212,170,.05)}
+.ritem.warn{border-color:rgba(255,184,77,.3);background:rgba(255,184,77,.05)}
+.ritem.danger{border-color:rgba(255,107,107,.3);background:rgba(255,107,107,.05)}
+.ritem .tg{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px;display:block}
+.ritem.ok .tg{color:var(--ok)}.ritem.warn .tg{color:var(--warn)}.ritem.danger .tg{color:var(--bad)}
+.racts{display:flex;gap:10px;margin-top:16px}
+.racts button{flex:1;padding:10px;border-radius:var(--rs);font-family:var(--f);font-weight:600;font-size:13px;cursor:pointer;border:none}
+.bconf{background:var(--ok);color:#08110d}
+.bcanc{background:var(--surf2);color:var(--mut);border:1px solid var(--bd) !important}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="hd"><div class="t">✏️ Roteiro Detalhado</div><div class="s">Edite países, cidades e pontos de interesse</div></div>
+<div class="ctn">
+  <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Adicione cidades e pontos de interesse (data + valor de ingresso). Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
+  <div class="sect">Países do roteiro <span id="cnt" style="color:var(--dim)"></span></div>
+  <div id="paises"></div>
+  <button class="add addpais" id="btnAddPais">+ Adicionar país</button>
+</div>
+<div class="bar">
+  <div class="info2"><span id="pinfo">Nenhuma alteração pendente</span></div>
+  <span class="pend" id="pbadge" style="display:none">alterações não enviadas</span>
+  <button class="benv" id="benv" disabled>Enviar atualização</button>
+</div>
+<div class="ovl" id="ovl">
+  <div class="panel">
+    <h2>🔍 Revisão das atualizações</h2>
+    <div id="rcontent"></div>
+    <div class="racts"><button class="bcanc" id="bcanc">Revisar mais</button><button class="bconf" id="bconf">Aplicar no roteiro</button></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDOIJLwVb2Qs_sjWE0XkcusBXr-LyxVh7Y",
+  authDomain: "roteiro-viagem-world.firebaseapp.com",
+  projectId: "roteiro-viagem-world",
+  storageBucket: "roteiro-viagem-world.firebasestorage.app",
+  messagingSenderId: "353171475826",
+  appId: "1:353171475826:web:ac2250948400f014b521eb"
+};
+const fbApp = initializeApp(firebaseConfig);
+const dbFs = getFirestore(fbApp);
+
+const META={inicio:"2027-04-01",fim:"2028-03-31",orcamento:160000,schengen_max:90};
+const FLAGS={MA:"🇲🇦",PT:"🇵🇹",ES:"🇪🇸",FR:"🇫🇷",MC:"🇲🇨",IT:"🇮🇹",MT:"🇲🇹",LU:"🇱🇺",BE:"🇧🇪",NL:"🇳🇱",DE:"🇩🇪",AT:"🇦🇹",CH:"🇨🇭",SK:"🇸🇰",BG:"🇧🇬",AL:"🇦🇱",HR:"🇭🇷",GR:"🇬🇷",GB:"🇬🇧",IE:"🇮🇪",DK:"🇩🇰",NO:"🇳🇴",IS:"🇮🇸",SE:"🇸🇪",FI:"🇫🇮",TR:"🇹🇷",EG:"🇪🇬",AE:"🇦🇪",CN:"🇨🇳",NP:"🇳🇵",VN:"🇻🇳",PH:"🇵🇭",ID:"🇮🇩",SG:"🇸🇬",ZA:"🇿🇦",TZ:"🇹🇿",AU:"🇦🇺",NZ:"🇳🇿",TH:"🇹🇭",JP:"🇯🇵",KR:"🇰🇷",BUFFER:"🧳"};
+let PAISES_INDEX=["MA","PT","ES","FR1","MC","IT1","AT1","SK","AT2","DE1","DK","SE","NO","IS","IE","GB","NL","BE","LU","FR2","CH","FR3","IT2","AL","GR","TR","EG","AE","NP","CN","VN","PH","SG","ID","ZA","TZ","TH","AU","NZ","JP","KR"];
+let PAISES_DB={"MA":{"nome":"Marrocos","ini":"2027-04-01","fim":"2027-04-08","dias":7,"sch":0,"dpd":130,"cid":[{"nome":"Marrakech","dias":7,"poi":[],"transp_saida":"avião"}]},"PT":{"nome":"Portugal","ini":"2027-04-09","fim":"2027-04-14","dias":5,"sch":1,"dpd":200,"cid":[{"nome":"Lisboa","dias":5,"poi":[],"transp_saida":"trem"}]},"ES":{"nome":"Espanha","ini":"2027-04-15","fim":"2027-04-22","dias":7,"sch":1,"dpd":220,"cid":[{"nome":"Madrid","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Barcelona","dias":3,"poi":[],"transp_saida":"trem"}]},"FR1":{"nome":"França (1)","ini":"2027-04-23","fim":"2027-04-27","dias":4,"sch":1,"dpd":250,"cid":[{"nome":"Marselha","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Nice","dias":2,"poi":[],"transp_saida":"trem"}]},"MC":{"nome":"Mônaco","ini":"2027-04-28","fim":"2027-04-29","dias":1,"sch":1,"dpd":280,"cid":[{"nome":"Monte Carlo","dias":1,"poi":[],"transp_saida":"trem"}]},"IT1":{"nome":"Itália (Milão-Veneza)","ini":"2027-04-30","fim":"2027-05-05","dias":5,"sch":1,"dpd":230,"cid":[{"nome":"Milão","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Veneza","dias":2,"poi":[],"transp_saida":"trem"}]},"AT1":{"nome":"Áustria (Viena)","ini":"2027-05-06","fim":"2027-05-09","dias":3,"sch":1,"dpd":210,"cid":[{"nome":"Viena","dias":3,"poi":[],"transp_saida":"trem"}]},"SK":{"nome":"Eslováquia","ini":"2027-05-10","fim":"2027-05-12","dias":2,"sch":1,"dpd":120,"cid":[{"nome":"Bratislava","dias":2,"poi":[],"transp_saida":"trem"}]},"AT2":{"nome":"Áustria (Viena retorno)","ini":"2027-05-13","fim":"2027-05-14","dias":1,"sch":1,"dpd":210,"cid":[{"nome":"Viena","dias":1,"poi":[],"transp_saida":"trem"}]},"DE1":{"nome":"Alemanha (Munique-Berlim)","ini":"2027-05-15","fim":"2027-05-20","dias":5,"sch":1,"dpd":200,"cid":[{"nome":"Munique","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Berlim","dias":2,"poi":[],"transp_saida":"trem"}]},"DK":{"nome":"Dinamarca","ini":"2027-05-21","fim":"2027-05-24","dias":3,"sch":1,"dpd":280,"cid":[{"nome":"Copenhague","dias":3,"poi":[],"transp_saida":"trem"}]},"SE":{"nome":"Suécia","ini":"2027-05-25","fim":"2027-05-29","dias":4,"sch":1,"dpd":260,"cid":[{"nome":"Estocolmo","dias":4,"poi":[],"transp_saida":"trem"}]},"NO":{"nome":"Noruega","ini":"2027-05-30","fim":"2027-06-03","dias":4,"sch":1,"dpd":320,"cid":[{"nome":"Oslo","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Bergen","dias":2,"poi":[],"transp_saida":"avião"}]},"IS":{"nome":"Islândia","ini":"2027-06-04","fim":"2027-06-08","dias":4,"sch":1,"dpd":350,"cid":[{"nome":"Reykjavik","dias":4,"poi":[],"transp_saida":"avião"}]},"IE":{"nome":"Irlanda","ini":"2027-06-09","fim":"2027-06-16","dias":7,"sch":0,"dpd":230,"cid":[{"nome":"Dublin","dias":7,"poi":[],"transp_saida":"balsa/trem"}]},"GB":{"nome":"Reino Unido","ini":"2027-06-17","fim":"2027-07-02","dias":15,"sch":0,"dpd":280,"cid":[{"nome":"Edimburgo","dias":8,"poi":[],"transp_saida":"trem"},{"nome":"Londres","dias":7,"poi":[],"transp_saida":"trem"}]},"NL":{"nome":"Países Baixos","ini":"2027-07-03","fim":"2027-07-06","dias":3,"sch":1,"dpd":220,"cid":[{"nome":"Amsterdã","dias":3,"poi":[],"transp_saida":"trem"}]},"BE":{"nome":"Bélgica","ini":"2027-07-07","fim":"2027-07-09","dias":2,"sch":1,"dpd":210,"cid":[{"nome":"Bruxelas","dias":2,"poi":[],"transp_saida":"trem"}]},"LU":{"nome":"Luxemburgo","ini":"2027-07-10","fim":"2027-07-12","dias":2,"sch":1,"dpd":230,"cid":[{"nome":"Luxemburgo","dias":2,"poi":[],"transp_saida":"trem"}]},"FR2":{"nome":"França (Paris)","ini":"2027-07-13","fim":"2027-07-17","dias":4,"sch":1,"dpd":250,"cid":[{"nome":"Paris","dias":4,"poi":[],"transp_saida":"trem"}]},"CH":{"nome":"Suíça","ini":"2027-07-18","fim":"2027-07-21","dias":3,"sch":1,"dpd":320,"cid":[{"nome":"Zurique","dias":3,"poi":[],"transp_saida":"trem"}]},"FR3":{"nome":"França (Lyon)","ini":"2027-07-22","fim":"2027-07-25","dias":3,"sch":1,"dpd":250,"cid":[{"nome":"Lyon","dias":3,"poi":[],"transp_saida":"trem"}]},"IT2":{"nome":"Itália (Turim-Bari)","ini":"2027-07-26","fim":"2027-08-07","dias":12,"sch":1,"dpd":230,"cid":[{"nome":"Turim","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Florença","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Roma","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Nápoles","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Bari","dias":2,"poi":[],"transp_saida":"barco"}]},"AL":{"nome":"Albânia","ini":"2027-08-08","fim":"2027-08-15","dias":7,"sch":0,"dpd":90,"cid":[{"nome":"Durrës","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Berat","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Gjirokastër","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Ksamil/Dhërmi","dias":1,"poi":[],"transp_saida":"ônibus"}]},"GR":{"nome":"Grécia","ini":"2027-08-16","fim":"2027-08-22","dias":6,"sch":1,"dpd":160,"cid":[{"nome":"Meteora","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Trikala","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Atenas","dias":1,"poi":[],"transp_saida":"balsa"},{"nome":"Mykonos/Santorini","dias":1,"poi":[],"transp_saida":"balsa"},{"nome":"Atenas (retorno)","dias":1,"poi":[],"transp_saida":"barco"},{"nome":"Ilha de Chios","dias":1,"poi":[],"transp_saida":"barco"}]},"TR":{"nome":"Turquia","ini":"2027-08-23","fim":"2027-09-02","dias":10,"sch":0,"dpd":130,"cid":[{"nome":"Porto de Çeşme","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Izmir","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Denizli","dias":1,"poi":[],"transp_saida":"taxi"},{"nome":"Pamukkale","dias":1,"poi":[],"transp_saida":"taxi"},{"nome":"Denizli (retorno)","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Göreme/Capadócia","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Aeroporto Nevşehir (NAV)","dias":1,"poi":[],"transp_saida":"avião"},{"nome":"Istambul","dias":1,"poi":[],"transp_saida":"avião"}]},"EG":{"nome":"Egito","ini":"2027-09-03","fim":"2027-09-11","dias":8,"sch":0,"dpd":110,"cid":[{"nome":"Cairo","dias":8,"poi":[],"transp_saida":"avião"}]},"AE":{"nome":"Dubai","ini":"2027-09-12","fim":"2027-09-17","dias":5,"sch":0,"dpd":220,"cid":[{"nome":"Dubai","dias":5,"poi":[],"transp_saida":"avião"}]},"NP":{"nome":"Nepal","ini":"2027-09-18","fim":"2027-09-28","dias":10,"sch":0,"dpd":100,"cid":[{"nome":"Pokhara","dias":5,"poi":[],"transp_saida":"ônibus"},{"nome":"Katmandu","dias":5,"poi":[],"transp_saida":"avião"}]},"CN":{"nome":"China","ini":"2027-09-29","fim":"2027-10-14","dias":15,"sch":0,"dpd":140,"cid":[{"nome":"Pequim","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Xian","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Xangai","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Guilin","dias":3,"poi":[],"transp_saida":"avião"}]},"VN":{"nome":"Vietnã","ini":"2027-10-15","fim":"2027-11-02","dias":18,"sch":0,"dpd":100,"cid":[{"nome":"Hanói","dias":5,"poi":[],"transp_saida":"ônibus"},{"nome":"Hạ Long Bay","dias":5,"poi":[],"transp_saida":"avião"},{"nome":"Hội An","dias":4,"poi":[],"transp_saida":"ônibus"},{"nome":"Aeroporto Da Nang (DAD)","dias":4,"poi":[],"transp_saida":"avião"}]},"PH":{"nome":"Filipinas","ini":"2027-11-03","fim":"2027-11-18","dias":15,"sch":0,"dpd":110,"cid":[{"nome":"Manila","dias":4,"poi":[],"transp_saida":"avião"},{"nome":"Palawan","dias":4,"poi":[],"transp_saida":"avião"},{"nome":"Cebu","dias":4,"poi":[],"transp_saida":"balsa/avião"},{"nome":"Bohol","dias":3,"poi":[],"transp_saida":"avião"}]},"SG":{"nome":"Singapura","ini":"2027-11-19","fim":"2027-11-23","dias":4,"sch":0,"dpd":200,"cid":[{"nome":"Singapura","dias":4,"poi":[],"transp_saida":"avião"}]},"ID":{"nome":"Indonésia","ini":"2027-11-24","fim":"2027-12-18","dias":24,"sch":0,"dpd":110,"cid":[{"nome":"Bali","dias":6,"poi":[],"transp_saida":"balsa/ônibus"},{"nome":"Komodo","dias":6,"poi":[],"transp_saida":null},{"nome":"Yogyakarta","dias":6,"poi":[],"transp_saida":null},{"nome":"Lombok","dias":6,"poi":[],"transp_saida":"avião"}]},"ZA":{"nome":"África do Sul","ini":"2027-12-19","fim":"2027-12-30","dias":11,"sch":0,"dpd":160,"cid":[{"nome":"Cidade do Cabo","dias":11,"poi":[],"transp_saida":"avião"}]},"TZ":{"nome":"Tanzânia","ini":"2027-12-31","fim":"2028-01-09","dias":9,"sch":0,"dpd":180,"cid":[{"nome":"Zanzibar","dias":2,"poi":[],"transp_saida":"avião"},{"nome":"Arusha","dias":2,"poi":[],"transp_saida":"carro"},{"nome":"Ngorongoro","dias":2,"poi":[],"transp_saida":"carro"},{"nome":"Serengeti","dias":1,"poi":[],"transp_saida":"carro"},{"nome":"Mwanza","dias":1,"poi":[],"transp_saida":"avião"},{"nome":"Dar es Salaam","dias":1,"poi":[],"transp_saida":"avião"}]},"TH":{"nome":"Tailândia","ini":"2028-01-10","fim":"2028-01-25","dias":15,"sch":0,"dpd":110,"cid":[{"nome":"Bangkok","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Chiang Mai","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Bangkok (retorno)","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Krabi","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Bangkok (retorno 2)","dias":3,"poi":[],"transp_saida":"avião"}]},"AU":{"nome":"Austrália","ini":"2028-01-26","fim":"2028-02-10","dias":15,"sch":0,"dpd":0,"cid":[{"nome":"Gold Coast","dias":15,"poi":[],"transp_saida":"avião"}]},"NZ":{"nome":"Nova Zelândia","ini":"2028-02-11","fim":"2028-02-23","dias":12,"sch":0,"dpd":200,"cid":[{"nome":"Auckland","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Rotorua","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Auckland (retorno)","dias":2,"poi":[],"transp_saida":"avião"},{"nome":"Queenstown","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Milford Sound","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Queenstown (retorno)","dias":2,"poi":[],"transp_saida":"avião"}]},"JP":{"nome":"Japão","ini":"2028-02-24","fim":"2028-03-09","dias":14,"sch":0,"dpd":200,"cid":[{"nome":"Tóquio","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Quioto","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Osaka","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Hiroshima","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Fukuoka Airport","dias":2,"poi":[],"transp_saida":"avião"}]},"KR":{"nome":"Coreia do Sul","ini":"2028-03-10","fim":"2028-03-20","dias":10,"sch":0,"dpd":150,"cid":[{"nome":"Busan","dias":5,"poi":[],"transp_saida":"trem"},{"nome":"Seul","dias":5,"poi":[],"transp_saida":null}]}};
+
+let pending=false, novosIds=new Set(), counter=0;
+const $=s=>document.querySelector(s);
+const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
+const fmtD=iso=>{const[y,m,d]=iso.split('-');return `${d}/${m}/${y.slice(2)}`};
+const diasEntre=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
+
+function render(){
+  const cont=$('#paises'); cont.innerHTML='';
+  $('#cnt').textContent=`(${PAISES_INDEX.length})`;
+  PAISES_INDEX.forEach(id=>{
+    const p=PAISES_DB[id];
+    const somaC=p.cid.reduce((s,c)=>s+c.dias,0);
+    const mismatch=somaC!==p.dias;
+    const card=el(`<div class="pcard ${novosIds.has(id)?'new':''}" id="pc-${id}">
+      <div class="ph" data-id="${id}">
+        <div class="flag">${FLAGS[id]||'🏳️'}</div>
+        <input class="nm" value="${p.nome}">
+        <span class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</span>
+        <span class="db">${p.dias}d</span>
+        <span class="sg ${p.sch?'sy':'sn'}">${p.sch?'Schengen':'Fora Schengen'}</span>
+        ${mismatch?`<span class="sg" style="background:var(--warnd);color:var(--warn)">⚠ cidades somam ${somaC}d</span>`:''}
+        <button class="rmv" data-rm="${id}">✕</button>
+        <div class="chv">▾</div>
+      </div>
+      <div class="pb" id="pb-${id}">
+        <div class="mrow">
+          <div class="mfld"><label>Data início</label><input type="date" class="f-ini" value="${p.ini}"></div>
+          <div class="mfld"><label>Data fim</label><input type="date" class="f-fim" value="${p.fim}"></div>
+          <div class="mfld"><label>Custo/dia (R$)</label><input type="number" class="f-dpd" value="${p.dpd}"></div>
+          <div class="mfld"><label>Schengen?</label><select class="f-sch"><option value="1" ${p.sch?'selected':''}>Sim</option><option value="0" ${!p.sch?'selected':''}>Não</option></select></div>
+        </div>
+        <div class="cwrap" id="cw-${id}"></div>
+        <button class="add addcid" data-pais="${id}">+ Adicionar cidade em ${p.nome}</button>
+      </div>
+    </div>`);
+    cont.appendChild(card);
+    renderCidades(id);
+  });
+}
+
+function renderCidades(paisId){
+  const p=PAISES_DB[paisId];
+  const wrap=$('#cw-'+paisId); wrap.innerHTML='';
+  p.cid.forEach((c,ci)=>{
+    const card=el(`<div class="ccard">
+      <div class="ch" data-pais="${paisId}" data-ci="${ci}">
+        <span class="icn">📍</span>
+        <input class="nm" value="${c.nome}">
+        <input class="dd" type="number" value="${c.dias}">
+        <span class="dl">dias</span>
+        <input class="nm" style="width:110px" placeholder="transporte →" value="${c.transp_saida||''}" data-transp="${paisId}:${ci}">
+        <button class="rmv" data-rmcid="${paisId}:${ci}">✕</button>
+        <span class="chv">▾</span>
+      </div>
+      <div class="cb" id="cb-${paisId}-${ci}">
+        <div id="poi-${paisId}-${ci}"></div>
+        <button class="add addpoi" data-pais="${paisId}" data-ci="${ci}">+ Adicionar ponto de interesse</button>
+      </div>
+    </div>`);
+    wrap.appendChild(card);
+    renderPois(paisId, ci);
+  });
+}
+
+function renderPois(paisId, ci){
+  const c=PAISES_DB[paisId].cid[ci];
+  const wrap=$(`#poi-${paisId}-${ci}`); if(!wrap)return; wrap.innerHTML='';
+  (c.poi||[]).forEach((poi,pi)=>{
+    const row=el(`<div class="poi">
+      <input type="text" placeholder="Nome do ponto de interesse" value="${poi.nome||''}" data-poi="${paisId}:${ci}:${pi}:nome">
+      <input type="date" value="${poi.data||''}" data-poi="${paisId}:${ci}:${pi}:data">
+      <input type="number" class="vlr" placeholder="R$" value="${poi.valor!=null?poi.valor:''}" data-poi="${paisId}:${ci}:${pi}:valor">
+      <button class="rmv" data-rmpoi="${paisId}:${ci}:${pi}">✕</button>
+    </div>`);
+    wrap.appendChild(row);
+  });
+}
+
+function marcarPendente(){
+  pending=true;
+  $('#pbadge').style.display='inline-block';
+  $('#pinfo').textContent='Você tem alterações não enviadas';
+  $('#benv').disabled=false;
+}
+
+function recalcDias(p){
+  const d=diasEntre(p.ini,p.fim);
+  if(d>0)p.dias=d;
+}
+
+/* ===== Delegação de eventos (1 listener cobre tudo, sem rebind por item) ===== */
+document.body.addEventListener('click', e=>{
+  const ph=e.target.closest('.ph');
+  if(ph && !e.target.matches('input,button')){ph.classList.toggle('on');$('#pb-'+ph.dataset.id).classList.toggle('on');return}
+  const ch=e.target.closest('.ch');
+  if(ch && !e.target.matches('input,button')){ch.classList.toggle('on');$(`#cb-${ch.dataset.pais}-${ch.dataset.ci}`).classList.toggle('on');return}
+  if(e.target.dataset.rm){
+    if(!confirm(`Remover ${PAISES_DB[e.target.dataset.rm].nome} do roteiro?`))return;
+    const id=e.target.dataset.rm;
+    PAISES_INDEX=PAISES_INDEX.filter(x=>x!==id);
+    delete PAISES_DB[id]; novosIds.delete(id);
+    marcarPendente(); render();
+  }
+  if(e.target.dataset.rmcid){
+    const[pid,ci]=e.target.dataset.rmcid.split(':');
+    PAISES_DB[pid].cid.splice(+ci,1);
+    marcarPendente(); render();
+  }
+  if(e.target.dataset.rmpoi){
+    const[pid,ci,pi]=e.target.dataset.rmpoi.split(':');
+    PAISES_DB[pid].cid[+ci].poi.splice(+pi,1);
+    marcarPendente(); renderPois(pid,+ci);
+  }
+  if(e.target.classList.contains('addcid')){
+    const pid=e.target.dataset.pais;
+    PAISES_DB[pid].cid.push({nome:'Nova cidade',dias:1,poi:[]});
+    marcarPendente(); render();
+  }
+  if(e.target.classList.contains('addpoi')){
+    const pid=e.target.dataset.pais, ci=+e.target.dataset.ci;
+    if(!PAISES_DB[pid].cid[ci].poi)PAISES_DB[pid].cid[ci].poi=[];
+    PAISES_DB[pid].cid[ci].poi.push({nome:'',data:'',valor:0});
+    marcarPendente(); renderPois(pid,ci);
+  }
+});
+
+document.body.addEventListener('change', e=>{
+  const ph=e.target.closest('.ph');
+  if(ph && e.target.classList.contains('nm')){PAISES_DB[ph.dataset.id].nome=e.target.value; marcarPendente(); return}
+  const pb=e.target.closest('.pb');
+  if(pb){
+    const id=pb.id.replace('pb-','');
+    const p=PAISES_DB[id];
+    if(e.target.classList.contains('f-ini')){p.ini=e.target.value; recalcDias(p); marcarPendente(); render(); return}
+    if(e.target.classList.contains('f-fim')){p.fim=e.target.value; recalcDias(p); marcarPendente(); render(); return}
+    if(e.target.classList.contains('f-dpd')){p.dpd=parseFloat(e.target.value)||0; marcarPendente(); return}
+    if(e.target.classList.contains('f-sch')){p.sch=parseInt(e.target.value); marcarPendente(); return}
+  }
+  const ch=e.target.closest('.ch');
+  if(ch && e.target.classList.contains('nm')){PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].nome=e.target.value; marcarPendente(); return}
+  if(ch && e.target.classList.contains('dd')){PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].dias=parseInt(e.target.value)||0; marcarPendente(); render(); return}
+  if(e.target.dataset.transp){
+    const[pid,ci]=e.target.dataset.transp.split(':');
+    PAISES_DB[pid].cid[+ci].transp_saida=e.target.value;
+    marcarPendente();
+    return;
+  }
+  if(e.target.dataset.poi){
+    const[pid,ci,pi,campo]=e.target.dataset.poi.split(':');
+    const val=campo==='valor'?(parseFloat(e.target.value)||0):e.target.value;
+    PAISES_DB[pid].cid[+ci].poi[+pi][campo]=val;
+    marcarPendente();
+  }
+});
+
+$('#btnAddPais').onclick=()=>{
+  const id='NOVO'+(++counter);
+  PAISES_DB[id]={nome:'Novo país',ini:META.fim,fim:META.fim,dias:1,sch:0,dpd:150,cid:[]};
+  PAISES_INDEX.push(id); novosIds.add(id); FLAGS[id]='🏳️';
+  marcarPendente(); render();
+  $('#pc-'+id).scrollIntoView({behavior:'smooth',block:'center'});
+};
+
+/* ===== Revisão / Enviar atualização ===== */
+function gerarRevisao(){
+  const findings=[];
+  const primeiro=PAISES_INDEX[0], ultimo=PAISES_INDEX[PAISES_INDEX.length-1];
+  const ini=PAISES_DB[primeiro]?PAISES_DB[primeiro].ini:META.inicio;
+  const fim=PAISES_DB[ultimo]?PAISES_DB[ultimo].fim:META.fim;
+  const dur=diasEntre(ini,fim), limite=diasEntre(META.inicio,META.fim);
+
+  findings.push(dur>limite
+    ? {t:'danger',tag:'⏱ Duração excedida',txt:`Roteiro soma ${dur} dias, ${dur-limite} além do limite de 1 ano (${limite} dias).`}
+    : {t:'ok',tag:'⏱ Duração',txt:`${dur} dias, dentro do limite (margem de ${limite-dur} dias).`});
+
+  const sch=PAISES_INDEX.reduce((s,id)=>s+(PAISES_DB[id].sch?PAISES_DB[id].dias:0),0);
+  findings.push(sch>META.schengen_max
+    ? {t:'danger',tag:'🇪🇺 Limite Schengen excedido',txt:`${sch} dias Schengen, ${sch-META.schengen_max} acima do limite de ${META.schengen_max}. Reduza dias em algum país Schengen.`}
+    : {t:'ok',tag:'🇪🇺 Espaço Schengen',txt:`${sch}/${META.schengen_max} dias — dentro do limite (margem de ${META.schengen_max-sch} dias).`});
+
+  if(PAISES_DB['AU'] && PAISES_DB['AU'].dias>15)
+    findings.push({t:'danger',tag:'🇦🇺 Regra Austrália violada',txt:`Austrália com ${PAISES_DB['AU'].dias} dias, acima do máximo de 15 (casa da Michele em Gold Coast).`});
+
+  PAISES_INDEX.forEach(id=>{
+    const p=PAISES_DB[id];
+    if(!p.cid||!p.cid.length)return;
+    const soma=p.cid.reduce((s,c)=>s+c.dias,0);
+    if(soma!==p.dias) findings.push({t:'warn',tag:`⚠ ${p.nome} — dias não conferem`,txt:`Cidades somam ${soma}d, mas país está com ${p.dias}d. Ajuste recomendado.`});
+  });
+
+  let custo=0;
+  PAISES_INDEX.forEach(id=>{custo+=PAISES_DB[id].dias*(PAISES_DB[id].dpd||0)});
+  const pct=custo/META.orcamento*100;
+  findings.push(pct>100
+    ? {t:'danger',tag:'💰 Orçamento excedido',txt:`R$ ${custo.toLocaleString('pt-BR')} (${pct.toFixed(1)}%). Excedente de R$ ${(custo-META.orcamento).toLocaleString('pt-BR')}.`}
+    : pct>90
+    ? {t:'warn',tag:'💰 Orçamento — atenção',txt:`R$ ${custo.toLocaleString('pt-BR')} (${pct.toFixed(1)}%). Margem de R$ ${(META.orcamento-custo).toLocaleString('pt-BR')}.`}
+    : {t:'ok',tag:'💰 Custo estimado',txt:`R$ ${custo.toLocaleString('pt-BR')} de R$ ${META.orcamento.toLocaleString('pt-BR')} (${pct.toFixed(1)}%). Dentro da meta.`});
+
+  if(novosIds.size>0){
+    const nomes=[...novosIds].map(id=>PAISES_DB[id]?PAISES_DB[id].nome:id).join(', ');
+    findings.push({t:'warn',tag:'🆕 Países novos adicionados',txt:`${nomes}. Verifique manualmente visto, vacina ou seguro diferenciado — não atualizados automaticamente.`});
+  }
+
+  PAISES_INDEX.forEach(id=>{
+    const p=PAISES_DB[id];
+    (p.cid||[]).forEach(c=>(c.poi||[]).forEach(poi=>{
+      if(poi.data && (poi.data<p.ini || poi.data>p.fim))
+        findings.push({t:'warn',tag:`📍 ${poi.nome||'Ponto de interesse'} fora do período`,txt:`Data ${fmtD(poi.data)} fora do período de ${p.nome} (${fmtD(p.ini)} → ${fmtD(p.fim)}).`});
+    }));
+  });
+  return findings;
+}
+
+$('#benv').onclick=()=>{
+  const findings=gerarRevisao();
+  const c=$('#rcontent'); c.innerHTML='';
+  findings.forEach(f=>c.appendChild(el(`<div class="ritem ${f.t}"><span class="tg">${f.tag}</span>${f.txt}</div>`)));
+  const grave=findings.some(f=>f.t==='danger');
+  $('#bconf').textContent=grave?'Aplicar mesmo assim (não recomendado)':'Aplicar no roteiro';
+  $('#bconf').style.background=grave?'var(--bad)':'var(--ok)';
+  $('#ovl').classList.add('on');
+};
+$('#bcanc').onclick=()=>$('#ovl').classList.remove('on');
+$('#bconf').onclick=async()=>{
+  pending=false; novosIds.clear();
+  $('#pbadge').style.display='none';
+  $('#pinfo').textContent='✓ Roteiro e Custos atualizados com sucesso';
+  $('#benv').disabled=true;
+  $('#ovl').classList.remove('on');
+  render();
+  try{
+    await setDoc(doc(dbFs,'config','paises_index'), {ordem: PAISES_INDEX});
+    for(const id of PAISES_INDEX) await setDoc(doc(dbFs,'paises',id), PAISES_DB[id]);
+  }catch(e){console.error(e)}
+  setTimeout(()=>{$('#pinfo').textContent='Nenhuma alteração pendente'},4000);
+};
+
+async function carregarDoFirestore(){
+  try{
+    const snap = await getDocs(collection(dbFs,'paises'));
+    if(snap.empty){ await semear(); return; }
+    const novoDb = {};
+    snap.forEach(d=>{ novoDb[d.id] = d.data(); });
+    const idxSnap = await getDoc(doc(dbFs,'config','paises_index'));
+    if(idxSnap.exists()){
+      PAISES_INDEX.length = 0;
+      idxSnap.data().ordem.forEach(id=>PAISES_INDEX.push(id));
+    }
+    Object.keys(PAISES_DB).forEach(k=>delete PAISES_DB[k]);
+    Object.assign(PAISES_DB, novoDb);
+  }catch(e){ console.error('Erro ao carregar do Firestore, usando dados locais:', e); }
+}
+async function semear(){
+  try{
+    await setDoc(doc(dbFs,'config','meta'), META);
+    await setDoc(doc(dbFs,'config','paises_index'), {ordem: PAISES_INDEX});
+    for(const id of PAISES_INDEX) await setDoc(doc(dbFs,'paises',id), PAISES_DB[id]);
+  }catch(e){console.error('Erro ao semear Firestore:',e)}
+}
+
+(async()=>{
+  await carregarDoFirestore();
+  render();
+})();
+</script>
+</body>
+</html>
