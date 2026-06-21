@@ -352,17 +352,21 @@ $('#benv').onclick=()=>{
 };
 $('#bcanc').onclick=()=>$('#ovl').classList.remove('on');
 $('#bconf').onclick=async()=>{
-  pending=false; novosIds.clear();
-  $('#pbadge').style.display='none';
-  $('#pinfo').textContent='✓ Roteiro e Custos atualizados com sucesso';
-  $('#benv').disabled=true;
   $('#ovl').classList.remove('on');
-  render();
+  $('#pinfo').textContent='Salvando no Firestore...';
   try{
     await setDoc(doc(dbFs,'config','paises_index'), {ordem: PAISES_INDEX});
     for(const id of PAISES_INDEX) await setDoc(doc(dbFs,'paises',id), PAISES_DB[id]);
-  }catch(e){console.error(e)}
-  setTimeout(()=>{$('#pinfo').textContent='Nenhuma alteração pendente'},4000);
+    pending=false; novosIds.clear();
+    $('#pbadge').style.display='none';
+    $('#pinfo').textContent='✓ Roteiro e Custos atualizados com sucesso — pode atualizar a página com segurança';
+    $('#benv').disabled=true;
+    render();
+    setTimeout(()=>{$('#pinfo').textContent='Nenhuma alteração pendente'},5000);
+  }catch(e){
+    console.error('Falha ao salvar no Firestore:', e);
+    $('#pinfo').textContent='⚠️ Erro ao salvar — NÃO atualize a página ainda. Tente "Enviar atualização" novamente.';
+  }
 };
 
 async function carregarDoFirestore(){
