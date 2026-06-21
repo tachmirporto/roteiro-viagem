@@ -123,6 +123,7 @@ function reg(id){
 }
 const REGLBL={eu:"Europa",om:"Oriente Médio",as:"Ásia",hs:"Hemisfério Sul",buf:"Buffer"};
 function toggleAcc(h){h.classList.toggle('on');h.nextElementSibling.classList.toggle('on')}
+window.toggleAcc = toggleAcc;
 
 function pageRoteiro(){
   const schTotal=PAISES_INDEX.reduce((s,id)=>s+(PAISES_DB[id].sch?PAISES_DB[id].dias:0),0);
