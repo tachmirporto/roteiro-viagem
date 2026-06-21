@@ -129,7 +129,15 @@ const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();ret
 const fmtD=iso=>{const[y,m,d]=iso.split('-');return `${d}/${m}/${y.slice(2)}`};
 const diasEntre=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
 
-function render(){
+function capturarEstadoAberto(){
+  const abertos = {paises: new Set(), cidades: new Set()};
+  document.querySelectorAll('.ph.on').forEach(h=>abertos.paises.add(h.dataset.id));
+  document.querySelectorAll('.ch.on').forEach(h=>abertos.cidades.add(h.dataset.pais+':'+h.dataset.ci));
+  return abertos;
+}
+
+function render(estadoAberto){
+  const abertos = estadoAberto || capturarEstadoAberto();
   const cont=$('#paises'); cont.innerHTML='';
   $('#cnt').textContent=`(${PAISES_INDEX.length})`;
   PAISES_INDEX.forEach(id=>{
@@ -163,11 +171,16 @@ function render(){
       </div>
     </div>`);
     cont.appendChild(card);
-    renderCidades(id);
+    if(abertos.paises.has(id)){
+      card.querySelector('.ph').classList.add('on');
+      card.querySelector('.pb').classList.add('on');
+    }
+    renderCidades(id, abertos);
   });
 }
 
-function renderCidades(paisId){
+function renderCidades(paisId, abertos){
+  abertos = abertos || {cidades:new Set()};
   const p=PAISES_DB[paisId];
   const wrap=$('#cw-'+paisId); wrap.innerHTML='';
   p.cid.forEach((c,ci)=>{
@@ -187,6 +200,10 @@ function renderCidades(paisId){
       </div>
     </div>`);
     wrap.appendChild(card);
+    if(abertos.cidades.has(paisId+':'+ci)){
+      card.querySelector('.ch').classList.add('on');
+      card.querySelector('.cb').classList.add('on');
+    }
     renderPois(paisId, ci);
   });
 }
@@ -217,6 +234,31 @@ function recalcDias(p){
   if(d>0)p.dias=d;
 }
 
+function addDias(iso, n){
+  const d = new Date(iso+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  return d.toISOString().slice(0,10);
+}
+
+// Recalcula dias do país a partir da soma das cidades, ajusta fim, e empurra/recua
+// ini e fim de todos os países seguintes na mesma quantidade de dias (cascata).
+function propagarDatas(paisId){
+  const p = PAISES_DB[paisId];
+  const somaCidades = p.cid.reduce((s,c)=>s+c.dias,0);
+  const diasAntigos = p.dias;
+  const diff = somaCidades - diasAntigos;
+  if(diff === 0) return;
+  p.dias = somaCidades;
+  p.fim = addDias(p.fim, diff);
+  const idx = PAISES_INDEX.indexOf(paisId);
+  for(let i=idx+1; i<PAISES_INDEX.length; i++){
+    const seg = PAISES_DB[PAISES_INDEX[i]];
+    if(!seg) continue;
+    seg.ini = addDias(seg.ini, diff);
+    seg.fim = addDias(seg.fim, diff);
+  }
+}
+
 /* ===== Delegação de eventos (1 listener cobre tudo, sem rebind por item) ===== */
 document.body.addEventListener('click', e=>{
   const ph=e.target.closest('.ph');
@@ -228,12 +270,13 @@ document.body.addEventListener('click', e=>{
     const id=e.target.dataset.rm;
     PAISES_INDEX=PAISES_INDEX.filter(x=>x!==id);
     delete PAISES_DB[id]; novosIds.delete(id);
-    marcarPendente(); render();
+    marcarPendente(); render(capturarEstadoAberto());
   }
   if(e.target.dataset.rmcid){
     const[pid,ci]=e.target.dataset.rmcid.split(':');
     PAISES_DB[pid].cid.splice(+ci,1);
-    marcarPendente(); render();
+    propagarDatas(pid);
+    marcarPendente(); render(capturarEstadoAberto());
   }
   if(e.target.dataset.rmpoi){
     const[pid,ci,pi]=e.target.dataset.rmpoi.split(':');
@@ -243,7 +286,8 @@ document.body.addEventListener('click', e=>{
   if(e.target.classList.contains('addcid')){
     const pid=e.target.dataset.pais;
     PAISES_DB[pid].cid.push({nome:'Nova cidade',dias:1,poi:[]});
-    marcarPendente(); render();
+    propagarDatas(pid);
+    marcarPendente(); render(capturarEstadoAberto());
   }
   if(e.target.classList.contains('addpoi')){
     const pid=e.target.dataset.pais, ci=+e.target.dataset.ci;
@@ -260,14 +304,20 @@ document.body.addEventListener('change', e=>{
   if(pb){
     const id=pb.id.replace('pb-','');
     const p=PAISES_DB[id];
-    if(e.target.classList.contains('f-ini')){p.ini=e.target.value; recalcDias(p); marcarPendente(); render(); return}
-    if(e.target.classList.contains('f-fim')){p.fim=e.target.value; recalcDias(p); marcarPendente(); render(); return}
+    if(e.target.classList.contains('f-ini')){p.ini=e.target.value; recalcDias(p); marcarPendente(); render(capturarEstadoAberto()); return}
+    if(e.target.classList.contains('f-fim')){p.fim=e.target.value; recalcDias(p); marcarPendente(); render(capturarEstadoAberto()); return}
     if(e.target.classList.contains('f-dpd')){p.dpd=parseFloat(e.target.value)||0; marcarPendente(); return}
     if(e.target.classList.contains('f-sch')){p.sch=parseInt(e.target.value); marcarPendente(); return}
   }
   const ch=e.target.closest('.ch');
   if(ch && e.target.classList.contains('nm')){PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].nome=e.target.value; marcarPendente(); return}
-  if(ch && e.target.classList.contains('dd')){PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].dias=parseInt(e.target.value)||0; marcarPendente(); render(); return}
+  if(ch && e.target.classList.contains('dd')){
+    PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].dias=parseInt(e.target.value)||0;
+    propagarDatas(ch.dataset.pais);
+    marcarPendente();
+    render(capturarEstadoAberto());
+    return;
+  }
   if(e.target.dataset.transp){
     const[pid,ci]=e.target.dataset.transp.split(':');
     PAISES_DB[pid].cid[+ci].transp_saida=e.target.value;
@@ -286,7 +336,7 @@ $('#btnAddPais').onclick=()=>{
   const id='NOVO'+(++counter);
   PAISES_DB[id]={nome:'Novo país',ini:META.fim,fim:META.fim,dias:1,sch:0,dpd:150,cid:[]};
   PAISES_INDEX.push(id); novosIds.add(id); FLAGS[id]='🏳️';
-  marcarPendente(); render();
+  marcarPendente(); render(capturarEstadoAberto());
   $('#pc-'+id).scrollIntoView({behavior:'smooth',block:'center'});
 };
 
