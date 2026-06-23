@@ -90,6 +90,14 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 .ptask input{width:15px;height:15px;accent-color:var(--ok);cursor:pointer}
 .ptask .txt{font-size:13px;color:var(--mut)}
 .ptask.done .txt{text-decoration:line-through;color:var(--dim)}
+.add{background:var(--surf2);border:1px dashed var(--bd);color:var(--mut);padding:8px 14px;border-radius:var(--rs);cursor:pointer;font-family:var(--f);font-size:13px;width:100%}
+.add:hover{border-color:var(--ok);color:var(--ok)}
+.rmv{background:none;border:none;color:var(--dim);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:var(--rs)}
+.rmv:hover{color:var(--bad);background:var(--badd)}
+.ordbtn{background:var(--surf2);border:1px solid var(--bd);color:var(--mut);cursor:pointer;font-size:11px;padding:2px 6px;border-radius:var(--rs)}
+.ordbtn:hover:not(:disabled){border-color:var(--ok);color:var(--ok)}
+.ordbtn:disabled{opacity:.3;cursor:not-allowed}
+.sec-toggle{user-select:none}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
 </style>
 </head>
@@ -108,7 +116,7 @@ const TALVEZ=["Finlândia","Bulgária","Croácia","Itália"];
 const TRENS=[{"origem":"Lisboa","destino":"Madrid","mes":"ABR27","eur":60,"brl":378,"noturno":true},{"origem":"Madrid","destino":"Barcelona","mes":"ABR27","eur":59,"brl":372,"noturno":false},{"origem":"Barcelona","destino":"Marselha","mes":"ABR27","eur":65,"brl":410,"noturno":false},{"origem":"Marselha","destino":"Nice","mes":"ABR27","eur":35,"brl":220,"noturno":false},{"origem":"Nice","destino":"Monte Carlo","mes":"ABR27","eur":8,"brl":50,"noturno":false},{"origem":"Monte Carlo","destino":"Milão","mes":"ABR27","eur":55,"brl":346,"noturno":false},{"origem":"Milão","destino":"Veneza","mes":"ABR27","eur":30,"brl":189,"noturno":false},{"origem":"Veneza","destino":"Viena","mes":"ABR27","eur":70,"brl":441,"noturno":true},{"origem":"Viena","destino":"Bratislava","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Bratislava","destino":"Viena","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Viena","destino":"Munique","mes":"MAI27","eur":60,"brl":378,"noturno":false},{"origem":"Munique","destino":"Berlim","mes":"MAI27","eur":70,"brl":441,"noturno":false},{"origem":"Berlim","destino":"Copenhague","mes":"MAI27","eur":75,"brl":472,"noturno":true},{"origem":"Copenhague","destino":"Estocolmo","mes":"MAI27","eur":80,"brl":504,"noturno":true},{"origem":"Estocolmo","destino":"Oslo","mes":"MAI27","eur":55,"brl":346,"noturno":false},{"origem":"Oslo","destino":"Bergen","mes":"MAI27","eur":65,"brl":410,"noturno":false},{"origem":"Edimburgo","destino":"Londres","mes":"JUN27","eur":60,"brl":378,"noturno":false},{"origem":"Londres","destino":"Amsterdã","mes":"JUN27","eur":75,"brl":472,"noturno":false},{"origem":"Amsterdã","destino":"Bruxelas","mes":"JUL27","eur":30,"brl":189,"noturno":false},{"origem":"Bruxelas","destino":"Luxemburgo","mes":"JUL27","eur":25,"brl":158,"noturno":false},{"origem":"Luxemburgo","destino":"Paris","mes":"JUL27","eur":50,"brl":315,"noturno":false},{"origem":"Paris","destino":"Zurique","mes":"JUL27","eur":70,"brl":441,"noturno":false},{"origem":"Zurique","destino":"Lyon","mes":"JUL27","eur":55,"brl":346,"noturno":false},{"origem":"Lyon","destino":"Turim","mes":"JUL27","eur":50,"brl":315,"noturno":false},{"origem":"Turim","destino":"Florença","mes":"JUL27","eur":35,"brl":220,"noturno":false},{"origem":"Florença","destino":"Roma","mes":"JUL27","eur":30,"brl":189,"noturno":false},{"origem":"Roma","destino":"Nápoles","mes":"JUL27","eur":28,"brl":176,"noturno":false},{"origem":"Nápoles","destino":"Bari","mes":"JUL27","eur":32,"brl":202,"noturno":false},{"origem":"Pequim","destino":"Xian","mes":"SET27","eur":65,"brl":410,"noturno":false},{"origem":"Xian","destino":"Xangai","mes":"SET27","eur":65,"brl":410,"noturno":false},{"origem":"Xangai","destino":"Guilin","mes":"SET27","eur":70,"brl":441,"noturno":false},{"origem":"Tóquio","destino":"Quioto","mes":"FEV28","eur":90,"brl":567,"noturno":false},{"origem":"Quioto","destino":"Osaka","mes":"FEV28","eur":15,"brl":94,"noturno":false},{"origem":"Osaka","destino":"Hiroshima","mes":"FEV28","eur":70,"brl":441,"noturno":false},{"origem":"Hiroshima","destino":"Fukuoka Airport","mes":"FEV28","eur":55,"brl":346,"noturno":false},{"origem":"Busan","destino":"Seul","mes":"MAR28","eur":40,"brl":252,"noturno":false}];
 const VISTOS=[{id:"CN",prazo:"1-3 meses antes; validade 30-90d",forma:"online/embaixada",custo:250,alerta:"verificar isenção 2027"},{id:"NP",prazo:"na chegada; validade 15/30/90d",forma:"presencial ou online",custo:250,alerta:null},{id:"ID",prazo:"VOA; 30d renovável +30",forma:"presencial na chegada",custo:180,alerta:null},{id:"AU",prazo:"ETA 1 sem antes; validade 12 meses",forma:"online (app)",custo:30,alerta:"15 dias cobertos com folga"},{id:"NZ",prazo:"NZeTA antes embarque; validade 2 anos",forma:"online (app)",custo:50,alerta:null},{id:"TZ",prazo:"2-4 sem antes; validade 90d",forma:"online eVisa",custo:250,alerta:"seguro malária recomendado"}];
 const VACINAS=[{nome:"Febre Amarela",destinos:"Tanzânia, Tailândia, Nepal, Indonésia",prazo:"10+ dias antes, dose única vitalícia"},{nome:"Hepatite A",destinos:"Marrocos, Egito, Tanzânia, Nepal, Vietnã, Filipinas, Indonésia",prazo:"2 doses (0 e 6-12m), validade 25 anos"},{nome:"Hepatite B",destinos:"Todos os destinos",prazo:"3 doses (0,1,6m), iniciar 6m antes"},{nome:"Tétano/Difteria",destinos:"Todos os destinos",prazo:"Reforço cada 10 anos"},{nome:"Meningite ACWY",destinos:"Nepal, África do Sul, Tanzânia",prazo:"Dose única 2 sem antes, validade 5 anos"},{nome:"Febre Tifoide",destinos:"Marrocos, Egito, Nepal, Vietnã, Filipinas, Indonésia",prazo:"Injetável 2 anos / oral 5 anos"},{nome:"Raiva pré-exposição",destinos:"Nepal, Indonésia, Vietnã, Filipinas",prazo:"3 doses (0,7,21/28)"},{nome:"Encefalite Japonesa",destinos:"Japão, Coreia, China, Vietnã (zonas rurais)",prazo:"2 doses (0,28d), se >1 mês zona rural"},{nome:"Covid-19",destinos:"Vários — verificar exigências",prazo:"Atualizar conforme regras de 2027"},{nome:"Gripe",destinos:"Todos os destinos",prazo:"2 sem antes, renovar anual"}];
-const PREP=[{sec:"Inglês",tasks:["Encontrar aulas de inglês para viagem"]},{sec:"Produção de Vídeos",tasks:["Aprender sobre vídeos de viagem e como produzir roteiros","Pensar estilo do canal: como falar, periodicidade","Criar canal no YouTube","Produzir conteúdo sobre preparativos","Pensar roteiros para conteúdo durante viagem"]},{sec:"Passaporte",tasks:["Renovar passaporte — vence ABR/2028 ⚠️"]},{sec:"Vacinas, Vistos e Seguro",tasks:["Revisar aba Vacinas","Revisar aba Vistos","Cotar Seguro Viagem (cobertura mín. €30.000)","Contratar Seguro Viagem"]},{sec:"Comprar",tasks:["Mochila adequada","Roupa adequada","Chip de internet internacional"]},{sec:"Vender",tasks:["Moto","Bicicleta","Cama","Fogão","Geladeira","Microondas","Airfryer","Chaleira elétrica","Máquina de lavar","Mesa de trabalho","Aspirador robô","Impressora","Criados mudos do quarto","Escada e varais","Cadeiras de praia","Estante de ferro","Mesa com 6 cadeiras","Bicicleta ergométrica","Pendente de luz (não instalado)","Material de ginástica","Armários de madeira do escritório","Cadeira de escritório"]},{sec:"Guardar",tasks:["Achar local para guardar coisas","Caixa plástico: álbuns, livros, documentos","Caixa plástico: itens da Umbanda","Caixa plástico: capacete e roupas de moto"]},{sec:"Doar / Jogar Fora",tasks:["Doar roupas e sapatos","Doar toalhas e lençóis","Jogar fora panos de prato","Jogar fora cortinas"]},{sec:"Entregar / Cancelar",tasks:["Entregar apartamento","Cancelar luz do apartamento","Cancelar internet do apartamento"]}];
+let PREP=[{"sec":"Inglês","tasks":[{"t":"Encontrar aulas de inglês para viagem","d":false}]},{"sec":"Produção de Vídeos","tasks":[{"t":"Aprender sobre vídeos de viagem e como produzir roteiros","d":false},{"t":"Pensar estilo do canal: como falar, periodicidade","d":false},{"t":"Criar canal no YouTube","d":false},{"t":"Produzir conteúdo sobre preparativos","d":false},{"t":"Pensar roteiros para conteúdo durante viagem","d":false}]},{"sec":"Passaporte","tasks":[{"t":"Renovar passaporte — vence ABR/2028 ⚠️","d":false}]},{"sec":"Vacinas, Vistos e Seguro","tasks":[{"t":"Revisar aba Vacinas","d":false},{"t":"Revisar aba Vistos","d":false},{"t":"Cotar Seguro Viagem (cobertura mín. €30.000)","d":false},{"t":"Contratar Seguro Viagem","d":false}]},{"sec":"Comprar","tasks":[{"t":"Mochila adequada","d":false},{"t":"Roupa adequada","d":false},{"t":"Chip de internet internacional","d":false}]},{"sec":"Vender","tasks":[{"t":"Moto","d":false},{"t":"Bicicleta","d":false},{"t":"Cama","d":false},{"t":"Fogão","d":false},{"t":"Geladeira","d":false},{"t":"Microondas","d":false},{"t":"Airfryer","d":false},{"t":"Chaleira elétrica","d":false},{"t":"Máquina de lavar","d":false},{"t":"Mesa de trabalho","d":false},{"t":"Aspirador robô","d":false},{"t":"Impressora","d":false},{"t":"Criados mudos do quarto","d":false},{"t":"Escada e varais","d":false},{"t":"Cadeiras de praia","d":false},{"t":"Estante de ferro","d":false},{"t":"Mesa com 6 cadeiras","d":false},{"t":"Bicicleta ergométrica","d":false},{"t":"Pendente de luz (não instalado)","d":false},{"t":"Material de ginástica","d":false},{"t":"Armários de madeira do escritório","d":false},{"t":"Cadeira de escritório","d":false}]},{"sec":"Guardar","tasks":[{"t":"Achar local para guardar coisas","d":false},{"t":"Caixa plástico: álbuns, livros, documentos","d":false},{"t":"Caixa plástico: itens da Umbanda","d":false},{"t":"Caixa plástico: capacete e roupas de moto","d":false}]},{"sec":"Doar / Jogar Fora","tasks":[{"t":"Doar roupas e sapatos","d":false},{"t":"Doar toalhas e lençóis","d":false},{"t":"Jogar fora panos de prato","d":false},{"t":"Jogar fora cortinas","d":false}]},{"sec":"Entregar / Cancelar","tasks":[{"t":"Entregar apartamento","d":false},{"t":"Cancelar luz do apartamento","d":false},{"t":"Cancelar internet do apartamento","d":false}]}];
 
 const $=s=>document.querySelector(s);
 const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
@@ -158,13 +166,84 @@ function pageRoteiro(){
   return wrap;
 }
 
+async function salvarCustoExtra(item){
+  try{
+    const ref = doc(collection(dbFs,'custos_extras'));
+    await setDoc(ref, item);
+    return ref.id;
+  }catch(e){ console.error('Erro ao salvar custo extra:',e); return null; }
+}
+async function removerCustoExtra(id){
+  try{ await deleteDoc(doc(dbFs,'custos_extras',id)); }
+  catch(e){ console.error('Erro ao remover custo extra:',e); }
+}
+
 function pageCustos(){
   let total=0; const meses={};
   PAISES_INDEX.forEach(id=>{const p=PAISES_DB[id];total+=p.dias*p.dpd;const mk=mesKey(p.ini);(meses[mk]=meses[mk]||[]).push(id)});
   const totalTrens = TRENS.reduce((s,t)=>s+t.brl,0);
-  total += totalTrens;
+  const totalExtras = CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
+  total += totalTrens + totalExtras;
   const pct=(total/META.orcamento*100).toFixed(1);
-  const wrap=el(`<div><div class="cnt"><div><div class="lb">Custos da Viagem</div><div class="v">${fmtR(total)} <small>/ ${fmtR(META.orcamento)}</small></div></div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill ${pct>90?(pct>100?'d':'w'):''}" style="width:${Math.min(pct,100)}%"></div></div><div class="pct"><b>${pct}%</b> do orçamento</div></div></div><div class="info">ℹ️ Estimativas mochilão (hospedagem+alimentação+transporte local+passeios) <b>+ passagens de trem entre cidades</b>. Vistos somados em separado. Voos internacionais não incluídos (compra mais perto da data). Trens noturnos priorizados quando mais baratos que a opção diurna — economia de 1 noite de hospedagem.</div><div class="sect">Custos por mês</div><div id="mc"></div></div>`);
+  const wrap=el(`<div><div class="cnt"><div><div class="lb">Custos da Viagem</div><div class="v">${fmtR(total)} <small>/ ${fmtR(META.orcamento)}</small></div></div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill ${pct>90?(pct>100?'d':'w'):''}" style="width:${Math.min(pct,100)}%"></div></div><div class="pct"><b>${pct}%</b> do orçamento</div></div></div><div class="info">ℹ️ Estimativas mochilão (hospedagem+alimentação+transporte local+passeios) <b>+ passagens de trem entre cidades</b> <b>+ custos extras lançados manualmente</b>. Vistos somados em separado. Voos internacionais não incluídos (compra mais perto da data). Trens noturnos priorizados quando mais baratos que a opção diurna — economia de 1 noite de hospedagem.</div><div class="sect">Custos extras (antes da viagem)</div><div id="ce"></div><div class="sect">Custos por mês</div><div id="mc"></div></div>`);
+
+  const contExtras = wrap.querySelector('#ce');
+  function renderExtras(){
+    contExtras.innerHTML='';
+    const totExtrasAtual = CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
+    const acc=el(`<div class="acc">
+      <div class="acc-h" onclick="toggleAcc(this)"><div class="nm">EXTRAS</div><div class="sum">Gastos antes da viagem (equipamento, seguros, vistos antecipados, etc.)</div><div class="tot">${fmtR(totExtrasAtual)}</div><div class="chv">▾</div></div>
+      <div class="acc-b"></div>
+    </div>`);
+    const body = acc.querySelector('.acc-b');
+    CUSTOS_EXTRAS.forEach(c=>{
+      body.appendChild(el(`<div class="crow2"><span class="nm">${c.descricao}</span><span class="d">${c.data||''}</span><span class="v">${fmtR(c.valor)}</span><button class="rmv" data-rmextra="${c.id}" style="margin-left:8px">✕</button></div>`));
+    });
+    const formRow = el(`<div style="display:flex;gap:8px;padding:14px 20px;flex-wrap:wrap">
+      <input type="text" id="ce-desc" placeholder="Descrição (ex: mochila nova)" style="flex:2;min-width:160px;background:var(--surf2);border:1px solid var(--bd);color:var(--tx);padding:8px 10px;border-radius:var(--rs);font-family:var(--f);font-size:13px">
+      <input type="number" id="ce-valor" placeholder="Valor (R$)" style="flex:1;min-width:100px;background:var(--surf2);border:1px solid var(--bd);color:var(--ok);padding:8px 10px;border-radius:var(--rs);font-family:var(--m);font-size:13px">
+      <button class="add" id="ce-salvar" style="width:auto;padding:8px 18px">💾 Salvar</button>
+    </div>`);
+    body.appendChild(formRow);
+    contExtras.appendChild(acc);
+
+    body.querySelectorAll('[data-rmextra]').forEach(btn=>{
+      btn.onclick=async()=>{
+        const id = btn.dataset.rmextra;
+        CUSTOS_EXTRAS = CUSTOS_EXTRAS.filter(x=>x.id!==id);
+        renderExtras();
+        atualizarContadorTotal();
+        await removerCustoExtra(id);
+      };
+    });
+    $('#ce-salvar').onclick=async()=>{
+      const desc = $('#ce-desc').value.trim();
+      const valor = parseFloat($('#ce-valor').value);
+      if(!desc || !valor || valor<=0){ alert('Preencha descrição e valor válido.'); return; }
+      const item = {descricao:desc, valor:valor, data:new Date().toISOString().slice(0,10)};
+      const novoId = await salvarCustoExtra(item);
+      if(novoId){
+        item.id = novoId;
+        CUSTOS_EXTRAS.push(item);
+        renderExtras();
+        atualizarContadorTotal();
+      }else{
+        alert('Erro ao salvar — tente novamente.');
+      }
+    };
+  }
+  function atualizarContadorTotal(){
+    let novoTotal=0;
+    PAISES_INDEX.forEach(id=>{const p=PAISES_DB[id];novoTotal+=p.dias*p.dpd});
+    novoTotal += totalTrens + CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
+    const novoPct=(novoTotal/META.orcamento*100).toFixed(1);
+    wrap.querySelector('.cnt .v').innerHTML = `${fmtR(novoTotal)} <small>/ ${fmtR(META.orcamento)}</small>`;
+    wrap.querySelector('.bar-fill').style.width = Math.min(novoPct,100)+'%';
+    wrap.querySelector('.bar-fill').className = 'bar-fill ' + (novoPct>90?(novoPct>100?'d':'w'):'');
+    wrap.querySelector('.pct').innerHTML = `<b>${novoPct}%</b> do orçamento`;
+  }
+  renderExtras();
+
   const cont=wrap.querySelector('#mc');
   Object.entries(meses).forEach(([mk,ids])=>{
     const totMesHosp=ids.reduce((s,id)=>s+PAISES_DB[id].dias*PAISES_DB[id].dpd,0);
@@ -207,29 +286,145 @@ function pageVistos(){
 function pageVacinas(){
   const wrap=el(`<div><div class="info">ℹ️ Marque as vacinas já tomadas.</div><div class="sect">Vacinas necessárias</div><div id="vc"></div></div>`);
   const cont=wrap.querySelector('#vc');
-  VACINAS.forEach(v=>{
-    const row=el(`<div class="vacrow"><input type="checkbox"><div><div class="nm">${v.nome}</div><div class="dst">📍 ${v.destinos}</div></div><div class="prz"><div class="lb">Quando tomar</div>${v.prazo}</div><div class="dt">—</div></div>`);
+  VACINAS.forEach((v,i)=>{
+    const tomada=!!v.tomada;
+    const row=el(`<div class="vacrow ${tomada?'ok':''}"><input type="checkbox" ${tomada?'checked':''}><div><div class="nm">${v.nome}</div><div class="dst">📍 ${v.destinos}</div></div><div class="prz"><div class="lb">Quando tomar</div>${v.prazo}</div><div class="dt">${tomada?'<span style="color:var(--ok)">✓ tomada</span>':'—'}</div></div>`);
     const cb=row.querySelector('input'), dt=row.querySelector('.dt');
-    cb.onchange=()=>{row.classList.toggle('ok',cb.checked);dt.innerHTML=cb.checked?'<span style="color:var(--ok)">✓ tomada</span>':'—'};
+    cb.onchange=async()=>{
+      row.classList.toggle('ok',cb.checked);
+      dt.innerHTML=cb.checked?'<span style="color:var(--ok)">✓ tomada</span>':'—';
+      v.tomada=cb.checked;
+      try{ await setDoc(doc(dbFs,'vacinas',String(i)), v); }
+      catch(e){ console.error('Erro ao salvar vacina:',e); dt.innerHTML='<span style="color:var(--bad)">⚠ erro ao salvar</span>'; }
+    };
     cont.appendChild(row);
   });
   return wrap;
 }
 
+async function salvarPrepSecao(i){
+  try{ await setDoc(doc(dbFs,'prep',String(i)), PREP[i]); }
+  catch(e){ console.error('Erro ao salvar seção de preparativos:',e); }
+}
+async function salvarPrepIndex(){
+  try{ await setDoc(doc(dbFs,'config','prep_index'), {total: PREP.length}); }
+  catch(e){ console.error('Erro ao salvar índice de preparativos:',e); }
+}
+async function removerPrepSecaoFirestore(i){
+  try{ await deleteDoc(doc(dbFs,'prep',String(i))); }
+  catch(e){ console.error('Erro ao remover seção:',e); }
+}
+async function resincronizarTodasSecoes(){
+  // Após reordenar/remover, os índices mudam — regrava todas as seções nas novas posições
+  // e apaga documentos órfãos (índices antigos além do novo total)
+  try{
+    const idxSnap = await getDoc(doc(dbFs,'config','prep_index'));
+    const totalAntigo = idxSnap.exists() ? (idxSnap.data().total||0) : PREP.length;
+    for(let i=0;i<PREP.length;i++) await setDoc(doc(dbFs,'prep',String(i)), PREP[i]);
+    for(let i=PREP.length;i<totalAntigo;i++) await deleteDoc(doc(dbFs,'prep',String(i)));
+    await salvarPrepIndex();
+  }catch(e){ console.error('Erro ao resincronizar seções:',e); }
+}
+
 function pagePrep(){
-  const wrap=el(`<div><div class="sect">Lista de tarefas — marque ao concluir</div><div id="pl"></div></div>`);
+  const wrap=el(`<div><div class="sect">Preparativos — crie seções e tarefas, marque ao concluir</div><div id="pl"></div><button class="add" id="addsec" style="margin-top:10px">+ Nova seção</button></div>`);
   const cont=wrap.querySelector('#pl');
-  PREP.forEach(sec=>{
-    const acc=el(`<div class="acc"><div class="acc-h prep-h" onclick="toggleAcc(this)"><span class="nm">${sec.sec}</span><span class="prog">0/${sec.tasks.length}</span><span class="chv">▾</span></div><div class="acc-b"></div></div>`);
-    const body=acc.querySelector('.acc-b'), progEl=acc.querySelector('.prog');
-    sec.tasks.forEach(t=>{
-      const task=el(`<div class="ptask"><input type="checkbox"><label class="txt">${t}</label></div>`);
-      const cb=task.querySelector('input');
-      cb.onchange=()=>{task.classList.toggle('done',cb.checked);const done=[...body.querySelectorAll('input')].filter(i=>i.checked).length;progEl.textContent=`${done}/${sec.tasks.length}`};
-      body.appendChild(task);
+
+  function renderSecoes(){
+    cont.innerHTML='';
+    PREP.forEach((sec,i)=>{
+      const done = sec.tasks.filter(t=>t.d).length;
+      const acc=el(`<div class="acc">
+        <div class="acc-h prep-h">
+          <button class="ordbtn" data-up="${i}" title="Mover para cima" ${i===0?'disabled':''}>↑</button>
+          <button class="ordbtn" data-down="${i}" title="Mover para baixo" ${i===PREP.length-1?'disabled':''}>↓</button>
+          <span class="nm sec-toggle" data-toggle="${i}" style="cursor:pointer">${sec.sec}</span>
+          <span class="prog">${done}/${sec.tasks.length}</span>
+          <button class="rmv" data-rmsec="${i}" title="Remover seção">✕</button>
+          <span class="chv sec-toggle" data-toggle="${i}" style="cursor:pointer">▾</span>
+        </div>
+        <div class="acc-b" id="prep-b-${i}"></div>
+      </div>`);
+      const body=acc.querySelector('.acc-b');
+      sec.tasks.forEach((t,ti)=>{
+        const task=el(`<div class="ptask ${t.d?'done':''}"><input type="checkbox" ${t.d?'checked':''}><label class="txt">${t.t}</label><button class="rmv" data-rmtask="${i}:${ti}" title="Remover tarefa">✕</button></div>`);
+        const cb=task.querySelector('input');
+        cb.onchange=async()=>{
+          t.d=cb.checked;
+          task.classList.toggle('done',cb.checked);
+          const doneCount=sec.tasks.filter(x=>x.d).length;
+          acc.querySelector('.prog').textContent=`${doneCount}/${sec.tasks.length}`;
+          await salvarPrepSecao(i);
+        };
+        body.appendChild(task);
+      });
+      const addTaskRow=el(`<div class="ptask" style="gap:8px">
+        <input type="text" placeholder="Nova tarefa..." class="addtask-input" style="flex:1;background:var(--surf2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;border-radius:var(--rs);font-family:var(--f);font-size:13px">
+        <button class="add" data-addtask="${i}" style="width:auto;padding:6px 14px">+ Adicionar</button>
+      </div>`);
+      body.appendChild(addTaskRow);
+      cont.appendChild(acc);
     });
-    cont.appendChild(acc);
+  }
+  renderSecoes();
+
+  cont.addEventListener('click', async e=>{
+    const upI = e.target.dataset.up;
+    const downI = e.target.dataset.down;
+    const toggleI = e.target.dataset.toggle;
+    const rmSecI = e.target.dataset.rmsec;
+    const rmTask = e.target.dataset.rmtask;
+    const addTaskI = e.target.dataset.addtask;
+
+    if(toggleI!==undefined){
+      const accEl = cont.children[+toggleI];
+      accEl.querySelector('.acc-h').classList.toggle('on');
+      accEl.querySelector('.acc-b').classList.toggle('on');
+      return;
+    }
+    if(upI!==undefined){
+      const i=+upI;
+      if(i>0){ [PREP[i-1],PREP[i]]=[PREP[i],PREP[i-1]]; renderSecoes(); await resincronizarTodasSecoes(); }
+      return;
+    }
+    if(downI!==undefined){
+      const i=+downI;
+      if(i<PREP.length-1){ [PREP[i+1],PREP[i]]=[PREP[i],PREP[i+1]]; renderSecoes(); await resincronizarTodasSecoes(); }
+      return;
+    }
+    if(rmSecI!==undefined){
+      if(!confirm(`Remover a seção "${PREP[+rmSecI].sec}" e todas as suas tarefas?`)) return;
+      PREP.splice(+rmSecI,1);
+      renderSecoes();
+      await resincronizarTodasSecoes();
+      return;
+    }
+    if(rmTask){
+      const [si,ti]=rmTask.split(':').map(Number);
+      PREP[si].tasks.splice(ti,1);
+      renderSecoes();
+      await salvarPrepSecao(si);
+      return;
+    }
+    if(addTaskI!==undefined){
+      const i=+addTaskI;
+      const input = e.target.closest('.ptask').querySelector('.addtask-input');
+      const texto = input.value.trim();
+      if(!texto) return;
+      PREP[i].tasks.push({t:texto,d:false});
+      renderSecoes();
+      await salvarPrepSecao(i);
+    }
   });
+
+  $('#addsec').onclick=async()=>{
+    const nome = prompt('Nome da nova seção:');
+    if(!nome || !nome.trim()) return;
+    PREP.push({sec:nome.trim(), tasks:[]});
+    renderSecoes();
+    await resincronizarTodasSecoes();
+  };
+
   return wrap;
 }
 
@@ -249,7 +444,7 @@ function renderApp(){
 
 /* ===== FIREBASE / FIRESTORE ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDOIJLwVb2Qs_sjWE0XkcusBXr-LyxVh7Y",
@@ -261,6 +456,8 @@ const firebaseConfig = {
 };
 const fbApp = initializeApp(firebaseConfig);
 const dbFs = getFirestore(fbApp);
+
+let CUSTOS_EXTRAS = [];
 
 async function carregarDoFirestore(){
   try{
@@ -282,6 +479,30 @@ async function carregarDoFirestore(){
     Object.keys(PAISES_DB).forEach(k=>delete PAISES_DB[k]);
     Object.assign(PAISES_DB, novoDb);
     if(metaSnap.exists()) Object.assign(META, metaSnap.data());
+
+    // Vacinas
+    const vacSnap = await getDocs(collection(dbFs,'vacinas'));
+    if(!vacSnap.empty){
+      const novasVacinas = new Array(VACINAS.length);
+      vacSnap.forEach(d=>{ novasVacinas[+d.id] = d.data(); });
+      for(let i=0;i<VACINAS.length;i++) if(novasVacinas[i]) VACINAS[i]=novasVacinas[i];
+    }
+
+    // Preparativos
+    const prepSnap = await getDocs(collection(dbFs,'prep'));
+    if(!prepSnap.empty){
+      const prepIdxSnap = await getDoc(doc(dbFs,'config','prep_index'));
+      const total = prepIdxSnap.exists() ? prepIdxSnap.data().total : prepSnap.size;
+      const novoPrep = new Array(total);
+      prepSnap.forEach(d=>{ const i=+d.id; if(i<total) novoPrep[i]=d.data(); });
+      PREP.length=0;
+      novoPrep.forEach(s=>{ if(s) PREP.push(s); });
+    }
+
+    // Custos extras
+    const custosSnap = await getDocs(collection(dbFs,'custos_extras'));
+    CUSTOS_EXTRAS = [];
+    custosSnap.forEach(d=>{ CUSTOS_EXTRAS.push({id:d.id, ...d.data()}); });
   }catch(e){
     console.error('Erro ao carregar do Firestore, usando dados locais:', e);
   }
@@ -292,6 +513,9 @@ async function semear(){
     await setDoc(doc(dbFs,'config','meta'), META);
     await setDoc(doc(dbFs,'config','paises_index'), {ordem: PAISES_INDEX});
     for(const id of PAISES_INDEX) await setDoc(doc(dbFs,'paises',id), PAISES_DB[id]);
+    for(let i=0;i<VACINAS.length;i++) await setDoc(doc(dbFs,'vacinas',String(i)), VACINAS[i]);
+    for(let i=0;i<PREP.length;i++) await setDoc(doc(dbFs,'prep',String(i)), PREP[i]);
+    await setDoc(doc(dbFs,'config','prep_index'), {total: PREP.length});
   }catch(e){console.error('Erro ao semear Firestore:',e)}
 }
 
