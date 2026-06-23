@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Roteiro Viagem — 1 Ano pelo Mundo</title>
+<title>Roteiro Detalhado — 1 Ano pelo Mundo</title>
 <style>
 :root{--bg:#0e0f11;--surf:#16181c;--surf2:#1e2026;--bd:#2a2d35;--tx:#e8eaf0;--mut:#7a7f8e;--dim:#4a4f5e;--ok:#00d4aa;--okd:rgba(0,212,170,.12);--ac2:#6c8eff;--ac2d:rgba(108,142,255,.12);--warn:#ffb84d;--warnd:rgba(255,184,77,.12);--bad:#ff6b6b;--r:10px;--rs:6px;--f:'Space Grotesk',sans-serif;--m:'Space Mono',monospace}
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
@@ -216,9 +216,11 @@ function pageCustos(){
         await removerCustoExtra(id);
       };
     });
-    $('#ce-salvar').onclick=async()=>{
-      const desc = $('#ce-desc').value.trim();
-      const valor = parseFloat($('#ce-valor').value);
+    formRow.querySelector('#ce-salvar').onclick=async()=>{
+      const descInput = formRow.querySelector('#ce-desc');
+      const valorInput = formRow.querySelector('#ce-valor');
+      const desc = descInput.value.trim();
+      const valor = parseFloat(valorInput.value);
       if(!desc || !valor || valor<=0){ alert('Preencha descrição e valor válido.'); return; }
       const item = {descricao:desc, valor:valor, data:new Date().toISOString().slice(0,10)};
       const novoId = await salvarCustoExtra(item);
@@ -417,7 +419,7 @@ function pagePrep(){
     }
   });
 
-  $('#addsec').onclick=async()=>{
+  wrap.querySelector('#addsec').onclick=async()=>{
     const nome = prompt('Nome da nova seção:');
     if(!nome || !nome.trim()) return;
     PREP.push({sec:nome.trim(), tasks:[]});
