@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Roteiro Detalhado — 1 Ano pelo Mundo</title>
 <style>
-:root{--bg:#0e0f11;--surf:#16181c;--surf2:#1e2026;--bd:#2a2d35;--tx:#e8eaf0;--mut:#7a7f8e;--dim:#4a4f5e;--ok:#00d4aa;--okd:rgba(0,212,170,.12);--ac2:#6c8eff;--ac2d:rgba(108,142,255,.12);--warn:#ffb84d;--warnd:rgba(255,184,77,.12);--bad:#ff6b6b;--r:10px;--rs:6px;--f:'Space Grotesk',sans-serif;--m:'Space Mono',monospace}
+:root{--bg:#0e0f11;--surf:#16181c;--surf2:#1e2026;--surf3:#24272e;--bd:#2a2d35;--tx:#e8eaf0;--mut:#7a7f8e;--dim:#4a4f5e;--ok:#00d4aa;--okd:rgba(0,212,170,.12);--ac2:#6c8eff;--ac2d:rgba(108,142,255,.12);--warn:#ffb84d;--warnd:rgba(255,184,77,.12);--bad:#ff6b6b;--badd:rgba(255,107,107,.12);--r:10px;--rs:6px;--f:'Space Grotesk',sans-serif;--m:'Space Mono',monospace}
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;line-height:1.6}
@@ -99,7 +99,75 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 .ordbtn:disabled{opacity:.3;cursor:not-allowed}
 .sec-toggle{user-select:none}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+
+/* ===== Roteiro Detalhado (editor) — escopado sob .detwrap ===== */
+.detwrap .info{margin-bottom:20px}
+.detwrap .info b{color:var(--ok)}
+.detwrap .pcard{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.detwrap .pcard.new{border-color:rgba(0,212,170,.4);background:rgba(0,212,170,.04)}
+.detwrap .ph{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer}
+.detwrap .ph:hover{background:var(--surf2)}
+.detwrap .ph .flag{font-size:22px}
+.detwrap .ph input.nm{background:none;border:none;color:var(--tx);font-family:var(--f);font-size:14px;font-weight:600;width:160px;padding:4px 6px;border-radius:var(--rs)}
+.detwrap .ph input.nm:focus{background:var(--surf3);outline:1px solid var(--ok)}
+.detwrap .ph .per{font-family:var(--m);font-size:11px;color:var(--mut);white-space:nowrap}
+.detwrap .ph .db{font-family:var(--m);font-size:12px;font-weight:700;color:var(--ok);background:var(--okd);padding:3px 10px;border-radius:99px;white-space:nowrap}
+.detwrap .ph .sg{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;white-space:nowrap}
+.detwrap .sy{background:var(--okd);color:var(--ok)}.detwrap .sn{background:var(--ac2d);color:var(--ac2)}
+.detwrap .ph .chv{color:var(--dim);margin-left:auto;transition:.2s;flex-shrink:0}
+.detwrap .ph.on .chv{transform:rotate(180deg)}
+.detwrap .rmv{background:none;border:none;color:var(--dim);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:var(--rs);flex-shrink:0}
+.detwrap .rmv:hover{color:var(--bad);background:var(--badd)}
+.detwrap .pb{display:none;padding:0 18px 16px}
+.detwrap .pb.on{display:block}
+.detwrap .mrow{display:flex;gap:16px;margin-bottom:14px;padding:10px 0;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.detwrap .mfld{display:flex;flex-direction:column;gap:3px}
+.detwrap .mfld label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.detwrap .mfld input,.detwrap .mfld select{background:var(--surf2);border:1px solid var(--bd);color:var(--tx);font-family:var(--m);font-size:12px;padding:6px 8px;border-radius:var(--rs);width:130px}
+.detwrap .mfld input:focus,.detwrap .mfld select:focus{outline:1px solid var(--ok)}
+.detwrap .ccard{background:var(--surf2);border:1px solid var(--bd);border-radius:var(--rs);margin-bottom:8px}
+.detwrap .ch{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer}
+.detwrap .ch:hover{background:var(--surf3)}
+.detwrap .ch .icn{font-size:14px;color:var(--dim)}
+.detwrap .ch input.nm{background:none;border:none;color:var(--tx);font-family:var(--f);font-size:13px;font-weight:500;width:140px;padding:3px 6px;border-radius:var(--rs)}
+.detwrap .ch input.nm:focus{background:var(--surf3);outline:1px solid var(--ok)}
+.detwrap .ch input.dd{background:var(--surf3);border:1px solid var(--bd);color:var(--ok);font-family:var(--m);font-size:11px;width:42px;padding:3px 4px;border-radius:var(--rs);text-align:center}
+.detwrap .ch .dl{font-size:11px;color:var(--dim)}
+.detwrap .ch .chv{color:var(--dim);margin-left:auto;transition:.2s;font-size:12px}
+.detwrap .ch.on .chv{transform:rotate(180deg)}
+.detwrap .cb{display:none;padding:0 14px 12px}
+.detwrap .cb.on{display:block}
+.detwrap .poi{display:grid;grid-template-columns:1fr 110px 90px auto;gap:8px;align-items:center;padding:8px 10px;background:var(--surf3);border-radius:var(--rs);margin-bottom:6px}
+.detwrap .poi input{background:var(--surf);border:1px solid var(--bd);color:var(--tx);font-family:var(--f);font-size:12px;padding:6px 8px;border-radius:var(--rs);width:100%}
+.detwrap .poi input[type=date]{font-family:var(--m);font-size:11px}
+.detwrap .poi input.vlr{font-family:var(--m);color:var(--ok)}
+.detwrap .poi input:focus{outline:1px solid var(--ok)}
+.detwrap .add{background:none;border:1px dashed var(--bd);color:var(--mut);font-family:var(--f);font-size:12px;padding:8px 14px;border-radius:var(--rs);cursor:pointer;width:100%;text-align:left}
+.detwrap .add:hover{border-color:var(--ok);color:var(--ok);background:var(--okd)}
+.detwrap .addpais{margin-top:14px;padding:12px 16px}
+.detwrap .bar{position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--bd);padding:14px 24px;display:flex;align-items:center;gap:16px;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.detwrap .bar .info2{font-size:12px;color:var(--mut);flex:1}
+.detwrap .bar .info2 b{color:var(--tx)}
+.detwrap .benv{background:var(--ok);color:#08110d;border:none;font-family:var(--f);font-size:14px;font-weight:700;padding:12px 24px;border-radius:var(--rs);cursor:pointer}
+.detwrap .benv:hover{background:#00e8bb}
+.detwrap .benv:disabled{background:var(--bd);color:var(--dim);cursor:not-allowed}
+.detwrap .pend{font-family:var(--m);font-size:11px;background:var(--warnd);color:var(--warn);padding:4px 10px;border-radius:99px;white-space:nowrap}
+.detwrap .ovl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:24px}
+.detwrap .ovl.on{display:flex}
+.detwrap .panel{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:24px}
+.detwrap .panel h2{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.detwrap .ritem{border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;font-size:12.5px}
+.detwrap .ritem.ok{border-color:rgba(0,212,170,.3);background:rgba(0,212,170,.05)}
+.detwrap .ritem.warn{border-color:rgba(255,184,77,.3);background:rgba(255,184,77,.05)}
+.detwrap .ritem.danger{border-color:rgba(255,107,107,.3);background:rgba(255,107,107,.05)}
+.detwrap .ritem .tg{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px;display:block}
+.detwrap .ritem.ok .tg{color:var(--ok)}.detwrap .ritem.warn .tg{color:var(--warn)}.detwrap .ritem.danger .tg{color:var(--bad)}
+.detwrap .racts{display:flex;gap:10px;margin-top:16px}
+.detwrap .racts button{flex:1;padding:10px;border-radius:var(--rs);font-family:var(--f);font-weight:600;font-size:13px;cursor:pointer;border:none}
+.detwrap .bconf{background:var(--ok);color:#08110d}
+.detwrap .bcanc{background:var(--surf2);color:var(--mut);border:1px solid var(--bd) !important}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <div class="hd"><div class="t">🌍 Roteiro Detalhado</div><div class="s">01/04/2027 → 31/03/2028 (viagem termina 20/03, 11d de buffer) · 41 destinos · Orçamento R$160mil</div></div>
@@ -110,12 +178,67 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 const META={inicio:"2027-04-01",fim:"2028-03-31",orcamento:160000,schengen_max:90};
 const FLAGS={MA:"🇲🇦",PT:"🇵🇹",ES:"🇪🇸",FR1:"🇫🇷",MC:"🇲🇨",IT1:"🇮🇹",AT1:"🇦🇹",SK:"🇸🇰",AT2:"🇦🇹",DE1:"🇩🇪",DK:"🇩🇰",SE:"🇸🇪",NO:"🇳🇴",IS:"🇮🇸",IE:"🇮🇪",GB:"🇬🇧",NL:"🇳🇱",BE:"🇧🇪",LU:"🇱🇺",FR2:"🇫🇷",CH:"🇨🇭",FR3:"🇫🇷",IT2:"🇮🇹",AL:"🇦🇱",GR:"🇬🇷",TR:"🇹🇷",EG:"🇪🇬",AE:"🇦🇪",NP:"🇳🇵",CN:"🇨🇳",VN:"🇻🇳",PH:"🇵🇭",SG:"🇸🇬",ID:"🇮🇩",ZA:"🇿🇦",TZ:"🇹🇿",TH:"🇹🇭",AU:"🇦🇺",NZ:"🇳🇿",JP:"🇯🇵",KR:"🇰🇷"};
 const DESC={MA:"Primavera ideal. Marrakech.",PT:"Lisboa. Primavera amena.",ES:"Madrid, Barcelona. Trens AVE.",FR1:"Marselha, Nice. Riviera Francesa.",MC:"Monte Carlo — cassino. 1 dia.",IT1:"Milão, Veneza.",AT1:"Viena — palácios, ópera.",SK:"Bratislava — 1h de Viena.",AT2:"Viena (retorno).",DE1:"Munique, Berlim.",DK:"Copenhague.",SE:"Estocolmo.",NO:"Oslo, Bergen.",IS:"Reykjavik — início do verão escandinavo.",IE:"7 dias — Dublin. Fora Schengen.",GB:"15 dias — Edimburgo, Londres. Fora Schengen. Verão.",NL:"Amsterdã.",BE:"Bruxelas.",LU:"Cidade de Luxemburgo.",FR2:"Paris.",CH:"Zurique.",FR3:"Lyon.",IT2:"12 dias — Turim, Florença, Roma, Nápoles, Bari. Calor de verão.",AL:"7 dias — Durrës, Berat, Gjirokastër, Ksamil/Dhërmi. Fora Schengen.",GR:"Meteora, Trikala, Atenas, Mykonos/Santorini, Chios.",TR:"Çeşme, Izmir, Pamukkale, Capadócia, Istambul.",EG:"Cairo. Hijab recomendado em templos.",AE:"Dubai. Hijab só em mesquitas.",NP:"Pokhara, Katmandu.",CN:"Pequim, Xian, Xangai, Guilin. VPN necessário.",VN:"Hanói, Hạ Long Bay, Hội An.",PH:"Manila, Palawan, Cebu, Bohol.",SG:"Singapura.",ID:"Bali, Komodo, Yogyakarta, Lombok.",ZA:"Cidade do Cabo.",TZ:"Zanzibar, Arusha, Ngorongoro, Serengeti, Mwanza, Dar es Salaam. Hijab indicado em Zanzibar fora das praias.",TH:"Bangkok, Chiang Mai, Krabi.",AU:"Gold Coast — casa da Michele 🏠, máx 15 dias.",NZ:"Auckland, Rotorua, Queenstown, Milford Sound.",JP:"Tóquio, Quioto, Osaka, Hiroshima, Fukuoka.",KR:"Busan, Seul."};
-const PAISES_INDEX=["MA","PT","ES","FR1","MC","IT1","AT1","SK","AT2","DE1","DK","SE","NO","IS","IE","GB","NL","BE","LU","FR2","CH","FR3","IT2","AL","GR","TR","EG","AE","NP","CN","VN","PH","SG","ID","ZA","TZ","TH","AU","NZ","JP","KR"];
+
+// Hemisfério de cada país e meses considerados primavera/verão nesse hemisfério.
+// hemisferio:null = zona tropical/equatorial, onde a divisão primavera/verão não se aplica (clima seco/chuvoso) — sem checagem.
+const MESES_PT=["","janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const NORTE={hemisferio:'N',meses:[3,4,5,6,7,8]};   // mar–ago
+const SUL={hemisferio:'S',meses:[9,10,11,12,1,2]};   // set–fev
+const TROPICAL={hemisferio:null,meses:null};
+const ESTACOES={
+  MA:NORTE,PT:NORTE,ES:NORTE,FR1:NORTE,MC:NORTE,IT1:NORTE,AT1:NORTE,SK:NORTE,AT2:NORTE,DE1:NORTE,DK:NORTE,SE:NORTE,NO:NORTE,IS:NORTE,
+  IE:NORTE,GB:NORTE,NL:NORTE,BE:NORTE,LU:NORTE,FR2:NORTE,CH:NORTE,FR3:NORTE,IT2:NORTE,AL:NORTE,GR:NORTE,TR:NORTE,EG:NORTE,AE:NORTE,
+  NP:NORTE,CN:NORTE,JP:NORTE,KR:NORTE,
+  VN:TROPICAL,PH:TROPICAL,SG:TROPICAL,ID:TROPICAL,TZ:TROPICAL,TH:TROPICAL,
+  ZA:SUL,AU:SUL,NZ:SUL
+};
+function mesesNoIntervalo(ini,fim){
+  const meses=new Set();
+  let d=new Date(ini+'T00:00:00');
+  const fimD=new Date(fim+'T00:00:00');
+  while(d<=fimD){ meses.add(d.getMonth()+1); d.setDate(d.getDate()+1); }
+  return [...meses];
+}
+function checarEstacao(id,p){
+  const est=ESTACOES[id];
+  if(!est || !est.hemisferio) return null; // sem regra para zona tropical/desconhecida
+  const cobertos=mesesNoIntervalo(p.ini,p.fim);
+  const fora=cobertos.filter(m=>!est.meses.includes(m));
+  if(!fora.length) return null;
+  return {hemisferio:est.hemisferio, mesesFora:fora.map(m=>MESES_PT[m])};
+}
+
+// Meses de estação seca para os países tropicais/equatoriais (o restante é considerado chuvoso).
+// Aproximação geral por país — clima local pode variar por região dentro do país.
+const MESES_SECOS={
+  VN:[11,12,1,2,3,4],   // Vietnã: seca nov–abr, chuvosa/tufões mai–out
+  PH:[11,12,1,2,3,4],   // Filipinas: seca nov–abr, chuvosa/tufões mai–out
+  SG:[2,3,4,5,6,7,8,9], // Singapura: menos chuva fev–set, monção chuvosa out–jan
+  ID:[4,5,6,7,8,9,10],  // Indonésia (Bali): seca abr–out, chuvosa nov–mar
+  TZ:[1,2,6,7,8,9,10],  // Tanzânia: seca jun–out + jan–fev, chuvas mar–mai e nov–dez
+  TH:[11,12,1,2,3,4],   // Tailândia: seca/fresco nov–abr, chuvosa/monção mai–out
+};
+function climaTropical(id,p){
+  const secos=MESES_SECOS[id];
+  if(!secos) return null;
+  let diasSeca=0, diasChuva=0;
+  let d=new Date(p.ini+'T00:00:00');
+  const fimD=new Date(p.fim+'T00:00:00');
+  while(d<=fimD){
+    const m=d.getMonth()+1;
+    if(secos.includes(m)) diasSeca++; else diasChuva++;
+    d.setDate(d.getDate()+1);
+  }
+  if(diasChuva===0) return {status:'seca', label:'☀️ Estação seca', cls:'p-ok'};
+  if(diasSeca===0) return {status:'chuvosa', label:'🌧️ Estação chuvosa', cls:'p-warn'};
+  return {status:'mista', label:`🌦️ Mista (${diasSeca}d seca / ${diasChuva}d chuvosa)`, cls:'p-ac2'};
+}
+let PAISES_INDEX=["MA","PT","ES","FR1","MC","IT1","AT1","SK","AT2","DE1","DK","SE","NO","IS","IE","GB","NL","BE","LU","FR2","CH","FR3","IT2","AL","GR","TR","EG","AE","NP","CN","VN","PH","SG","ID","ZA","TZ","TH","AU","NZ","JP","KR"];
 const PAISES_DB={"MA":{"nome":"Marrocos","ini":"2027-04-01","fim":"2027-04-08","dias":7,"sch":0,"dpd":130,"cid":[{"nome":"Marrakech","dias":7,"poi":[],"transp_saida":"avião"}]},"PT":{"nome":"Portugal","ini":"2027-04-09","fim":"2027-04-14","dias":5,"sch":1,"dpd":200,"cid":[{"nome":"Lisboa","dias":5,"poi":[],"transp_saida":"trem"}]},"ES":{"nome":"Espanha","ini":"2027-04-15","fim":"2027-04-22","dias":7,"sch":1,"dpd":220,"cid":[{"nome":"Madrid","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Barcelona","dias":3,"poi":[],"transp_saida":"trem"}]},"FR1":{"nome":"França (1)","ini":"2027-04-23","fim":"2027-04-27","dias":4,"sch":1,"dpd":250,"cid":[{"nome":"Marselha","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Nice","dias":2,"poi":[],"transp_saida":"trem"}]},"MC":{"nome":"Mônaco","ini":"2027-04-28","fim":"2027-04-29","dias":1,"sch":1,"dpd":280,"cid":[{"nome":"Monte Carlo","dias":1,"poi":[],"transp_saida":"trem"}]},"IT1":{"nome":"Itália (Milão-Veneza)","ini":"2027-04-30","fim":"2027-05-05","dias":5,"sch":1,"dpd":230,"cid":[{"nome":"Milão","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Veneza","dias":2,"poi":[],"transp_saida":"trem"}]},"AT1":{"nome":"Áustria (Viena)","ini":"2027-05-06","fim":"2027-05-09","dias":3,"sch":1,"dpd":210,"cid":[{"nome":"Viena","dias":3,"poi":[],"transp_saida":"trem"}]},"SK":{"nome":"Eslováquia","ini":"2027-05-10","fim":"2027-05-12","dias":2,"sch":1,"dpd":120,"cid":[{"nome":"Bratislava","dias":2,"poi":[],"transp_saida":"trem"}]},"AT2":{"nome":"Áustria (Viena retorno)","ini":"2027-05-13","fim":"2027-05-14","dias":1,"sch":1,"dpd":210,"cid":[{"nome":"Viena","dias":1,"poi":[],"transp_saida":"trem"}]},"DE1":{"nome":"Alemanha (Munique-Berlim)","ini":"2027-05-15","fim":"2027-05-20","dias":5,"sch":1,"dpd":200,"cid":[{"nome":"Munique","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Berlim","dias":2,"poi":[],"transp_saida":"trem"}]},"DK":{"nome":"Dinamarca","ini":"2027-05-21","fim":"2027-05-24","dias":3,"sch":1,"dpd":280,"cid":[{"nome":"Copenhague","dias":3,"poi":[],"transp_saida":"trem"}]},"SE":{"nome":"Suécia","ini":"2027-05-25","fim":"2027-05-29","dias":4,"sch":1,"dpd":260,"cid":[{"nome":"Estocolmo","dias":4,"poi":[],"transp_saida":"trem"}]},"NO":{"nome":"Noruega","ini":"2027-05-30","fim":"2027-06-03","dias":4,"sch":1,"dpd":320,"cid":[{"nome":"Oslo","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Bergen","dias":2,"poi":[],"transp_saida":"avião"}]},"IS":{"nome":"Islândia","ini":"2027-06-04","fim":"2027-06-08","dias":4,"sch":1,"dpd":350,"cid":[{"nome":"Reykjavik","dias":4,"poi":[],"transp_saida":"avião"}]},"IE":{"nome":"Irlanda","ini":"2027-06-09","fim":"2027-06-16","dias":7,"sch":0,"dpd":230,"cid":[{"nome":"Dublin","dias":7,"poi":[],"transp_saida":"balsa/trem"}]},"GB":{"nome":"Reino Unido","ini":"2027-06-17","fim":"2027-07-02","dias":15,"sch":0,"dpd":280,"cid":[{"nome":"Edimburgo","dias":8,"poi":[],"transp_saida":"trem"},{"nome":"Londres","dias":7,"poi":[],"transp_saida":"trem"}]},"NL":{"nome":"Países Baixos","ini":"2027-07-03","fim":"2027-07-06","dias":3,"sch":1,"dpd":220,"cid":[{"nome":"Amsterdã","dias":3,"poi":[],"transp_saida":"trem"}]},"BE":{"nome":"Bélgica","ini":"2027-07-07","fim":"2027-07-09","dias":2,"sch":1,"dpd":210,"cid":[{"nome":"Bruxelas","dias":2,"poi":[],"transp_saida":"trem"}]},"LU":{"nome":"Luxemburgo","ini":"2027-07-10","fim":"2027-07-12","dias":2,"sch":1,"dpd":230,"cid":[{"nome":"Luxemburgo","dias":2,"poi":[],"transp_saida":"trem"}]},"FR2":{"nome":"França (Paris)","ini":"2027-07-13","fim":"2027-07-17","dias":4,"sch":1,"dpd":250,"cid":[{"nome":"Paris","dias":4,"poi":[],"transp_saida":"trem"}]},"CH":{"nome":"Suíça","ini":"2027-07-18","fim":"2027-07-21","dias":3,"sch":1,"dpd":320,"cid":[{"nome":"Zurique","dias":3,"poi":[],"transp_saida":"trem"}]},"FR3":{"nome":"França (Lyon)","ini":"2027-07-22","fim":"2027-07-25","dias":3,"sch":1,"dpd":250,"cid":[{"nome":"Lyon","dias":3,"poi":[],"transp_saida":"trem"}]},"IT2":{"nome":"Itália (Turim-Bari)","ini":"2027-07-26","fim":"2027-08-07","dias":12,"sch":1,"dpd":230,"cid":[{"nome":"Turim","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Florença","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Roma","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Nápoles","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Bari","dias":2,"poi":[],"transp_saida":"barco"}]},"AL":{"nome":"Albânia","ini":"2027-08-08","fim":"2027-08-15","dias":7,"sch":0,"dpd":90,"cid":[{"nome":"Durrës","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Berat","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Gjirokastër","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Ksamil/Dhërmi","dias":1,"poi":[],"transp_saida":"ônibus"}]},"GR":{"nome":"Grécia","ini":"2027-08-16","fim":"2027-08-22","dias":6,"sch":1,"dpd":160,"cid":[{"nome":"Meteora","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Trikala","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Atenas","dias":1,"poi":[],"transp_saida":"balsa"},{"nome":"Mykonos/Santorini","dias":1,"poi":[],"transp_saida":"balsa"},{"nome":"Atenas (retorno)","dias":1,"poi":[],"transp_saida":"barco"},{"nome":"Ilha de Chios","dias":1,"poi":[],"transp_saida":"barco"}]},"TR":{"nome":"Turquia","ini":"2027-08-23","fim":"2027-09-02","dias":10,"sch":0,"dpd":130,"cid":[{"nome":"Porto de Çeşme","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Izmir","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Denizli","dias":1,"poi":[],"transp_saida":"taxi"},{"nome":"Pamukkale","dias":1,"poi":[],"transp_saida":"taxi"},{"nome":"Denizli (retorno)","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Göreme/Capadócia","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Aeroporto Nevşehir (NAV)","dias":1,"poi":[],"transp_saida":"avião"},{"nome":"Istambul","dias":1,"poi":[],"transp_saida":"avião"}]},"EG":{"nome":"Egito","ini":"2027-09-03","fim":"2027-09-11","dias":8,"sch":0,"dpd":110,"cid":[{"nome":"Cairo","dias":8,"poi":[],"transp_saida":"avião"}]},"AE":{"nome":"Dubai","ini":"2027-09-12","fim":"2027-09-17","dias":5,"sch":0,"dpd":220,"cid":[{"nome":"Dubai","dias":5,"poi":[],"transp_saida":"avião"}]},"NP":{"nome":"Nepal","ini":"2027-09-18","fim":"2027-09-28","dias":10,"sch":0,"dpd":100,"cid":[{"nome":"Pokhara","dias":5,"poi":[],"transp_saida":"ônibus"},{"nome":"Katmandu","dias":5,"poi":[],"transp_saida":"avião"}]},"CN":{"nome":"China","ini":"2027-09-29","fim":"2027-10-14","dias":15,"sch":0,"dpd":140,"cid":[{"nome":"Pequim","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Xian","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Xangai","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Guilin","dias":3,"poi":[],"transp_saida":"avião"}]},"VN":{"nome":"Vietnã","ini":"2027-10-15","fim":"2027-11-02","dias":18,"sch":0,"dpd":100,"cid":[{"nome":"Hanói","dias":5,"poi":[],"transp_saida":"ônibus"},{"nome":"Hạ Long Bay","dias":5,"poi":[],"transp_saida":"avião"},{"nome":"Hội An","dias":4,"poi":[],"transp_saida":"ônibus"},{"nome":"Aeroporto Da Nang (DAD)","dias":4,"poi":[],"transp_saida":"avião"}]},"PH":{"nome":"Filipinas","ini":"2027-11-03","fim":"2027-11-18","dias":15,"sch":0,"dpd":110,"cid":[{"nome":"Manila","dias":4,"poi":[],"transp_saida":"avião"},{"nome":"Palawan","dias":4,"poi":[],"transp_saida":"avião"},{"nome":"Cebu","dias":4,"poi":[],"transp_saida":"balsa/avião"},{"nome":"Bohol","dias":3,"poi":[],"transp_saida":"avião"}]},"SG":{"nome":"Singapura","ini":"2027-11-19","fim":"2027-11-23","dias":4,"sch":0,"dpd":200,"cid":[{"nome":"Singapura","dias":4,"poi":[],"transp_saida":"avião"}]},"ID":{"nome":"Indonésia","ini":"2027-11-24","fim":"2027-12-18","dias":24,"sch":0,"dpd":110,"cid":[{"nome":"Bali","dias":6,"poi":[],"transp_saida":"balsa/ônibus"},{"nome":"Komodo","dias":6,"poi":[],"transp_saida":null},{"nome":"Yogyakarta","dias":6,"poi":[],"transp_saida":null},{"nome":"Lombok","dias":6,"poi":[],"transp_saida":"avião"}]},"ZA":{"nome":"África do Sul","ini":"2027-12-19","fim":"2027-12-30","dias":11,"sch":0,"dpd":160,"cid":[{"nome":"Cidade do Cabo","dias":11,"poi":[],"transp_saida":"avião"}]},"TZ":{"nome":"Tanzânia","ini":"2027-12-31","fim":"2028-01-09","dias":9,"sch":0,"dpd":180,"cid":[{"nome":"Zanzibar","dias":2,"poi":[],"transp_saida":"avião"},{"nome":"Arusha","dias":2,"poi":[],"transp_saida":"carro"},{"nome":"Ngorongoro","dias":2,"poi":[],"transp_saida":"carro"},{"nome":"Serengeti","dias":1,"poi":[],"transp_saida":"carro"},{"nome":"Mwanza","dias":1,"poi":[],"transp_saida":"avião"},{"nome":"Dar es Salaam","dias":1,"poi":[],"transp_saida":"avião"}]},"TH":{"nome":"Tailândia","ini":"2028-01-10","fim":"2028-01-25","dias":15,"sch":0,"dpd":110,"cid":[{"nome":"Bangkok","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Chiang Mai","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Bangkok (retorno)","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Krabi","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Bangkok (retorno 2)","dias":3,"poi":[],"transp_saida":"avião"}]},"AU":{"nome":"Austrália","ini":"2028-01-26","fim":"2028-02-10","dias":15,"sch":0,"dpd":0,"cid":[{"nome":"Gold Coast","dias":15,"poi":[],"transp_saida":"avião"}]},"NZ":{"nome":"Nova Zelândia","ini":"2028-02-11","fim":"2028-02-23","dias":12,"sch":0,"dpd":200,"cid":[{"nome":"Auckland","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Rotorua","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Auckland (retorno)","dias":2,"poi":[],"transp_saida":"avião"},{"nome":"Queenstown","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Milford Sound","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Queenstown (retorno)","dias":2,"poi":[],"transp_saida":"avião"}]},"JP":{"nome":"Japão","ini":"2028-02-24","fim":"2028-03-09","dias":14,"sch":0,"dpd":200,"cid":[{"nome":"Tóquio","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Quioto","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Osaka","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Hiroshima","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Fukuoka Airport","dias":2,"poi":[],"transp_saida":"avião"}]},"KR":{"nome":"Coreia do Sul","ini":"2028-03-10","fim":"2028-03-20","dias":10,"sch":0,"dpd":150,"cid":[{"nome":"Busan","dias":5,"poi":[],"transp_saida":"trem"},{"nome":"Seul","dias":5,"poi":[],"transp_saida":null}]}};
 const TALVEZ=["Finlândia","Bulgária","Croácia","Itália"];
 const TRENS=[{"origem":"Lisboa","destino":"Madrid","mes":"ABR27","eur":60,"brl":378,"noturno":true},{"origem":"Madrid","destino":"Barcelona","mes":"ABR27","eur":59,"brl":372,"noturno":false},{"origem":"Barcelona","destino":"Marselha","mes":"ABR27","eur":65,"brl":410,"noturno":false},{"origem":"Marselha","destino":"Nice","mes":"ABR27","eur":35,"brl":220,"noturno":false},{"origem":"Nice","destino":"Monte Carlo","mes":"ABR27","eur":8,"brl":50,"noturno":false},{"origem":"Monte Carlo","destino":"Milão","mes":"ABR27","eur":55,"brl":346,"noturno":false},{"origem":"Milão","destino":"Veneza","mes":"ABR27","eur":30,"brl":189,"noturno":false},{"origem":"Veneza","destino":"Viena","mes":"ABR27","eur":70,"brl":441,"noturno":true},{"origem":"Viena","destino":"Bratislava","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Bratislava","destino":"Viena","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Viena","destino":"Munique","mes":"MAI27","eur":60,"brl":378,"noturno":false},{"origem":"Munique","destino":"Berlim","mes":"MAI27","eur":70,"brl":441,"noturno":false},{"origem":"Berlim","destino":"Copenhague","mes":"MAI27","eur":75,"brl":472,"noturno":true},{"origem":"Copenhague","destino":"Estocolmo","mes":"MAI27","eur":80,"brl":504,"noturno":true},{"origem":"Estocolmo","destino":"Oslo","mes":"MAI27","eur":55,"brl":346,"noturno":false},{"origem":"Oslo","destino":"Bergen","mes":"MAI27","eur":65,"brl":410,"noturno":false},{"origem":"Edimburgo","destino":"Londres","mes":"JUN27","eur":60,"brl":378,"noturno":false},{"origem":"Londres","destino":"Amsterdã","mes":"JUN27","eur":75,"brl":472,"noturno":false},{"origem":"Amsterdã","destino":"Bruxelas","mes":"JUL27","eur":30,"brl":189,"noturno":false},{"origem":"Bruxelas","destino":"Luxemburgo","mes":"JUL27","eur":25,"brl":158,"noturno":false},{"origem":"Luxemburgo","destino":"Paris","mes":"JUL27","eur":50,"brl":315,"noturno":false},{"origem":"Paris","destino":"Zurique","mes":"JUL27","eur":70,"brl":441,"noturno":false},{"origem":"Zurique","destino":"Lyon","mes":"JUL27","eur":55,"brl":346,"noturno":false},{"origem":"Lyon","destino":"Turim","mes":"JUL27","eur":50,"brl":315,"noturno":false},{"origem":"Turim","destino":"Florença","mes":"JUL27","eur":35,"brl":220,"noturno":false},{"origem":"Florença","destino":"Roma","mes":"JUL27","eur":30,"brl":189,"noturno":false},{"origem":"Roma","destino":"Nápoles","mes":"JUL27","eur":28,"brl":176,"noturno":false},{"origem":"Nápoles","destino":"Bari","mes":"JUL27","eur":32,"brl":202,"noturno":false},{"origem":"Pequim","destino":"Xian","mes":"SET27","eur":65,"brl":410,"noturno":false},{"origem":"Xian","destino":"Xangai","mes":"SET27","eur":65,"brl":410,"noturno":false},{"origem":"Xangai","destino":"Guilin","mes":"SET27","eur":70,"brl":441,"noturno":false},{"origem":"Tóquio","destino":"Quioto","mes":"FEV28","eur":90,"brl":567,"noturno":false},{"origem":"Quioto","destino":"Osaka","mes":"FEV28","eur":15,"brl":94,"noturno":false},{"origem":"Osaka","destino":"Hiroshima","mes":"FEV28","eur":70,"brl":441,"noturno":false},{"origem":"Hiroshima","destino":"Fukuoka Airport","mes":"FEV28","eur":55,"brl":346,"noturno":false},{"origem":"Busan","destino":"Seul","mes":"MAR28","eur":40,"brl":252,"noturno":false}];
 const VISTOS=[{id:"CN",prazo:"1-3 meses antes; validade 30-90d",forma:"online/embaixada",custo:250,alerta:"verificar isenção 2027"},{id:"NP",prazo:"na chegada; validade 15/30/90d",forma:"presencial ou online",custo:250,alerta:null},{id:"ID",prazo:"VOA; 30d renovável +30",forma:"presencial na chegada",custo:180,alerta:null},{id:"AU",prazo:"ETA 1 sem antes; validade 12 meses",forma:"online (app)",custo:30,alerta:"15 dias cobertos com folga"},{id:"NZ",prazo:"NZeTA antes embarque; validade 2 anos",forma:"online (app)",custo:50,alerta:null},{id:"TZ",prazo:"2-4 sem antes; validade 90d",forma:"online eVisa",custo:250,alerta:"seguro malária recomendado"}];
-const VACINAS=[{nome:"Febre Amarela",destinos:"Tanzânia, Tailândia, Nepal, Indonésia",prazo:"10+ dias antes, dose única vitalícia"},{nome:"Hepatite A",destinos:"Marrocos, Egito, Tanzânia, Nepal, Vietnã, Filipinas, Indonésia",prazo:"2 doses (0 e 6-12m), validade 25 anos"},{nome:"Hepatite B",destinos:"Todos os destinos",prazo:"3 doses (0,1,6m), iniciar 6m antes"},{nome:"Tétano/Difteria",destinos:"Todos os destinos",prazo:"Reforço cada 10 anos"},{nome:"Meningite ACWY",destinos:"Nepal, África do Sul, Tanzânia",prazo:"Dose única 2 sem antes, validade 5 anos"},{nome:"Febre Tifoide",destinos:"Marrocos, Egito, Nepal, Vietnã, Filipinas, Indonésia",prazo:"Injetável 2 anos / oral 5 anos"},{nome:"Raiva pré-exposição",destinos:"Nepal, Indonésia, Vietnã, Filipinas",prazo:"3 doses (0,7,21/28)"},{nome:"Encefalite Japonesa",destinos:"Japão, Coreia, China, Vietnã (zonas rurais)",prazo:"2 doses (0,28d), se >1 mês zona rural"},{nome:"Covid-19",destinos:"Vários — verificar exigências",prazo:"Atualizar conforme regras de 2027"},{nome:"Gripe",destinos:"Todos os destinos",prazo:"2 sem antes, renovar anual"}];
+const VACINAS=[{nome:"Febre Amarela",destinos:"Tanzânia, Tailândia, Nepal, Indonésia",prazo:"10+ dias antes, dose única vitalícia",vitalicia:true},{nome:"Hepatite A",destinos:"Marrocos, Egito, Tanzânia, Nepal, Vietnã, Filipinas, Indonésia",prazo:"2 doses (0 e 6-12m), validade 25 anos",validadeAnos:25},{nome:"Hepatite B",destinos:"Todos os destinos",prazo:"3 doses (0,1,6m), iniciar 6m antes",vitalicia:true},{nome:"Tétano/Difteria",destinos:"Todos os destinos",prazo:"Reforço cada 10 anos",validadeAnos:10},{nome:"Meningite ACWY",destinos:"Nepal, África do Sul, Tanzânia",prazo:"Dose única 2 sem antes, validade 5 anos",validadeAnos:5},{nome:"Febre Tifoide",destinos:"Marrocos, Egito, Nepal, Vietnã, Filipinas, Indonésia",prazo:"Injetável 2 anos / oral 5 anos",validadeAnos:2},{nome:"Raiva pré-exposição",destinos:"Nepal, Indonésia, Vietnã, Filipinas",prazo:"3 doses (0,7,21/28)",validadeAnos:null},{nome:"Encefalite Japonesa",destinos:"Japão, Coreia, China, Vietnã (zonas rurais)",prazo:"2 doses (0,28d), se >1 mês zona rural",validadeAnos:null},{nome:"Covid-19",destinos:"Vários — verificar exigências",prazo:"Atualizar conforme regras de 2027",validadeAnos:null},{nome:"Gripe",destinos:"Todos os destinos",prazo:"2 sem antes, renovar anual",validadeAnos:1}];
 let PREP=[{"sec":"Inglês","tasks":[{"t":"Encontrar aulas de inglês para viagem","d":false}]},{"sec":"Produção de Vídeos","tasks":[{"t":"Aprender sobre vídeos de viagem e como produzir roteiros","d":false},{"t":"Pensar estilo do canal: como falar, periodicidade","d":false},{"t":"Criar canal no YouTube","d":false},{"t":"Produzir conteúdo sobre preparativos","d":false},{"t":"Pensar roteiros para conteúdo durante viagem","d":false}]},{"sec":"Passaporte","tasks":[{"t":"Renovar passaporte — vence ABR/2028 ⚠️","d":false}]},{"sec":"Vacinas, Vistos e Seguro","tasks":[{"t":"Revisar aba Vacinas","d":false},{"t":"Revisar aba Vistos","d":false},{"t":"Cotar Seguro Viagem (cobertura mín. €30.000)","d":false},{"t":"Contratar Seguro Viagem","d":false}]},{"sec":"Comprar","tasks":[{"t":"Mochila adequada","d":false},{"t":"Roupa adequada","d":false},{"t":"Chip de internet internacional","d":false}]},{"sec":"Vender","tasks":[{"t":"Moto","d":false},{"t":"Bicicleta","d":false},{"t":"Cama","d":false},{"t":"Fogão","d":false},{"t":"Geladeira","d":false},{"t":"Microondas","d":false},{"t":"Airfryer","d":false},{"t":"Chaleira elétrica","d":false},{"t":"Máquina de lavar","d":false},{"t":"Mesa de trabalho","d":false},{"t":"Aspirador robô","d":false},{"t":"Impressora","d":false},{"t":"Criados mudos do quarto","d":false},{"t":"Escada e varais","d":false},{"t":"Cadeiras de praia","d":false},{"t":"Estante de ferro","d":false},{"t":"Mesa com 6 cadeiras","d":false},{"t":"Bicicleta ergométrica","d":false},{"t":"Pendente de luz (não instalado)","d":false},{"t":"Material de ginástica","d":false},{"t":"Armários de madeira do escritório","d":false},{"t":"Cadeira de escritório","d":false}]},{"sec":"Guardar","tasks":[{"t":"Achar local para guardar coisas","d":false},{"t":"Caixa plástico: álbuns, livros, documentos","d":false},{"t":"Caixa plástico: itens da Umbanda","d":false},{"t":"Caixa plástico: capacete e roupas de moto","d":false}]},{"sec":"Doar / Jogar Fora","tasks":[{"t":"Doar roupas e sapatos","d":false},{"t":"Doar toalhas e lençóis","d":false},{"t":"Jogar fora panos de prato","d":false},{"t":"Jogar fora cortinas","d":false}]},{"sec":"Entregar / Cancelar","tasks":[{"t":"Entregar apartamento","d":false},{"t":"Cancelar luz do apartamento","d":false},{"t":"Cancelar internet do apartamento","d":false}]}];
 
 const $=s=>document.querySelector(s);
@@ -134,6 +257,35 @@ const REGLBL={eu:"Europa",om:"Oriente Médio",as:"Ásia",hs:"Hemisfério Sul",bu
 function toggleAcc(h){h.classList.toggle('on');h.nextElementSibling.classList.toggle('on')}
 window.toggleAcc = toggleAcc;
 
+const diasEntre=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
+function addDias(iso, n){
+  const d = new Date(iso+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  return d.toISOString().slice(0,10);
+}
+function recalcDias(p){
+  const d=diasEntre(p.ini,p.fim);
+  if(d>0)p.dias=d;
+}
+// Recalcula dias do país a partir da soma das cidades, ajusta fim, e empurra/recua
+// ini e fim de todos os países seguintes na mesma quantidade de dias (cascata).
+function propagarDatas(paisId){
+  const p = PAISES_DB[paisId];
+  const somaCidades = p.cid.reduce((s,c)=>s+c.dias,0);
+  const diasAntigos = p.dias;
+  const diff = somaCidades - diasAntigos;
+  if(diff === 0) return;
+  p.dias = somaCidades;
+  p.fim = addDias(p.fim, diff);
+  const idx = PAISES_INDEX.indexOf(paisId);
+  for(let i=idx+1; i<PAISES_INDEX.length; i++){
+    const seg = PAISES_DB[PAISES_INDEX[i]];
+    if(!seg) continue;
+    seg.ini = addDias(seg.ini, diff);
+    seg.fim = addDias(seg.fim, diff);
+  }
+}
+
 function pageRoteiro(){
   const schTotal=PAISES_INDEX.reduce((s,id)=>s+(PAISES_DB[id].sch?PAISES_DB[id].dias:0),0);
   const pct=(schTotal/META.schengen_max*100).toFixed(1);
@@ -151,7 +303,9 @@ function pageRoteiro(){
       const p=PAISES_DB[id];
       const extra=p.prioridade?' ⭐':(id==='AU'?' — Gold Coast 🏠':'');
       const hijabTag=p.hijab==='zanzibar'?' <span class="pill p-warn">🧕 hijab indicado</span>':'';
-      body.appendChild(el(`<div class="crow"><div class="flag">${FLAGS[id]}</div><div class="info"><div class="nm">${p.nome}${extra} <span class="pill ${p.sch?'p-ok':'p-ac2'}">${p.sch?'Schengen':'Fora Schengen'}</span>${hijabTag}</div><div class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</div><div class="desc">${DESC[id]||''}</div></div><div class="days">${p.dias}d<small>dias</small></div></div>`));
+      const clima=climaTropical(id,p);
+      const climaTag=clima?` <span class="pill ${clima.cls}">${clima.label}</span>`:'';
+      body.appendChild(el(`<div class="crow"><div class="flag">${FLAGS[id]}</div><div class="info"><div class="nm">${p.nome}${extra} <span class="pill ${p.sch?'p-ok':'p-ac2'}">${p.sch?'Schengen':'Fora Schengen'}</span>${hijabTag}${climaTag}</div><div class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</div><div class="desc">${DESC[id]||''}</div></div><div class="days">${p.dias}d<small>dias</small></div></div>`));
     });
     cont.appendChild(acc);
   });
@@ -285,19 +439,63 @@ function pageVistos(){
   return wrap;
 }
 
+function calcValidadeVacina(v){
+  // Retorna {status:'sem-data'|'sem-validade'|'valida'|'expira-antes', dataExpira}
+  if(!v.tomada || !v.dataAplicacao) return {status:'sem-data'};
+  if(v.vitalicia) return {status:'valida'};
+  if(v.validadeAnos==null) return {status:'sem-validade'};
+  const dExp = new Date(v.dataAplicacao+'T00:00:00');
+  dExp.setFullYear(dExp.getFullYear()+v.validadeAnos);
+  const fimViagem = new Date((META.fim||'2028-03-31')+'T00:00:00');
+  const dataExpira = dExp.toISOString().slice(0,10);
+  return {status: dExp>=fimViagem ? 'valida':'expira-antes', dataExpira};
+}
+
 function pageVacinas(){
-  const wrap=el(`<div><div class="info">ℹ️ Marque as vacinas já tomadas.</div><div class="sect">Vacinas necessárias</div><div id="vc"></div></div>`);
+  const wrap=el(`<div><div class="info">ℹ️ Marque as vacinas já tomadas e informe a data de aplicação. A validade é comparada com o fim da viagem (${fmtD(META.fim)}).</div><div class="sect">Vacinas necessárias</div><div id="vc"></div></div>`);
   const cont=wrap.querySelector('#vc');
+
+  function statusHtml(v,r){
+    if(r.status==='sem-data') return '—';
+    if(r.status==='valida') return '<span style="color:var(--ok)">✓ válida durante toda a viagem</span>';
+    if(r.status==='sem-validade') return '<span style="color:var(--warn)">✓ tomada — validade não padronizada, verificar com médico</span>';
+    if(r.status==='expira-antes') return `<span style="color:var(--bad)">⚠ vence em ${fmtD(r.dataExpira)} — antes do fim da viagem, precisa reforço</span>`;
+  }
+
   VACINAS.forEach((v,i)=>{
     const tomada=!!v.tomada;
-    const row=el(`<div class="vacrow ${tomada?'ok':''}"><input type="checkbox" ${tomada?'checked':''}><div><div class="nm">${v.nome}</div><div class="dst">📍 ${v.destinos}</div></div><div class="prz"><div class="lb">Quando tomar</div>${v.prazo}</div><div class="dt">${tomada?'<span style="color:var(--ok)">✓ tomada</span>':'—'}</div></div>`);
-    const cb=row.querySelector('input'), dt=row.querySelector('.dt');
-    cb.onchange=async()=>{
-      row.classList.toggle('ok',cb.checked);
-      dt.innerHTML=cb.checked?'<span style="color:var(--ok)">✓ tomada</span>':'—';
-      v.tomada=cb.checked;
+    const r=calcValidadeVacina(v);
+    const row=el(`<div class="vacrow ${r.status==='valida'?'ok':''}">
+      <input type="checkbox" ${tomada?'checked':''}>
+      <div><div class="nm">${v.nome}</div><div class="dst">📍 ${v.destinos}</div></div>
+      <div class="prz"><div class="lb">Quando tomar</div>${v.prazo}</div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">
+        <input type="date" class="dtapl" value="${v.dataAplicacao||''}" style="background:var(--surf2);border:1px solid var(--bd);color:var(--tx);font-family:var(--m);font-size:11px;padding:4px 6px;border-radius:var(--rs)" ${tomada?'':'disabled'}>
+        <div class="dt" style="text-align:right;max-width:220px">${statusHtml(v,r)}</div>
+      </div>
+    </div>`);
+    const cb=row.querySelector('input[type=checkbox]'), dtInput=row.querySelector('.dtapl'), dt=row.querySelector('.dt');
+
+    async function salvar(){
       try{ await setDoc(doc(dbFs,'vacinas',String(i)), v); }
       catch(e){ console.error('Erro ao salvar vacina:',e); dt.innerHTML='<span style="color:var(--bad)">⚠ erro ao salvar</span>'; }
+    }
+    function atualizarLinha(){
+      const rr=calcValidadeVacina(v);
+      row.classList.toggle('ok', rr.status==='valida');
+      dt.innerHTML=statusHtml(v,rr);
+    }
+    cb.onchange=async()=>{
+      v.tomada=cb.checked;
+      dtInput.disabled=!cb.checked;
+      if(!cb.checked){ v.dataAplicacao=''; dtInput.value=''; }
+      atualizarLinha();
+      await salvar();
+    };
+    dtInput.onchange=async()=>{
+      v.dataAplicacao=dtInput.value;
+      atualizarLinha();
+      await salvar();
     };
     cont.appendChild(row);
   });
@@ -430,15 +628,384 @@ function pagePrep(){
   return wrap;
 }
 
-const PAGES=[["roteiro","📍 Roteiro",pageRoteiro],["custos","💰 Custos",pageCustos],["vistos","🛂 Vistos",pageVistos],["vacinas","💉 Vacinas",pageVacinas],["preparativos","✅ Preparativos",pagePrep]];
+/* ===== Aba Roteiro Detalhado (editor) ===== */
+let pendingDet=false, novosIdsDet=new Set(), counterDet=0;
+
+function pageRoteiroDetalhado(){
+  const wrap=el(`<div class="detwrap">
+    <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Adicione cidades e pontos de interesse (data + valor de ingresso). Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
+    <div class="sect">Países do roteiro <span id="det-cnt" style="color:var(--dim)"></span></div>
+    <div id="det-paises"></div>
+    <button class="add addpais" id="det-btnAddPais">+ Adicionar país</button>
+    <div class="bar">
+      <div class="info2"><span id="det-pinfo">Nenhuma alteração pendente</span></div>
+      <span class="pend" id="det-pbadge" style="display:none">alterações não enviadas</span>
+      <button class="benv" id="det-fechar" style="background:var(--ac2);color:#fff">📊 Fechar roteiro (.xlsx)</button>
+      <button class="benv" id="det-benv" disabled>Enviar atualização</button>
+    </div>
+    <div class="ovl" id="det-ovl">
+      <div class="panel">
+        <h2>🔍 Revisão das atualizações</h2>
+        <div id="det-rcontent"></div>
+        <div class="racts"><button class="bcanc" id="det-bcanc">Revisar mais</button><button class="bconf" id="det-bconf">Aplicar no roteiro</button></div>
+      </div>
+    </div>
+  </div>`);
+  const $$=s=>wrap.querySelector(s);
+
+  function capturarEstadoAberto(){
+    const abertos = {paises: new Set(), cidades: new Set()};
+    wrap.querySelectorAll('.ph.on').forEach(h=>abertos.paises.add(h.dataset.id));
+    wrap.querySelectorAll('.ch.on').forEach(h=>abertos.cidades.add(h.dataset.pais+':'+h.dataset.ci));
+    return abertos;
+  }
+
+  function renderDet(estadoAberto){
+    const abertos = estadoAberto || capturarEstadoAberto();
+    const cont=$$('#det-paises'); cont.innerHTML='';
+    $$('#det-cnt').textContent=`(${PAISES_INDEX.length})`;
+    PAISES_INDEX.forEach(id=>{
+      const p=PAISES_DB[id];
+      if(!p || !Array.isArray(p.cid)){
+        console.warn('País sem dados válidos, pulado no render:', id, p);
+        return;
+      }
+      const somaC=p.cid.reduce((s,c)=>s+c.dias,0);
+      const mismatch=somaC!==p.dias;
+      const climaDet=climaTropical(id,p);
+      const climaDetTag=climaDet?`<span class="sg" style="background:${climaDet.status==='chuvosa'?'var(--warnd)':climaDet.status==='mista'?'var(--ac2d)':'var(--okd)'};color:${climaDet.status==='chuvosa'?'var(--warn)':climaDet.status==='mista'?'var(--ac2)':'var(--ok)'}">${climaDet.label}</span>`:'';
+      const card=el(`<div class="pcard ${novosIdsDet.has(id)?'new':''}" id="det-pc-${id}">
+        <div class="ph" data-id="${id}">
+          <div class="flag">${FLAGS[id]||'🏳️'}</div>
+          <input class="nm" value="${p.nome}">
+          <span class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</span>
+          <span class="db">${p.dias}d</span>
+          <span class="sg ${p.sch?'sy':'sn'}">${p.sch?'Schengen':'Fora Schengen'}</span>
+          ${climaDetTag}
+          ${mismatch?`<span class="sg" style="background:var(--warnd);color:var(--warn)">⚠ cidades somam ${somaC}d</span>`:''}
+          <button class="rmv" data-rm="${id}">✕</button>
+          <div class="chv">▾</div>
+        </div>
+        <div class="pb" id="det-pb-${id}">
+          <div class="mrow">
+            <div class="mfld"><label>Data início</label><input type="date" class="f-ini" value="${p.ini}"></div>
+            <div class="mfld"><label>Data fim</label><input type="date" class="f-fim" value="${p.fim}"></div>
+            <div class="mfld"><label>Custo/dia (R$)</label><input type="number" class="f-dpd" value="${p.dpd}"></div>
+            <div class="mfld"><label>Schengen?</label><select class="f-sch"><option value="1" ${p.sch?'selected':''}>Sim</option><option value="0" ${!p.sch?'selected':''}>Não</option></select></div>
+          </div>
+          <div class="cwrap" id="det-cw-${id}"></div>
+          <button class="add addcid" data-pais="${id}">+ Adicionar cidade em ${p.nome}</button>
+        </div>
+      </div>`);
+      cont.appendChild(card);
+      if(abertos.paises.has(id)){
+        card.querySelector('.ph').classList.add('on');
+        card.querySelector('.pb').classList.add('on');
+      }
+      renderCidadesDet(id, abertos);
+    });
+  }
+
+  function renderCidadesDet(paisId, abertos){
+    abertos = abertos || {cidades:new Set()};
+    const p=PAISES_DB[paisId];
+    const wrapC=$$('#det-cw-'+paisId); wrapC.innerHTML='';
+    p.cid.forEach((c,ci)=>{
+      const card=el(`<div class="ccard">
+        <div class="ch" data-pais="${paisId}" data-ci="${ci}">
+          <span class="icn">📍</span>
+          <input class="nm" value="${c.nome}">
+          <input class="dd" type="number" value="${c.dias}">
+          <span class="dl">dias</span>
+          <input class="nm" style="width:110px" placeholder="transporte →" value="${c.transp_saida||''}" data-transp="${paisId}:${ci}">
+          <button class="rmv" data-rmcid="${paisId}:${ci}">✕</button>
+          <span class="chv">▾</span>
+        </div>
+        <div class="cb" id="det-cb-${paisId}-${ci}">
+          <div id="det-poi-${paisId}-${ci}"></div>
+          <button class="add addpoi" data-pais="${paisId}" data-ci="${ci}">+ Adicionar ponto de interesse</button>
+        </div>
+      </div>`);
+      wrapC.appendChild(card);
+      if(abertos.cidades.has(paisId+':'+ci)){
+        card.querySelector('.ch').classList.add('on');
+        card.querySelector('.cb').classList.add('on');
+      }
+      renderPoisDet(paisId, ci);
+    });
+  }
+
+  function renderPoisDet(paisId, ci){
+    const c=PAISES_DB[paisId].cid[ci];
+    const wrapP=$$(`#det-poi-${paisId}-${ci}`); if(!wrapP)return; wrapP.innerHTML='';
+    (c.poi||[]).forEach((poi,pi)=>{
+      const row=el(`<div class="poi">
+        <input type="text" placeholder="Nome do ponto de interesse" value="${poi.nome||''}" data-poi="${paisId}:${ci}:${pi}:nome">
+        <input type="date" value="${poi.data||''}" data-poi="${paisId}:${ci}:${pi}:data">
+        <input type="number" class="vlr" placeholder="R$" value="${poi.valor!=null?poi.valor:''}" data-poi="${paisId}:${ci}:${pi}:valor">
+        <button class="rmv" data-rmpoi="${paisId}:${ci}:${pi}">✕</button>
+      </div>`);
+      wrapP.appendChild(row);
+    });
+  }
+
+  function marcarPendenteDet(){
+    pendingDet=true;
+    $$('#det-pbadge').style.display='inline-block';
+    $$('#det-pinfo').textContent='Você tem alterações não enviadas';
+    $$('#det-benv').disabled=false;
+  }
+
+  /* ===== Delegação de eventos, escopada ao wrap deste editor ===== */
+  wrap.addEventListener('click', e=>{
+    const ph=e.target.closest('.ph');
+    if(ph && !e.target.matches('input,button')){ph.classList.toggle('on');$$('#det-pb-'+ph.dataset.id).classList.toggle('on');return}
+    const ch=e.target.closest('.ch');
+    if(ch && !e.target.matches('input,button')){ch.classList.toggle('on');$$(`#det-cb-${ch.dataset.pais}-${ch.dataset.ci}`).classList.toggle('on');return}
+    if(e.target.dataset.rm){
+      if(!confirm(`Remover ${PAISES_DB[e.target.dataset.rm].nome} do roteiro?`))return;
+      const id=e.target.dataset.rm;
+      PAISES_INDEX=PAISES_INDEX.filter(x=>x!==id);
+      delete PAISES_DB[id]; novosIdsDet.delete(id);
+      marcarPendenteDet(); renderDet(capturarEstadoAberto());
+    }
+    if(e.target.dataset.rmcid){
+      const[pid,ci]=e.target.dataset.rmcid.split(':');
+      PAISES_DB[pid].cid.splice(+ci,1);
+      propagarDatas(pid);
+      marcarPendenteDet(); renderDet(capturarEstadoAberto());
+    }
+    if(e.target.dataset.rmpoi){
+      const[pid,ci,pi]=e.target.dataset.rmpoi.split(':');
+      PAISES_DB[pid].cid[+ci].poi.splice(+pi,1);
+      marcarPendenteDet(); renderPoisDet(pid,+ci);
+    }
+    if(e.target.classList.contains('addcid')){
+      const pid=e.target.dataset.pais;
+      PAISES_DB[pid].cid.push({nome:'Nova cidade',dias:1,poi:[]});
+      propagarDatas(pid);
+      marcarPendenteDet(); renderDet(capturarEstadoAberto());
+    }
+    if(e.target.classList.contains('addpoi')){
+      const pid=e.target.dataset.pais, ci=+e.target.dataset.ci;
+      if(!PAISES_DB[pid].cid[ci].poi)PAISES_DB[pid].cid[ci].poi=[];
+      PAISES_DB[pid].cid[ci].poi.push({nome:'',data:'',valor:0});
+      marcarPendenteDet(); renderPoisDet(pid,ci);
+    }
+  });
+
+  wrap.addEventListener('change', e=>{
+    const ph=e.target.closest('.ph');
+    if(ph && e.target.classList.contains('nm')){PAISES_DB[ph.dataset.id].nome=e.target.value; marcarPendenteDet(); return}
+    const pb=e.target.closest('.pb');
+    if(pb){
+      const id=pb.id.replace('det-pb-','');
+      const p=PAISES_DB[id];
+      if(e.target.classList.contains('f-ini')){p.ini=e.target.value; recalcDias(p); marcarPendenteDet(); renderDet(capturarEstadoAberto()); return}
+      if(e.target.classList.contains('f-fim')){p.fim=e.target.value; recalcDias(p); marcarPendenteDet(); renderDet(capturarEstadoAberto()); return}
+      if(e.target.classList.contains('f-dpd')){p.dpd=parseFloat(e.target.value)||0; marcarPendenteDet(); return}
+      if(e.target.classList.contains('f-sch')){p.sch=parseInt(e.target.value); marcarPendenteDet(); return}
+    }
+    const ch=e.target.closest('.ch');
+    if(ch && e.target.classList.contains('nm')){PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].nome=e.target.value; marcarPendenteDet(); return}
+    if(ch && e.target.classList.contains('dd')){
+      PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].dias=parseInt(e.target.value)||0;
+      propagarDatas(ch.dataset.pais);
+      marcarPendenteDet();
+      renderDet(capturarEstadoAberto());
+      return;
+    }
+    if(e.target.dataset.transp){
+      const[pid,ci]=e.target.dataset.transp.split(':');
+      PAISES_DB[pid].cid[+ci].transp_saida=e.target.value;
+      marcarPendenteDet();
+      return;
+    }
+    if(e.target.dataset.poi){
+      const[pid,ci,pi,campo]=e.target.dataset.poi.split(':');
+      const val=campo==='valor'?(parseFloat(e.target.value)||0):e.target.value;
+      PAISES_DB[pid].cid[+ci].poi[+pi][campo]=val;
+      marcarPendenteDet();
+    }
+  });
+
+  $$('#det-btnAddPais').onclick=()=>{
+    const id='NOVO'+(++counterDet);
+    PAISES_DB[id]={nome:'Novo país',ini:META.fim,fim:META.fim,dias:1,sch:0,dpd:150,cid:[]};
+    PAISES_INDEX.push(id); novosIdsDet.add(id); FLAGS[id]=FLAGS[id]||'🏳️';
+    marcarPendenteDet(); renderDet(capturarEstadoAberto());
+    $$('#det-pc-'+id).scrollIntoView({behavior:'smooth',block:'center'});
+  };
+
+  /* ===== Revisão / Enviar atualização ===== */
+  function gerarRevisaoDet(){
+    const findings=[];
+    const primeiro=PAISES_INDEX[0], ultimo=PAISES_INDEX[PAISES_INDEX.length-1];
+    const ini=PAISES_DB[primeiro]?PAISES_DB[primeiro].ini:META.inicio;
+    const fim=PAISES_DB[ultimo]?PAISES_DB[ultimo].fim:META.fim;
+    const dur=diasEntre(ini,fim), limite=diasEntre(META.inicio,META.fim);
+
+    findings.push(dur>limite
+      ? {t:'danger',tag:'⏱ Duração excedida',txt:`Roteiro soma ${dur} dias, ${dur-limite} além do limite de 1 ano (${limite} dias).`}
+      : {t:'ok',tag:'⏱ Duração',txt:`${dur} dias, dentro do limite (margem de ${limite-dur} dias).`});
+
+    const sch=PAISES_INDEX.reduce((s,id)=>s+(PAISES_DB[id].sch?PAISES_DB[id].dias:0),0);
+    findings.push(sch>META.schengen_max
+      ? {t:'danger',tag:'🇪🇺 Limite Schengen excedido',txt:`${sch} dias Schengen, ${sch-META.schengen_max} acima do limite de ${META.schengen_max}. Reduza dias em algum país Schengen.`}
+      : {t:'ok',tag:'🇪🇺 Espaço Schengen',txt:`${sch}/${META.schengen_max} dias — dentro do limite (margem de ${META.schengen_max-sch} dias).`});
+
+    if(PAISES_DB['AU'] && PAISES_DB['AU'].dias>15)
+      findings.push({t:'danger',tag:'🇦🇺 Regra Austrália violada',txt:`Austrália com ${PAISES_DB['AU'].dias} dias, acima do máximo de 15 (casa da Michele em Gold Coast).`});
+
+    PAISES_INDEX.forEach(id=>{
+      const p=PAISES_DB[id];
+      if(!p.cid||!p.cid.length)return;
+      const soma=p.cid.reduce((s,c)=>s+c.dias,0);
+      if(soma!==p.dias) findings.push({t:'warn',tag:`⚠ ${p.nome} — dias não conferem`,txt:`Cidades somam ${soma}d, mas país está com ${p.dias}d. Ajuste recomendado.`});
+    });
+
+    PAISES_INDEX.forEach(id=>{
+      const p=PAISES_DB[id];
+      const est=checarEstacao(id,p);
+      if(est){
+        findings.push({t:'warn',tag:`🌦 ${p.nome} — fora de primavera/verão`,txt:`Período ${fmtD(p.ini)} → ${fmtD(p.fim)} inclui mês(es) fora da primavera/verão do hemisfério ${est.hemisferio==='N'?'norte':'sul'}: ${est.mesesFora.join(', ')}.`});
+      }
+    });
+
+    let custo=0;
+    PAISES_INDEX.forEach(id=>{custo+=PAISES_DB[id].dias*(PAISES_DB[id].dpd||0)});
+    const pct=custo/META.orcamento*100;
+    findings.push(pct>100
+      ? {t:'danger',tag:'💰 Orçamento excedido',txt:`R$ ${custo.toLocaleString('pt-BR')} (${pct.toFixed(1)}%). Excedente de R$ ${(custo-META.orcamento).toLocaleString('pt-BR')}.`}
+      : pct>90
+      ? {t:'warn',tag:'💰 Orçamento — atenção',txt:`R$ ${custo.toLocaleString('pt-BR')} (${pct.toFixed(1)}%). Margem de R$ ${(META.orcamento-custo).toLocaleString('pt-BR')}.`}
+      : {t:'ok',tag:'💰 Custo estimado',txt:`R$ ${custo.toLocaleString('pt-BR')} de R$ ${META.orcamento.toLocaleString('pt-BR')} (${pct.toFixed(1)}%). Dentro da meta.`});
+
+    if(novosIdsDet.size>0){
+      const nomes=[...novosIdsDet].map(id=>PAISES_DB[id]?PAISES_DB[id].nome:id).join(', ');
+      findings.push({t:'warn',tag:'🆕 Países novos adicionados',txt:`${nomes}. Verifique manualmente visto, vacina ou seguro diferenciado — não atualizados automaticamente.`});
+    }
+
+    PAISES_INDEX.forEach(id=>{
+      const p=PAISES_DB[id];
+      (p.cid||[]).forEach(c=>(c.poi||[]).forEach(poi=>{
+        if(poi.data && (poi.data<p.ini || poi.data>p.fim))
+          findings.push({t:'warn',tag:`📍 ${poi.nome||'Ponto de interesse'} fora do período`,txt:`Data ${fmtD(poi.data)} fora do período de ${p.nome} (${fmtD(p.ini)} → ${fmtD(p.fim)}).`});
+      }));
+    });
+    return findings;
+  }
+
+  $$('#det-benv').onclick=()=>{
+    const findings=gerarRevisaoDet();
+    const c=$$('#det-rcontent'); c.innerHTML='';
+    findings.forEach(f=>c.appendChild(el(`<div class="ritem ${f.t}"><span class="tg">${f.tag}</span>${f.txt}</div>`)));
+    const grave=findings.some(f=>f.t==='danger');
+    $$('#det-bconf').textContent=grave?'Aplicar mesmo assim (não recomendado)':'Aplicar no roteiro';
+    $$('#det-bconf').style.background=grave?'var(--bad)':'var(--ok)';
+    $$('#det-ovl').classList.add('on');
+  };
+  $$('#det-bcanc').onclick=()=>$$('#det-ovl').classList.remove('on');
+  $$('#det-bconf').onclick=async()=>{
+    $$('#det-ovl').classList.remove('on');
+    $$('#det-pinfo').textContent='Salvando no Firestore...';
+    try{
+      await setDoc(doc(dbFs,'config','paises_index'), {ordem: PAISES_INDEX});
+      for(const id of PAISES_INDEX) await setDoc(doc(dbFs,'paises',id), PAISES_DB[id]);
+      pendingDet=false; novosIdsDet.clear();
+      abaAtiva='detalhado';
+      renderApp();
+      const novoWrap=$('#pg-detalhado');
+      if(novoWrap){
+        const pinfo=novoWrap.querySelector('#det-pinfo');
+        if(pinfo) pinfo.textContent='✓ Roteiro e Custos atualizados com sucesso';
+        setTimeout(()=>{ const pi=$('#pg-detalhado #det-pinfo'); if(pi) pi.textContent='Nenhuma alteração pendente'; },5000);
+      }
+    }catch(e){
+      console.error('Falha ao salvar no Firestore:', e);
+      $$('#det-pinfo').textContent='⚠️ Erro ao salvar — tente "Enviar atualização" novamente.';
+    }
+  };
+
+  function gerarXLSX(){
+    const wb = XLSX.utils.book_new();
+
+    const roteiroRows=[["Mês","País","Início","Fim","Dias","Schengen","Descrição"]];
+    PAISES_INDEX.forEach(id=>{
+      const p=PAISES_DB[id];
+      roteiroRows.push([mesKey(p.ini), p.nome, fmtD(p.ini), fmtD(p.fim), p.dias, p.sch?"Sim":"Não", DESC[id]||""]);
+    });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(roteiroRows), "Roteiro");
+
+    const detRows=[["País","Cidade","Dias","Transporte saída","Ponto de interesse","Data","Valor (R$)"]];
+    PAISES_INDEX.forEach(id=>{
+      const p=PAISES_DB[id];
+      (p.cid||[]).forEach(c=>{
+        if(c.poi && c.poi.length){
+          c.poi.forEach(poi=>detRows.push([p.nome, c.nome, c.dias, c.transp_saida||"", poi.nome||"", poi.data?fmtD(poi.data):"", poi.valor||0]));
+        }else{
+          detRows.push([p.nome, c.nome, c.dias, c.transp_saida||"", "", "", ""]);
+        }
+      });
+    });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(detRows), "Roteiro Detalhado");
+
+    const custoRows=[["Tipo","País/Item","Detalhe","Valor (R$)"]];
+    let totalGeral=0;
+    PAISES_INDEX.forEach(id=>{
+      const p=PAISES_DB[id]; const tot=p.dias*(p.dpd||0); totalGeral+=tot;
+      custoRows.push(["País", p.nome, `${p.dias}d × R$${p.dpd}/dia`, tot]);
+    });
+    TRENS.forEach(t=>{ totalGeral+=t.brl; custoRows.push(["Trem", `${t.origem} → ${t.destino}`, t.noturno?"noturno":"diurno", t.brl]); });
+    CUSTOS_EXTRAS.forEach(c=>{ totalGeral+=(c.valor||0); custoRows.push(["Extra", c.descricao, c.data||"", c.valor||0]); });
+    VISTOS.forEach(v=>{ totalGeral+=(v.custo||0); custoRows.push(["Visto", PAISES_DB[v.id]?PAISES_DB[v.id].nome:v.id, v.forma, v.custo]); });
+    custoRows.push(["","","TOTAL GERAL", totalGeral]);
+    custoRows.push(["","","Orçamento", META.orcamento]);
+    custoRows.push(["","","Margem", META.orcamento-totalGeral]);
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(custoRows), "Custos");
+
+    const vistoRows=[["País","Prazo/Validade","Forma","Custo (R$)","Alerta"]];
+    VISTOS.forEach(v=>vistoRows.push([PAISES_DB[v.id]?PAISES_DB[v.id].nome:v.id, v.prazo, v.forma, v.custo, v.alerta||""]));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(vistoRows), "Vistos");
+
+    const vacRows=[["Vacina","Destinos","Prazo/Validade","Tomada?","Data aplicação","Status"]];
+    VACINAS.forEach(v=>{
+      const r=calcValidadeVacina(v);
+      const status = !v.tomada?'Não tomada'
+        : r.status==='valida'?'Válida para toda viagem'
+        : r.status==='expira-antes'?`Vence em ${fmtD(r.dataExpira)} — reforço necessário`
+        : r.status==='sem-validade'?'Validade não padronizada'
+        : 'Sem data informada';
+      vacRows.push([v.nome, v.destinos, v.prazo, v.tomada?"Sim":"Não", v.dataAplicacao?fmtD(v.dataAplicacao):"", status]);
+    });
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(vacRows), "Vacinas");
+
+    const prepRows=[["Seção","Tarefa","Concluída?"]];
+    PREP.forEach(sec=>sec.tasks.forEach(t=>prepRows.push([sec.sec, t.t, t.d?"Sim":"Não"])));
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(prepRows), "Preparativos");
+
+    XLSX.writeFile(wb, "roteiro_fechado.xlsx");
+  }
+  $$('#det-fechar').onclick=()=>{
+    if(typeof XLSX==='undefined'){ alert('Biblioteca de planilha ainda carregando — tente novamente em instantes.'); return; }
+    gerarXLSX();
+  };
+
+  renderDet();
+  return wrap;
+}
+
+const PAGES=[["roteiro","📍 Roteiro",pageRoteiro],["custos","💰 Custos",pageCustos],["vistos","🛂 Vistos",pageVistos],["vacinas","💉 Vacinas",pageVacinas],["preparativos","✅ Preparativos",pagePrep],["detalhado","✏️ Roteiro Detalhado",pageRoteiroDetalhado]];
+let abaAtiva='roteiro';
 function renderApp(){
   const tabsEl=$('#tabs'), pagesEl=$('#pages');
   tabsEl.innerHTML=''; pagesEl.innerHTML='';
-  PAGES.forEach(([id,label,fn],i)=>{
-    const tab=el(`<button class="tab ${i===0?'on':''}">${label}</button>`);
-    tab.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));tab.classList.add('on');$('#pg-'+id).classList.add('on')};
+  PAGES.forEach(([id,label,fn])=>{
+    const isOn=id===abaAtiva;
+    const tab=el(`<button class="tab ${isOn?'on':''}">${label}</button>`);
+    tab.onclick=()=>{abaAtiva=id;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));tab.classList.add('on');$('#pg-'+id).classList.add('on')};
     tabsEl.appendChild(tab);
-    const pg=el(`<div class="pg ${i===0?'on':''}" id="pg-${id}"></div>`);
+    const pg=el(`<div class="pg ${isOn?'on':''}" id="pg-${id}"></div>`);
     pg.appendChild(fn());
     pagesEl.appendChild(pg);
   });
