@@ -707,7 +707,7 @@ let pendingDet=false, novosIdsDet=new Set(), counterDet=0;
 
 function pageRoteiroDetalhado(){
   const wrap=el(`<div class="detwrap">
-    <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Adicione cidades e pontos de interesse (data + valor de ingresso). Alterar a <b>Data fim</b> ou os dias de uma cidade empurra automaticamente as datas de todos os países seguintes (cascata); alterar a <b>Data início</b> só muda a duração daquele país, sem afetar os demais. Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
+    <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Adicione cidades e pontos de interesse (data + valor de ingresso). Alterar a <b>Data início</b> desloca o país inteiro (mantendo a duração) e empurra todos os seguintes junto; alterar a <b>Data fim</b> muda a duração daquele país e também empurra os seguintes. Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
     <div class="sect">Países do roteiro <span id="det-cnt" style="color:var(--dim)"></span></div>
     <div id="det-paises"></div>
     <button class="add addpais" id="det-btnAddPais">+ Adicionar país</button>
@@ -875,7 +875,14 @@ function pageRoteiroDetalhado(){
     if(pb){
       const id=pb.id.replace('det-pb-','');
       const p=PAISES_DB[id];
-      if(e.target.classList.contains('f-ini')){p.ini=e.target.value; recalcDias(p); marcarPendenteDet(); renderDet(capturarEstadoAberto()); return}
+      if(e.target.classList.contains('f-ini')){
+        const iniAntigo=p.ini;
+        const diff=diasEntre(iniAntigo, e.target.value);
+        p.ini=e.target.value;
+        p.fim=addDias(p.fim, diff);
+        propagarAPartirDe(id, diff);
+        marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
+      }
       if(e.target.classList.contains('f-fim')){
         const fimAntigo=p.fim;
         p.fim=e.target.value;
