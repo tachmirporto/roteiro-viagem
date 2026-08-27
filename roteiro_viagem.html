@@ -290,6 +290,17 @@ function recalcDias(p){
   const d=diasEntre(p.ini,p.fim);
   if(d>0)p.dias=d;
 }
+// Empurra/recua ini e fim de todos os países depois de paisId em `diff` dias (cascata).
+function propagarAPartirDe(paisId, diff){
+  if(diff === 0) return;
+  const idx = PAISES_INDEX.indexOf(paisId);
+  for(let i=idx+1; i<PAISES_INDEX.length; i++){
+    const seg = PAISES_DB[PAISES_INDEX[i]];
+    if(!seg) continue;
+    seg.ini = addDias(seg.ini, diff);
+    seg.fim = addDias(seg.fim, diff);
+  }
+}
 // Recalcula dias do país a partir da soma das cidades, ajusta fim, e empurra/recua
 // ini e fim de todos os países seguintes na mesma quantidade de dias (cascata).
 function propagarDatas(paisId){
@@ -300,13 +311,7 @@ function propagarDatas(paisId){
   if(diff === 0) return;
   p.dias = somaCidades;
   p.fim = addDias(p.fim, diff);
-  const idx = PAISES_INDEX.indexOf(paisId);
-  for(let i=idx+1; i<PAISES_INDEX.length; i++){
-    const seg = PAISES_DB[PAISES_INDEX[i]];
-    if(!seg) continue;
-    seg.ini = addDias(seg.ini, diff);
-    seg.fim = addDias(seg.fim, diff);
-  }
+  propagarAPartirDe(paisId, diff);
 }
 
 function pageRoteiro(){
@@ -702,7 +707,7 @@ let pendingDet=false, novosIdsDet=new Set(), counterDet=0;
 
 function pageRoteiroDetalhado(){
   const wrap=el(`<div class="detwrap">
-    <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Adicione cidades e pontos de interesse (data + valor de ingresso). Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
+    <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Adicione cidades e pontos de interesse (data + valor de ingresso). Alterar a <b>Data fim</b> ou os dias de uma cidade empurra automaticamente as datas de todos os países seguintes (cascata); alterar a <b>Data início</b> só muda a duração daquele país, sem afetar os demais. Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
     <div class="sect">Países do roteiro <span id="det-cnt" style="color:var(--dim)"></span></div>
     <div id="det-paises"></div>
     <button class="add addpais" id="det-btnAddPais">+ Adicionar país</button>
@@ -871,7 +876,13 @@ function pageRoteiroDetalhado(){
       const id=pb.id.replace('det-pb-','');
       const p=PAISES_DB[id];
       if(e.target.classList.contains('f-ini')){p.ini=e.target.value; recalcDias(p); marcarPendenteDet(); renderDet(capturarEstadoAberto()); return}
-      if(e.target.classList.contains('f-fim')){p.fim=e.target.value; recalcDias(p); marcarPendenteDet(); renderDet(capturarEstadoAberto()); return}
+      if(e.target.classList.contains('f-fim')){
+        const fimAntigo=p.fim;
+        p.fim=e.target.value;
+        recalcDias(p);
+        propagarAPartirDe(id, diasEntre(fimAntigo, p.fim));
+        marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
+      }
       if(e.target.classList.contains('f-dpd')){p.dpd=parseFloat(e.target.value)||0; marcarPendenteDet(); return}
       if(e.target.classList.contains('f-sch')){p.sch=parseInt(e.target.value); marcarPendenteDet(); return}
     }
