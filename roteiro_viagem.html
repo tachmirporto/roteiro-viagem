@@ -461,7 +461,7 @@ function pageCustos(){
   const realCont=wrap.querySelector('#custos-real');
 
   /* ===== PLANEJADO ===== */
-  planCont.appendChild(el(`<div class="sect">Custos por mês (estimativa)</div><div id="mc"></div>`));
+  planCont.appendChild(el(`<div><div class="sect">Custos por mês (estimativa)</div><div id="mc"></div></div>`));
   const cont=planCont.querySelector('#mc');
   Object.entries(meses).forEach(([mk,ids])=>{
     const totMesHosp=ids.reduce((s,id)=>s+PAISES_DB[id].dias*PAISES_DB[id].dpd,0);
@@ -489,7 +489,7 @@ function pageCustos(){
   });
 
   /* ===== REALIZADO ===== */
-  realCont.appendChild(el(`<div class="sect">Extras (fora dos destinos)</div><div id="ce"></div><div class="sect" style="margin-top:20px">Gastos por destino</div><div id="gd"></div>`));
+  realCont.appendChild(el(`<div><div class="sect">Extras (fora dos destinos)</div><div id="ce"></div><div class="sect" style="margin-top:20px">Gastos por destino</div><div id="gd"></div></div>`));
   const contExtras = realCont.querySelector('#ce');
   function renderExtras(){
     contExtras.innerHTML='';
