@@ -187,12 +187,15 @@ const META={inicio:"2027-04-01",fim:"2028-03-31",orcamento:160000,schengen_max:9
 const FLAGS={MA:"🇲🇦",PT:"🇵🇹",ES:"🇪🇸",FR1:"🇫🇷",MC:"🇲🇨",IT1:"🇮🇹",AT1:"🇦🇹",SK:"🇸🇰",AT2:"🇦🇹",DE1:"🇩🇪",DK:"🇩🇰",SE:"🇸🇪",NO:"🇳🇴",IS:"🇮🇸",IE:"🇮🇪",GB:"🇬🇧",NL:"🇳🇱",BE:"🇧🇪",LU:"🇱🇺",FR2:"🇫🇷",CH:"🇨🇭",FR3:"🇫🇷",IT2:"🇮🇹",AL:"🇦🇱",GR:"🇬🇷",TR:"🇹🇷",EG:"🇪🇬",AE:"🇦🇪",NP:"🇳🇵",CN:"🇨🇳",VN:"🇻🇳",PH:"🇵🇭",SG:"🇸🇬",ID:"🇮🇩",ZA:"🇿🇦",TZ:"🇹🇿",TH:"🇹🇭",AU:"🇦🇺",NZ:"🇳🇿",JP:"🇯🇵",KR:"🇰🇷"};
 const DESC={MA:"Primavera ideal. Marrakech.",PT:"Lisboa. Primavera amena.",ES:"Madrid, Barcelona. Trens AVE.",FR1:"Marselha, Nice. Riviera Francesa.",MC:"Monte Carlo — cassino. 1 dia.",IT1:"Milão, Veneza.",AT1:"Viena — palácios, ópera.",SK:"Bratislava — 1h de Viena.",AT2:"Viena (retorno).",DE1:"Munique, Berlim.",DK:"Copenhague.",SE:"Estocolmo.",NO:"Oslo, Bergen.",IS:"Reykjavik — início do verão escandinavo.",IE:"7 dias — Dublin. Fora Schengen.",GB:"15 dias — Edimburgo, Londres. Fora Schengen. Verão.",NL:"Amsterdã.",BE:"Bruxelas.",LU:"Cidade de Luxemburgo.",FR2:"Paris.",CH:"Zurique.",FR3:"Lyon.",IT2:"12 dias — Turim, Florença, Roma, Nápoles, Bari. Calor de verão.",AL:"7 dias — Durrës, Berat, Gjirokastër, Ksamil/Dhërmi. Fora Schengen.",GR:"Meteora, Trikala, Atenas, Mykonos/Santorini, Chios.",TR:"Çeşme, Izmir, Pamukkale, Capadócia, Istambul.",EG:"Cairo. Hijab recomendado em templos.",AE:"Dubai. Hijab só em mesquitas.",NP:"Pokhara, Katmandu.",CN:"Pequim, Xian, Xangai, Guilin. VPN necessário.",VN:"Hanói, Hạ Long Bay, Hội An.",PH:"Manila, Palawan, Cebu, Bohol.",SG:"Singapura.",ID:"Bali, Komodo, Yogyakarta, Lombok.",ZA:"Cidade do Cabo.",TZ:"Zanzibar, Arusha, Ngorongoro, Serengeti, Mwanza, Dar es Salaam. Hijab indicado em Zanzibar fora das praias.",TH:"Bangkok, Chiang Mai, Krabi.",AU:"Gold Coast — casa da Michele 🏠, máx 15 dias.",NZ:"Auckland, Rotorua, Queenstown, Milford Sound.",JP:"Tóquio, Quioto, Osaka, Hiroshima, Fukuoka.",KR:"Busan, Seul."};
 
-// Hemisfério de cada país e meses considerados primavera/verão nesse hemisfério.
-// hemisferio:null = zona tropical/equatorial, onde a divisão primavera/verão não se aplica (clima seco/chuvoso) — sem checagem.
-const MESES_PT=["","janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
-const NORTE={hemisferio:'N',meses:[3,4,5,6,7,8]};   // mar–ago
-const SUL={hemisferio:'S',meses:[9,10,11,12,1,2]};   // set–fev
-const TROPICAL={hemisferio:null,meses:null};
+// Hemisfério de cada país. hemisferio:null = zona tropical/equatorial, onde a divisão
+// primavera/verão não se aplica (clima seco/chuvoso) — sem checagem.
+// Datas de início/fim de primavera+verão usam as datas aproximadas de equinócio/solstício
+// (variam 1 dia entre anos, mas essa aproximação é suficiente aqui):
+//   Hemisfério Norte: primavera+verão = 20/mar até 22/set
+//   Hemisfério Sul:   primavera+verão = 23/set até 20/mar (vira o ano)
+const NORTE={hemisferio:'N'};
+const SUL={hemisferio:'S'};
+const TROPICAL={hemisferio:null};
 const ESTACOES={
   MA:NORTE,PT:NORTE,ES:NORTE,FR1:NORTE,MC:NORTE,IT1:NORTE,AT1:NORTE,SK:NORTE,AT2:NORTE,DE1:NORTE,DK:NORTE,SE:NORTE,NO:NORTE,IS:NORTE,
   IE:NORTE,GB:NORTE,NL:NORTE,BE:NORTE,LU:NORTE,FR2:NORTE,CH:NORTE,FR3:NORTE,IT2:NORTE,AL:NORTE,GR:NORTE,TR:NORTE,EG:NORTE,AE:NORTE,
@@ -200,20 +203,37 @@ const ESTACOES={
   VN:TROPICAL,PH:TROPICAL,SG:TROPICAL,ID:TROPICAL,TZ:TROPICAL,TH:TROPICAL,
   ZA:SUL,AU:SUL,NZ:SUL
 };
-function mesesNoIntervalo(ini,fim){
-  const meses=new Set();
-  let d=new Date(ini+'T00:00:00');
-  const fimD=new Date(fim+'T00:00:00');
-  while(d<=fimD){ meses.add(d.getMonth()+1); d.setDate(d.getDate()+1); }
-  return [...meses];
+function estacaoPermitida(hemi, d){
+  const m=d.getMonth()+1, dia=d.getDate();
+  if(hemi==='N'){
+    if(m>3 && m<9) return true;             // abr–ago inteiros
+    if(m===3 && dia>=20) return true;        // a partir do equinócio de março
+    if(m===9 && dia<=22) return true;        // até o equinócio de setembro
+    return false;
+  }
+  // hemisfério Sul: primavera+verão de 23/set a 20/mar (vira o ano)
+  if(m>9 || m<3) return true;                // out–fev inteiros
+  if(m===9 && dia>=23) return true;          // a partir do equinócio de setembro
+  if(m===3 && dia<=20) return true;          // até o equinócio de março
+  return false;
 }
 function checarEstacao(id,p){
   const est=ESTACOES[id];
   if(!est || !est.hemisferio) return null; // sem regra para zona tropical/desconhecida
-  const cobertos=mesesNoIntervalo(p.ini,p.fim);
-  const fora=cobertos.filter(m=>!est.meses.includes(m));
-  if(!fora.length) return null;
-  return {hemisferio:est.hemisferio, mesesFora:fora.map(m=>MESES_PT[m])};
+  let d=new Date(p.ini+'T00:00:00');
+  const fimD=new Date(p.fim+'T00:00:00');
+  let diasFora=0, primeiraFora=null, ultimaFora=null;
+  while(d<=fimD){
+    if(!estacaoPermitida(est.hemisferio, d)){
+      diasFora++;
+      if(!primeiraFora) primeiraFora=new Date(d);
+      ultimaFora=new Date(d);
+    }
+    d.setDate(d.getDate()+1);
+  }
+  if(!diasFora) return null;
+  const fmt=dt=>dt.toISOString().slice(0,10).split('-').reverse().join('/');
+  return {hemisferio:est.hemisferio, diasFora, deAte: primeiraFora.getTime()===ultimaFora.getTime() ? fmt(primeiraFora) : `${fmt(primeiraFora)} a ${fmt(ultimaFora)}`};
 }
 
 // Meses de estação seca para os países tropicais/equatoriais (o restante é considerado chuvoso).
@@ -957,7 +977,7 @@ function pageRoteiroDetalhado(){
       const p=PAISES_DB[id];
       const est=checarEstacao(id,p);
       if(est){
-        findings.push({t:'warn',tag:`🌦 ${p.nome} — fora de primavera/verão`,txt:`Período ${fmtD(p.ini)} → ${fmtD(p.fim)} inclui mês(es) fora da primavera/verão do hemisfério ${est.hemisferio==='N'?'norte':'sul'}: ${est.mesesFora.join(', ')}.`});
+        findings.push({t:'warn',tag:`🌦 ${p.nome} — fora de primavera/verão`,txt:`Período ${fmtD(p.ini)} → ${fmtD(p.fim)} tem ${est.diasFora} dia(s) fora da primavera/verão do hemisfério ${est.hemisferio==='N'?'norte':'sul'} (${est.deAte}).`});
       }
     });
 
