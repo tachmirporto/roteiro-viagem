@@ -25,6 +25,19 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 .bar-fill{height:100%;border-radius:99px;background:var(--ok)}
 .bar-fill.w{background:var(--warn)}.bar-fill.d{background:var(--bad)}
 .pct{font-size:11px;color:var(--mut)}.pct b{color:var(--tx)}
+.subtabs{display:flex;gap:8px;margin-bottom:20px}
+.subtab{background:var(--surf);border:1px solid var(--bd);color:var(--mut);padding:9px 18px;border-radius:var(--rs);cursor:pointer;font-family:var(--f);font-size:13px;font-weight:600}
+.subtab:hover{color:var(--tx)}
+.subtab.on{background:var(--okd);color:var(--ok);border-color:rgba(0,212,170,.3)}
+.cmp{display:flex;align-items:center;gap:8px;margin-top:6px;padding:0 20px 10px}
+.cmp .cmp-bar{flex:1;height:5px;background:var(--bd);border-radius:99px;overflow:hidden}
+.cmp .cmp-fill{height:100%;border-radius:99px;background:var(--ok)}
+.cmp .cmp-fill.w{background:var(--warn)}.cmp .cmp-fill.d{background:var(--bad)}
+.cmp .cmp-txt{font-family:var(--m);font-size:11px;color:var(--mut);white-space:nowrap}
+.gform{display:flex;gap:8px;padding:10px 20px;flex-wrap:wrap;align-items:center}
+.gform select,.gform input{background:var(--surf2);border:1px solid var(--bd);color:var(--tx);padding:7px 9px;border-radius:var(--rs);font-family:var(--f);font-size:12px}
+.gform input[type=number]{color:var(--ok);font-family:var(--m)}
+.cat-tag{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--ac2d);color:var(--ac2);font-weight:600;white-space:nowrap}
 .pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
 .p-ok{background:var(--okd);color:var(--ok)}.p-ac2{background:var(--ac2d);color:var(--ac2)}.p-warn{background:var(--warnd);color:var(--warn)}
 .tg{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
@@ -264,6 +277,7 @@ function climaTropical(id,p){
 let PAISES_INDEX=["MA","PT","ES","FR1","MC","IT1","AT1","SK","AT2","DE1","DK","SE","NO","IS","IE","GB","NL","BE","LU","FR2","CH","FR3","IT2","AL","GR","TR","EG","AE","NP","CN","VN","PH","SG","ID","ZA","TZ","TH","AU","NZ","JP","KR"];
 const PAISES_DB={"MA":{"nome":"Marrocos","ini":"2027-04-11","fim":"2027-04-22","dias":12,"sch":0,"dpd":130,"cid":[{"nome":"Marrakech","dias":7,"poi":[],"transp_saida":"avião"}]},"PT":{"nome":"Portugal","ini":"2027-04-22","fim":"2027-04-26","dias":5,"sch":1,"dpd":200,"cid":[{"nome":"Lisboa","dias":5,"poi":[],"transp_saida":"trem"}]},"ES":{"nome":"Espanha","ini":"2027-04-26","fim":"2027-05-02","dias":7,"sch":1,"dpd":220,"cid":[{"nome":"Madrid","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Barcelona","dias":3,"poi":[],"transp_saida":"trem"}]},"FR1":{"nome":"França (1)","ini":"2027-05-02","fim":"2027-05-05","dias":4,"sch":1,"dpd":250,"cid":[{"nome":"Marselha","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Nice","dias":2,"poi":[],"transp_saida":"trem"}]},"MC":{"nome":"Mônaco","ini":"2027-05-05","fim":"2027-05-05","dias":1,"sch":1,"dpd":280,"cid":[{"nome":"Monte Carlo","dias":1,"poi":[],"transp_saida":"trem"}]},"IT1":{"nome":"Itália (Milão-Veneza)","ini":"2027-05-05","fim":"2027-05-09","dias":5,"sch":1,"dpd":230,"cid":[{"nome":"Milão","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Veneza","dias":2,"poi":[],"transp_saida":"trem"}]},"AT1":{"nome":"Áustria (Viena)","ini":"2027-05-09","fim":"2027-05-11","dias":3,"sch":1,"dpd":210,"cid":[{"nome":"Viena","dias":3,"poi":[],"transp_saida":"trem"}]},"SK":{"nome":"Eslováquia","ini":"2027-05-11","fim":"2027-05-12","dias":2,"sch":1,"dpd":120,"cid":[{"nome":"Bratislava","dias":2,"poi":[],"transp_saida":"trem"}]},"AT2":{"nome":"Áustria (Viena retorno)","ini":"2027-05-12","fim":"2027-05-12","dias":1,"sch":1,"dpd":210,"cid":[{"nome":"Viena","dias":1,"poi":[],"transp_saida":"trem"}]},"DE1":{"nome":"Alemanha (Munique-Berlim)","ini":"2027-05-12","fim":"2027-05-16","dias":5,"sch":1,"dpd":200,"cid":[{"nome":"Munique","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Berlim","dias":2,"poi":[],"transp_saida":"trem"}]},"DK":{"nome":"Dinamarca","ini":"2027-05-16","fim":"2027-05-18","dias":3,"sch":1,"dpd":280,"cid":[{"nome":"Copenhague","dias":3,"poi":[],"transp_saida":"trem"}]},"SE":{"nome":"Suécia","ini":"2027-05-18","fim":"2027-05-21","dias":4,"sch":1,"dpd":260,"cid":[{"nome":"Estocolmo","dias":4,"poi":[],"transp_saida":"trem"}]},"NO":{"nome":"Noruega","ini":"2027-05-21","fim":"2027-05-24","dias":4,"sch":1,"dpd":320,"cid":[{"nome":"Oslo","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Bergen","dias":2,"poi":[],"transp_saida":"avião"}]},"IS":{"nome":"Islândia","ini":"2027-05-24","fim":"2027-05-27","dias":4,"sch":1,"dpd":350,"cid":[{"nome":"Reykjavik","dias":4,"poi":[],"transp_saida":"avião"}]},"IE":{"nome":"Irlanda","ini":"2027-05-27","fim":"2027-06-02","dias":7,"sch":0,"dpd":230,"cid":[{"nome":"Dublin","dias":7,"poi":[],"transp_saida":"balsa/trem"}]},"GB":{"nome":"Reino Unido","ini":"2027-06-02","fim":"2027-06-16","dias":15,"sch":0,"dpd":280,"cid":[{"nome":"Edimburgo","dias":8,"poi":[],"transp_saida":"trem"},{"nome":"Londres","dias":7,"poi":[],"transp_saida":"trem"}]},"NL":{"nome":"Países Baixos","ini":"2027-06-16","fim":"2027-06-18","dias":3,"sch":1,"dpd":220,"cid":[{"nome":"Amsterdã","dias":3,"poi":[],"transp_saida":"trem"}]},"BE":{"nome":"Bélgica","ini":"2027-06-18","fim":"2027-06-19","dias":2,"sch":1,"dpd":210,"cid":[{"nome":"Bruxelas","dias":2,"poi":[],"transp_saida":"trem"}]},"LU":{"nome":"Luxemburgo","ini":"2027-06-19","fim":"2027-06-20","dias":2,"sch":1,"dpd":230,"cid":[{"nome":"Luxemburgo","dias":2,"poi":[],"transp_saida":"trem"}]},"FR2":{"nome":"França (Paris)","ini":"2027-06-20","fim":"2027-06-23","dias":4,"sch":1,"dpd":250,"cid":[{"nome":"Paris","dias":4,"poi":[],"transp_saida":"trem"}]},"CH":{"nome":"Suíça","ini":"2027-06-23","fim":"2027-06-25","dias":3,"sch":1,"dpd":320,"cid":[{"nome":"Zurique","dias":3,"poi":[],"transp_saida":"trem"}]},"FR3":{"nome":"França (Lyon)","ini":"2027-06-25","fim":"2027-06-27","dias":3,"sch":1,"dpd":250,"cid":[{"nome":"Lyon","dias":3,"poi":[],"transp_saida":"trem"}]},"IT2":{"nome":"Itália (Turim-Bari)","ini":"2027-06-27","fim":"2027-07-08","dias":12,"sch":1,"dpd":230,"cid":[{"nome":"Turim","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Florença","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Roma","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Nápoles","dias":2,"poi":[],"transp_saida":"trem"},{"nome":"Bari","dias":2,"poi":[],"transp_saida":"barco"}]},"AL":{"nome":"Albânia","ini":"2027-07-08","fim":"2027-07-14","dias":7,"sch":0,"dpd":90,"cid":[{"nome":"Durrës","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Berat","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Gjirokastër","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Ksamil/Dhërmi","dias":1,"poi":[],"transp_saida":"ônibus"}]},"GR":{"nome":"Grécia","ini":"2027-07-14","fim":"2027-07-19","dias":6,"sch":1,"dpd":160,"cid":[{"nome":"Meteora","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Trikala","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Atenas","dias":1,"poi":[],"transp_saida":"balsa"},{"nome":"Mykonos/Santorini","dias":1,"poi":[],"transp_saida":"balsa"},{"nome":"Atenas (retorno)","dias":1,"poi":[],"transp_saida":"barco"},{"nome":"Ilha de Chios","dias":1,"poi":[],"transp_saida":"barco"}]},"TR":{"nome":"Turquia","ini":"2027-07-19","fim":"2027-07-28","dias":10,"sch":0,"dpd":130,"cid":[{"nome":"Porto de Çeşme","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Izmir","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Denizli","dias":1,"poi":[],"transp_saida":"taxi"},{"nome":"Pamukkale","dias":1,"poi":[],"transp_saida":"taxi"},{"nome":"Denizli (retorno)","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Göreme/Capadócia","dias":1,"poi":[],"transp_saida":"ônibus"},{"nome":"Aeroporto Nevşehir (NAV)","dias":1,"poi":[],"transp_saida":"avião"},{"nome":"Istambul","dias":1,"poi":[],"transp_saida":"avião"}]},"EG":{"nome":"Egito","ini":"2027-07-28","fim":"2027-08-04","dias":8,"sch":0,"dpd":110,"cid":[{"nome":"Cairo","dias":8,"poi":[],"transp_saida":"avião"}]},"AE":{"nome":"Dubai","ini":"2027-08-04","fim":"2027-08-08","dias":5,"sch":0,"dpd":220,"cid":[{"nome":"Dubai","dias":5,"poi":[],"transp_saida":"avião"}]},"NP":{"nome":"Nepal","ini":"2027-08-08","fim":"2027-08-17","dias":10,"sch":0,"dpd":100,"cid":[{"nome":"Pokhara","dias":5,"poi":[],"transp_saida":"ônibus"},{"nome":"Katmandu","dias":5,"poi":[],"transp_saida":"avião"}]},"CN":{"nome":"China","ini":"2027-08-17","fim":"2027-08-31","dias":15,"sch":0,"dpd":140,"cid":[{"nome":"Pequim","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Xian","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Xangai","dias":4,"poi":[],"transp_saida":"trem"},{"nome":"Guilin","dias":3,"poi":[],"transp_saida":"avião"}]},"VN":{"nome":"Vietnã","ini":"2027-08-31","fim":"2027-09-17","dias":18,"sch":0,"dpd":100,"cid":[{"nome":"Hanói","dias":5,"poi":[],"transp_saida":"ônibus"},{"nome":"Hạ Long Bay","dias":5,"poi":[],"transp_saida":"avião"},{"nome":"Hội An","dias":4,"poi":[],"transp_saida":"ônibus"},{"nome":"Aeroporto Da Nang (DAD)","dias":4,"poi":[],"transp_saida":"avião"}]},"PH":{"nome":"Filipinas","ini":"2027-09-17","fim":"2027-10-01","dias":15,"sch":0,"dpd":110,"cid":[{"nome":"Manila","dias":4,"poi":[],"transp_saida":"avião"},{"nome":"Palawan","dias":4,"poi":[],"transp_saida":"avião"},{"nome":"Cebu","dias":4,"poi":[],"transp_saida":"balsa/avião"},{"nome":"Bohol","dias":3,"poi":[],"transp_saida":"avião"}]},"SG":{"nome":"Singapura","ini":"2027-10-01","fim":"2027-10-04","dias":4,"sch":0,"dpd":200,"cid":[{"nome":"Singapura","dias":4,"poi":[],"transp_saida":"avião"}]},"ID":{"nome":"Indonésia","ini":"2027-10-04","fim":"2027-10-27","dias":24,"sch":0,"dpd":110,"cid":[{"nome":"Bali","dias":6,"poi":[],"transp_saida":"balsa/ônibus"},{"nome":"Komodo","dias":6,"poi":[],"transp_saida":null},{"nome":"Yogyakarta","dias":6,"poi":[],"transp_saida":null},{"nome":"Lombok","dias":6,"poi":[],"transp_saida":"avião"}]},"ZA":{"nome":"África do Sul","ini":"2027-10-27","fim":"2027-11-06","dias":11,"sch":0,"dpd":160,"cid":[{"nome":"Cidade do Cabo","dias":11,"poi":[],"transp_saida":"avião"}]},"TZ":{"nome":"Tanzânia","ini":"2027-11-06","fim":"2027-11-14","dias":9,"sch":0,"dpd":180,"cid":[{"nome":"Zanzibar","dias":2,"poi":[],"transp_saida":"avião"},{"nome":"Arusha","dias":2,"poi":[],"transp_saida":"carro"},{"nome":"Ngorongoro","dias":2,"poi":[],"transp_saida":"carro"},{"nome":"Serengeti","dias":1,"poi":[],"transp_saida":"carro"},{"nome":"Mwanza","dias":1,"poi":[],"transp_saida":"avião"},{"nome":"Dar es Salaam","dias":1,"poi":[],"transp_saida":"avião"}]},"TH":{"nome":"Tailândia","ini":"2027-11-14","fim":"2027-11-28","dias":15,"sch":0,"dpd":110,"cid":[{"nome":"Bangkok","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Chiang Mai","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Bangkok (retorno)","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Krabi","dias":3,"poi":[],"transp_saida":"avião"},{"nome":"Bangkok (retorno 2)","dias":3,"poi":[],"transp_saida":"avião"}]},"AU":{"nome":"Austrália","ini":"2027-11-28","fim":"2027-12-12","dias":15,"sch":0,"dpd":0,"cid":[{"nome":"Gold Coast","dias":15,"poi":[],"transp_saida":"avião"}]},"NZ":{"nome":"Nova Zelândia","ini":"2027-12-12","fim":"2027-12-23","dias":12,"sch":0,"dpd":200,"cid":[{"nome":"Auckland","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Rotorua","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Auckland (retorno)","dias":2,"poi":[],"transp_saida":"avião"},{"nome":"Queenstown","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Milford Sound","dias":2,"poi":[],"transp_saida":"ônibus"},{"nome":"Queenstown (retorno)","dias":2,"poi":[],"transp_saida":"avião"}]},"JP":{"nome":"Japão","ini":"2027-12-23","fim":"2028-01-05","dias":14,"sch":0,"dpd":200,"cid":[{"nome":"Tóquio","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Quioto","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Osaka","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Hiroshima","dias":3,"poi":[],"transp_saida":"trem"},{"nome":"Fukuoka Airport","dias":2,"poi":[],"transp_saida":"avião"}]},"KR":{"nome":"Coreia do Sul","ini":"2028-01-05","fim":"2028-01-14","dias":10,"sch":0,"dpd":150,"cid":[{"nome":"Busan","dias":5,"poi":[],"transp_saida":"trem"},{"nome":"Seul","dias":5,"poi":[],"transp_saida":null}]}};
 const TALVEZ=["Finlândia","Bulgária","Croácia","Itália"];
+const CATEGORIAS=[{id:"visto",label:"Visto",ic:"🛂"},{id:"voo",label:"Voo",ic:"✈️"},{id:"trem",label:"Trem",ic:"🚆"},{id:"passeios",label:"Passeios",ic:"🎟️"},{id:"alimentacao",label:"Alimentação",ic:"🍽️"},{id:"hospedagem",label:"Hospedagem",ic:"🛏️"}];
 const TRENS=[{"origem":"Lisboa","destino":"Madrid","mes":"ABR27","eur":60,"brl":378,"noturno":true},{"origem":"Madrid","destino":"Barcelona","mes":"ABR27","eur":59,"brl":372,"noturno":false},{"origem":"Barcelona","destino":"Marselha","mes":"MAI27","eur":65,"brl":410,"noturno":false},{"origem":"Marselha","destino":"Nice","mes":"MAI27","eur":35,"brl":220,"noturno":false},{"origem":"Nice","destino":"Monte Carlo","mes":"MAI27","eur":8,"brl":50,"noturno":false},{"origem":"Monte Carlo","destino":"Milão","mes":"MAI27","eur":55,"brl":346,"noturno":false},{"origem":"Milão","destino":"Veneza","mes":"MAI27","eur":30,"brl":189,"noturno":false},{"origem":"Veneza","destino":"Viena","mes":"MAI27","eur":70,"brl":441,"noturno":true},{"origem":"Viena","destino":"Bratislava","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Bratislava","destino":"Viena","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Viena","destino":"Munique","mes":"MAI27","eur":60,"brl":378,"noturno":false},{"origem":"Munique","destino":"Berlim","mes":"MAI27","eur":70,"brl":441,"noturno":false},{"origem":"Berlim","destino":"Copenhague","mes":"MAI27","eur":75,"brl":472,"noturno":true},{"origem":"Copenhague","destino":"Estocolmo","mes":"MAI27","eur":80,"brl":504,"noturno":true},{"origem":"Estocolmo","destino":"Oslo","mes":"MAI27","eur":55,"brl":346,"noturno":false},{"origem":"Oslo","destino":"Bergen","mes":"MAI27","eur":65,"brl":410,"noturno":false},{"origem":"Edimburgo","destino":"Londres","mes":"JUN27","eur":60,"brl":378,"noturno":false},{"origem":"Londres","destino":"Amsterdã","mes":"JUN27","eur":75,"brl":472,"noturno":false},{"origem":"Amsterdã","destino":"Bruxelas","mes":"JUN27","eur":30,"brl":189,"noturno":false},{"origem":"Bruxelas","destino":"Luxemburgo","mes":"JUN27","eur":25,"brl":158,"noturno":false},{"origem":"Luxemburgo","destino":"Paris","mes":"JUN27","eur":50,"brl":315,"noturno":false},{"origem":"Paris","destino":"Zurique","mes":"JUN27","eur":70,"brl":441,"noturno":false},{"origem":"Zurique","destino":"Lyon","mes":"JUN27","eur":55,"brl":346,"noturno":false},{"origem":"Lyon","destino":"Turim","mes":"JUN27","eur":50,"brl":315,"noturno":false},{"origem":"Turim","destino":"Florença","mes":"JUN27","eur":35,"brl":220,"noturno":false},{"origem":"Florença","destino":"Roma","mes":"JUN27","eur":30,"brl":189,"noturno":false},{"origem":"Roma","destino":"Nápoles","mes":"JUN27","eur":28,"brl":176,"noturno":false},{"origem":"Nápoles","destino":"Bari","mes":"JUN27","eur":32,"brl":202,"noturno":false},{"origem":"Pequim","destino":"Xian","mes":"AGO27","eur":65,"brl":410,"noturno":false},{"origem":"Xian","destino":"Xangai","mes":"AGO27","eur":65,"brl":410,"noturno":false},{"origem":"Xangai","destino":"Guilin","mes":"AGO27","eur":70,"brl":441,"noturno":false},{"origem":"Tóquio","destino":"Quioto","mes":"DEZ27","eur":90,"brl":567,"noturno":false},{"origem":"Quioto","destino":"Osaka","mes":"DEZ27","eur":15,"brl":94,"noturno":false},{"origem":"Osaka","destino":"Hiroshima","mes":"DEZ27","eur":70,"brl":441,"noturno":false},{"origem":"Hiroshima","destino":"Fukuoka Airport","mes":"DEZ27","eur":55,"brl":346,"noturno":false},{"origem":"Busan","destino":"Seul","mes":"JAN28","eur":40,"brl":252,"noturno":false}];
 const VISTOS=[{id:"CN",prazo:"1-3 meses antes; validade 30-90d",forma:"online/embaixada",custo:250,alerta:"verificar isenção 2027"},{id:"NP",prazo:"na chegada; validade 15/30/90d",forma:"presencial ou online",custo:250,alerta:null},{id:"ID",prazo:"VOA; 30d renovável +30",forma:"presencial na chegada",custo:180,alerta:null},{id:"AU",prazo:"ETA 1 sem antes; validade 12 meses",forma:"online (app)",custo:30,alerta:"15 dias cobertos com folga"},{id:"NZ",prazo:"NZeTA antes embarque; validade 2 anos",forma:"online (app)",custo:50,alerta:null},{id:"TZ",prazo:"2-4 sem antes; validade 90d",forma:"online eVisa",custo:250,alerta:"seguro malária recomendado"},{id:null,nomeCustom:"EES e ETIAS (Espaço Schengen/Europa)",flagCustom:"🇪🇺",prazo:"ETIAS: solicitar online antes do embarque, de preferência alguns dias antes (aprovação costuma sair em minutos, mas pode levar até 30 dias em análise manual). Validade de 3 anos ou até o passaporte vencer, o que vier primeiro. EES: sem solicitação prévia — registro biométrico (foto + digitais) feito automaticamente na primeira entrada em qualquer país do Espaço Schengen.",forma:"ETIAS: 100% online, no site/app oficial (travel-europe.europa.eu/etias). EES: automático na fronteira/aeroporto, sem ação prévia.",custo:130,alerta:"ETIAS já sofreu vários adiamentos — pode não estar obrigatório ainda em abr/2027, mas as previsões mais recentes apontam para obrigatoriedade nessa época. Confirmar mais perto da data no site oficial. EES é gratuito; os R$130 aqui referem-se só à taxa do ETIAS (€20)."}];
 
@@ -381,76 +395,74 @@ async function removerCustoExtra(id){
   try{ await deleteDoc(doc(dbFs,'custos_extras',id)); }
   catch(e){ console.error('Erro ao remover custo extra:',e); }
 }
+async function salvarGastoRealizado(item){
+  try{
+    const ref = doc(collection(dbFs,'gastos_realizados'));
+    await setDoc(ref, item);
+    return ref.id;
+  }catch(e){ console.error('Erro ao salvar gasto realizado:',e); return null; }
+}
+async function removerGastoRealizado(id){
+  try{ await deleteDoc(doc(dbFs,'gastos_realizados',id)); }
+  catch(e){ console.error('Erro ao remover gasto realizado:',e); }
+}
+
+function gastosDeCidade(paisId, cidadeNome){
+  return GASTOS_REALIZADOS.filter(g=>g.paisId===paisId && g.cidade===cidadeNome);
+}
+function gastosDePais(paisId){
+  return GASTOS_REALIZADOS.filter(g=>g.paisId===paisId).reduce((s,g)=>s+(g.valor||0),0);
+}
+function cmpBarHtml(realizado, planejado){
+  const pct = planejado>0 ? (realizado/planejado*100) : (realizado>0?100:0);
+  const cls = pct>100?'d':(pct>90?'w':'');
+  return `<div class="cmp"><span class="cmp-txt">Realizado</span><div class="cmp-bar"><div class="cmp-fill ${cls}" style="width:${Math.min(pct,100)}%"></div></div><span class="cmp-txt"><b style="color:var(--tx)">${fmtR(realizado)}</b> / ${fmtR(planejado)} (${pct.toFixed(0)}%)</span></div>`;
+}
 
 function pageCustos(){
-  let total=0; const meses={};
-  PAISES_INDEX.forEach(id=>{const p=PAISES_DB[id];total+=p.dias*p.dpd;const mk=mesKey(p.ini);(meses[mk]=meses[mk]||[]).push(id)});
+  let totalPlan=0; const meses={};
+  PAISES_INDEX.forEach(id=>{const p=PAISES_DB[id];totalPlan+=p.dias*p.dpd;const mk=mesKey(p.ini);(meses[mk]=meses[mk]||[]).push(id)});
   const totalTrens = TRENS.reduce((s,t)=>s+t.brl,0);
-  const totalExtras = CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
-  total += totalTrens + totalExtras;
-  const pct=(total/META.orcamento*100).toFixed(1);
-  const wrap=el(`<div><div class="cnt"><div><div class="lb">Custos da Viagem</div><div class="v">${fmtR(total)} <small>/ ${fmtR(META.orcamento)}</small></div></div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill ${pct>90?(pct>100?'d':'w'):''}" style="width:${Math.min(pct,100)}%"></div></div><div class="pct"><b>${pct}%</b> do orçamento</div></div></div><div class="info">ℹ️ Estimativas mochilão (hospedagem+alimentação+transporte local+passeios) <b>+ passagens de trem entre cidades</b> <b>+ custos extras lançados manualmente</b>. Vistos somados em separado. Voos internacionais não incluídos (compra mais perto da data). Trens noturnos priorizados quando mais baratos que a opção diurna — economia de 1 noite de hospedagem.</div><div class="sect">Custos extras (antes da viagem)</div><div id="ce"></div><div class="sect">Custos por mês</div><div id="mc"></div></div>`);
+  totalPlan += totalTrens;
+  const totalExtrasCalc = ()=>CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
+  const totalGastosCalc = ()=>GASTOS_REALIZADOS.reduce((s,g)=>s+(g.valor||0),0);
+  const totalPlanComExtras = ()=>totalPlan + totalExtrasCalc();
+  const totalRealizadoCalc = ()=>totalExtrasCalc() + totalGastosCalc();
 
-  const contExtras = wrap.querySelector('#ce');
-  function renderExtras(){
-    contExtras.innerHTML='';
-    const totExtrasAtual = CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
-    const acc=el(`<div class="acc">
-      <div class="acc-h" onclick="toggleAcc(this)"><div class="nm">EXTRAS</div><div class="sum">Gastos antes da viagem (equipamento, seguros, vistos antecipados, etc.)</div><div class="tot">${fmtR(totExtrasAtual)}</div><div class="chv">▾</div></div>
-      <div class="acc-b"></div>
-    </div>`);
-    const body = acc.querySelector('.acc-b');
-    CUSTOS_EXTRAS.forEach(c=>{
-      body.appendChild(el(`<div class="crow2"><span class="nm">${c.descricao}</span><span class="d">${c.data||''}</span><span class="v">${fmtR(c.valor)}</span><button class="rmv" data-rmextra="${c.id}" style="margin-left:8px">✕</button></div>`));
-    });
-    const formRow = el(`<div style="display:flex;gap:8px;padding:14px 20px;flex-wrap:wrap">
-      <input type="text" id="ce-desc" placeholder="Descrição (ex: mochila nova)" style="flex:2;min-width:160px;background:var(--surf2);border:1px solid var(--bd);color:var(--tx);padding:8px 10px;border-radius:var(--rs);font-family:var(--f);font-size:13px">
-      <input type="number" id="ce-valor" placeholder="Valor (R$)" style="flex:1;min-width:100px;background:var(--surf2);border:1px solid var(--bd);color:var(--ok);padding:8px 10px;border-radius:var(--rs);font-family:var(--m);font-size:13px">
-      <button class="add" id="ce-salvar" style="width:auto;padding:8px 18px">💾 Salvar</button>
-    </div>`);
-    body.appendChild(formRow);
-    contExtras.appendChild(acc);
+  const wrap=el(`<div>
+    <div class="cnt" id="cnt-top">
+      <div><div class="lb">Planejado</div><div class="v" id="cnt-plan-v">${fmtR(totalPlanComExtras())} <small>/ ${fmtR(META.orcamento)}</small></div></div>
+      <div class="bar-wrap"><div class="bar-track"><div class="bar-fill" id="cnt-plan-bar"></div></div><div class="pct" id="cnt-plan-pct"></div></div>
+      <div><div class="lb">Realizado</div><div class="v" id="cnt-real-v" style="color:var(--ac2)">${fmtR(totalRealizadoCalc())}</div></div>
+    </div>
+    <div id="cnt-cmp"></div>
+    <div class="info">ℹ️ <b>Planejado</b>: estimativas mochilão + trens + vistos. <b>Realizado</b>: valores efetivamente gastos, lançados por você (extras + destinos por categoria).</div>
+    <div class="subtabs">
+      <button class="subtab on" data-sub="plan">📋 Planejado</button>
+      <button class="subtab" data-sub="real">💸 Realizado</button>
+    </div>
+    <div id="custos-plan"></div>
+    <div id="custos-real" style="display:none"></div>
+  </div>`);
 
-    body.querySelectorAll('[data-rmextra]').forEach(btn=>{
-      btn.onclick=async()=>{
-        const id = btn.dataset.rmextra;
-        CUSTOS_EXTRAS = CUSTOS_EXTRAS.filter(x=>x.id!==id);
-        renderExtras();
-        atualizarContadorTotal();
-        await removerCustoExtra(id);
-      };
-    });
-    formRow.querySelector('#ce-salvar').onclick=async()=>{
-      const descInput = formRow.querySelector('#ce-desc');
-      const valorInput = formRow.querySelector('#ce-valor');
-      const desc = descInput.value.trim();
-      const valor = parseFloat(valorInput.value);
-      if(!desc || !valor || valor<=0){ alert('Preencha descrição e valor válido.'); return; }
-      const item = {descricao:desc, valor:valor, data:new Date().toISOString().slice(0,10)};
-      const novoId = await salvarCustoExtra(item);
-      if(novoId){
-        item.id = novoId;
-        CUSTOS_EXTRAS.push(item);
-        renderExtras();
-        atualizarContadorTotal();
-      }else{
-        alert('Erro ao salvar — tente novamente.');
-      }
-    };
+  function atualizarTop(){
+    const pv = totalPlanComExtras(), rv = totalRealizadoCalc();
+    const pct=(pv/META.orcamento*100).toFixed(1);
+    wrap.querySelector('#cnt-plan-v').innerHTML=`${fmtR(pv)} <small>/ ${fmtR(META.orcamento)}</small>`;
+    wrap.querySelector('#cnt-plan-bar').style.width=Math.min(pct,100)+'%';
+    wrap.querySelector('#cnt-plan-bar').className='bar-fill '+(pct>90?(pct>100?'d':'w'):'');
+    wrap.querySelector('#cnt-plan-pct').innerHTML=`<b>${pct}%</b> do orçamento`;
+    wrap.querySelector('#cnt-real-v').textContent=fmtR(rv);
+    wrap.querySelector('#cnt-cmp').innerHTML = cmpBarHtml(rv, pv);
   }
-  function atualizarContadorTotal(){
-    let novoTotal=0;
-    PAISES_INDEX.forEach(id=>{const p=PAISES_DB[id];novoTotal+=p.dias*p.dpd});
-    novoTotal += totalTrens + CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
-    const novoPct=(novoTotal/META.orcamento*100).toFixed(1);
-    wrap.querySelector('.cnt .v').innerHTML = `${fmtR(novoTotal)} <small>/ ${fmtR(META.orcamento)}</small>`;
-    wrap.querySelector('.bar-fill').style.width = Math.min(novoPct,100)+'%';
-    wrap.querySelector('.bar-fill').className = 'bar-fill ' + (novoPct>90?(novoPct>100?'d':'w'):'');
-    wrap.querySelector('.pct').innerHTML = `<b>${novoPct}%</b> do orçamento`;
-  }
-  renderExtras();
+  atualizarTop();
 
-  const cont=wrap.querySelector('#mc');
+  const planCont=wrap.querySelector('#custos-plan');
+  const realCont=wrap.querySelector('#custos-real');
+
+  /* ===== PLANEJADO ===== */
+  planCont.appendChild(el(`<div class="sect">Custos por mês (estimativa)</div><div id="mc"></div>`));
+  const cont=planCont.querySelector('#mc');
   Object.entries(meses).forEach(([mk,ids])=>{
     const totMesHosp=ids.reduce((s,id)=>s+PAISES_DB[id].dias*PAISES_DB[id].dpd,0);
     const trensDoMes = TRENS.filter(t=>t.mes===mk);
@@ -475,6 +487,135 @@ function pageCustos(){
     }
     cont.appendChild(acc);
   });
+
+  /* ===== REALIZADO ===== */
+  realCont.appendChild(el(`<div class="sect">Extras (fora dos destinos)</div><div id="ce"></div><div class="sect" style="margin-top:20px">Gastos por destino</div><div id="gd"></div>`));
+  const contExtras = realCont.querySelector('#ce');
+  function renderExtras(){
+    contExtras.innerHTML='';
+    const totExtrasAtual = totalExtrasCalc();
+    const acc=el(`<div class="acc">
+      <div class="acc-h" onclick="toggleAcc(this)"><div class="nm">EXTRAS</div><div class="sum">Gastos fora de destinos específicos (equipamento, seguros, etc.)</div><div class="tot">${fmtR(totExtrasAtual)}</div><div class="chv">▾</div></div>
+      <div class="acc-b on"></div>
+    </div>`);
+    acc.querySelector('.acc-h').classList.add('on');
+    const body = acc.querySelector('.acc-b');
+    CUSTOS_EXTRAS.forEach(c=>{
+      body.appendChild(el(`<div class="crow2"><span class="nm">${c.descricao}</span><span class="d">${c.data||''}</span><span class="v">${fmtR(c.valor)}</span><button class="rmv" data-rmextra="${c.id}" style="margin-left:8px">✕</button></div>`));
+    });
+    const formRow = el(`<div class="gform">
+      <input type="text" id="ce-desc" placeholder="Descrição (ex: mochila nova)" style="flex:2;min-width:160px">
+      <input type="number" id="ce-valor" placeholder="Valor (R$)" style="flex:1;min-width:100px">
+      <button class="add" id="ce-salvar" style="width:auto;padding:8px 18px">💾 Salvar</button>
+    </div>`);
+    body.appendChild(formRow);
+    contExtras.appendChild(acc);
+
+    body.querySelectorAll('[data-rmextra]').forEach(btn=>{
+      btn.onclick=async()=>{
+        const id = btn.dataset.rmextra;
+        CUSTOS_EXTRAS = CUSTOS_EXTRAS.filter(x=>x.id!==id);
+        renderExtras();
+        atualizarTop();
+        await removerCustoExtra(id);
+      };
+    });
+    formRow.querySelector('#ce-salvar').onclick=async()=>{
+      const descInput = formRow.querySelector('#ce-desc');
+      const valorInput = formRow.querySelector('#ce-valor');
+      const desc = descInput.value.trim();
+      const valor = parseFloat(valorInput.value);
+      if(!desc || !valor || valor<=0){ alert('Preencha descrição e valor válido.'); return; }
+      const item = {descricao:desc, valor:valor, data:new Date().toISOString().slice(0,10)};
+      const novoId = await salvarCustoExtra(item);
+      if(novoId){
+        item.id = novoId;
+        CUSTOS_EXTRAS.push(item);
+        renderExtras();
+        atualizarTop();
+      }else{
+        alert('Erro ao salvar — tente novamente.');
+      }
+    };
+  }
+  renderExtras();
+
+  const contGD = realCont.querySelector('#gd');
+  function renderGastosDestino(){
+    contGD.innerHTML='';
+    Object.entries(meses).forEach(([mk,ids])=>{
+      const totMesReal = ids.reduce((s,id)=>s+gastosDePais(id),0);
+      const accM=el(`<div class="acc"><div class="acc-h" onclick="toggleAcc(this)"><div class="nm">${mk}</div><div class="sum"></div><div class="tot">${fmtR(totMesReal)}</div><div class="chv">▾</div></div><div class="acc-b"></div></div>`);
+      const bodyM=accM.querySelector('.acc-b');
+      ids.forEach(id=>{
+        const p=PAISES_DB[id];
+        const planP=p.dias*p.dpd, realP=gastosDePais(id);
+        const subP=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${FLAGS[id]} ${p.nome}</span><span class="tot">${fmtR(realP)}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
+        const sbP=subP.querySelector('.sub-acc-b');
+        sbP.appendChild(el(cmpBarHtml(realP, planP)));
+        p.cid.forEach(c=>{
+          const entries=gastosDeCidade(id,c.nome);
+          const totC=entries.reduce((s,g)=>s+(g.valor||0),0);
+          const ccard=el(`<div style="background:var(--surf3);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;margin:8px 0">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:12px;font-weight:600">📍 ${c.nome}</span><span style="font-family:var(--m);font-size:12px;color:var(--ok)">${fmtR(totC)}</span></div>
+            <div class="glist"></div>
+            <div class="gform" style="padding:8px 0 0">
+              <select class="g-cat">${CATEGORIAS.map(ct=>`<option value="${ct.id}">${ct.ic} ${ct.label}</option>`).join('')}</select>
+              <input type="text" class="g-desc" placeholder="Descrição" style="flex:1;min-width:110px">
+              <input type="number" class="g-valor" placeholder="Valor (R$)" style="width:100px">
+              <button class="add g-salvar" style="width:auto;padding:6px 14px">💾</button>
+            </div>
+          </div>`);
+          const glist=ccard.querySelector('.glist');
+          entries.forEach(g=>{
+            const cat=CATEGORIAS.find(ct=>ct.id===g.categoria);
+            glist.appendChild(el(`<div class="crow2"><span class="cat-tag">${cat?cat.ic+' '+cat.label:g.categoria}</span><span class="nm">${g.descricao}</span><span class="d">${g.data?fmtD(g.data):''}</span><span class="v">${fmtR(g.valor)}</span><button class="rmv" data-rmg="${g.id}" style="margin-left:6px">✕</button></div>`));
+          });
+          glist.querySelectorAll('[data-rmg]').forEach(btn=>{
+            btn.onclick=async()=>{
+              const gid=btn.dataset.rmg;
+              GASTOS_REALIZADOS = GASTOS_REALIZADOS.filter(x=>x.id!==gid);
+              renderGastosDestino();
+              atualizarTop();
+              await removerGastoRealizado(gid);
+            };
+          });
+          ccard.querySelector('.g-salvar').onclick=async()=>{
+            const cat=ccard.querySelector('.g-cat').value;
+            const descI=ccard.querySelector('.g-desc');
+            const valI=ccard.querySelector('.g-valor');
+            const desc=descI.value.trim();
+            const valor=parseFloat(valI.value);
+            if(!desc||!valor||valor<=0){ alert('Preencha descrição e valor válido.'); return; }
+            const item={paisId:id, cidade:c.nome, categoria:cat, descricao:desc, valor:valor, data:new Date().toISOString().slice(0,10)};
+            const novoId=await salvarGastoRealizado(item);
+            if(novoId){
+              item.id=novoId;
+              GASTOS_REALIZADOS.push(item);
+              renderGastosDestino();
+              atualizarTop();
+            }else{
+              alert('Erro ao salvar — tente novamente.');
+            }
+          };
+          sbP.appendChild(ccard);
+        });
+        bodyM.appendChild(subP);
+      });
+      contGD.appendChild(accM);
+    });
+  }
+  renderGastosDestino();
+
+  wrap.querySelectorAll('.subtab').forEach(btn=>{
+    btn.onclick=()=>{
+      wrap.querySelectorAll('.subtab').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+      if(btn.dataset.sub==='plan'){planCont.style.display='';realCont.style.display='none';}
+      else{planCont.style.display='none';realCont.style.display='';}
+    };
+  });
+
   return wrap;
 }
 
@@ -1145,6 +1286,7 @@ const fbApp = initializeApp(firebaseConfig);
 const dbFs = getFirestore(fbApp);
 
 let CUSTOS_EXTRAS = [];
+let GASTOS_REALIZADOS = [];
 
 async function carregarDoFirestore(){
   try{
@@ -1190,6 +1332,11 @@ async function carregarDoFirestore(){
     const custosSnap = await getDocs(collection(dbFs,'custos_extras'));
     CUSTOS_EXTRAS = [];
     custosSnap.forEach(d=>{ CUSTOS_EXTRAS.push({id:d.id, ...d.data()}); });
+
+    // Gastos realizados (por destino/categoria)
+    const gastosSnap = await getDocs(collection(dbFs,'gastos_realizados'));
+    GASTOS_REALIZADOS = [];
+    gastosSnap.forEach(d=>{ GASTOS_REALIZADOS.push({id:d.id, ...d.data()}); });
   }catch(e){
     console.error('Erro ao carregar do Firestore, usando dados locais:', e);
   }
