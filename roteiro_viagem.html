@@ -29,6 +29,10 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 .subtab{background:var(--surf);border:1px solid var(--bd);color:var(--mut);padding:9px 18px;border-radius:var(--rs);cursor:pointer;font-family:var(--f);font-size:13px;font-weight:600}
 .subtab:hover{color:var(--tx)}
 .subtab.on{background:var(--okd);color:var(--ok);border-color:rgba(0,212,170,.3)}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.colhd{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--tx);font-weight:700;padding:10px 4px;border-bottom:2px solid var(--bd);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.colhd .tot{margin-left:auto;font-family:var(--m);color:var(--ok)}
+@media(max-width:900px){.cols2{grid-template-columns:1fr}}
 .cmp{display:flex;align-items:center;gap:8px;margin-top:6px;padding:0 20px 10px}
 .cmp .cmp-bar{flex:1;height:5px;background:var(--bd);border-radius:99px;overflow:hidden}
 .cmp .cmp-fill{height:100%;border-radius:99px;background:var(--ok)}
@@ -437,12 +441,10 @@ function pageCustos(){
     </div>
     <div id="cnt-cmp"></div>
     <div class="info">ℹ️ <b>Planejado</b>: estimativas mochilão + trens + vistos. <b>Realizado</b>: valores efetivamente gastos, lançados por você (extras + destinos por categoria).</div>
-    <div class="subtabs">
-      <button class="subtab on" data-sub="plan">📋 Planejado</button>
-      <button class="subtab" data-sub="real">💸 Realizado</button>
+    <div class="cols2">
+      <div><div class="colhd">📋 Planejado</div><div id="custos-plan"></div></div>
+      <div><div class="colhd">💸 Realizado</div><div id="custos-real"></div></div>
     </div>
-    <div id="custos-plan"></div>
-    <div id="custos-real" style="display:none"></div>
   </div>`);
 
   function atualizarTop(){
@@ -606,15 +608,6 @@ function pageCustos(){
     });
   }
   renderGastosDestino();
-
-  wrap.querySelectorAll('.subtab').forEach(btn=>{
-    btn.onclick=()=>{
-      wrap.querySelectorAll('.subtab').forEach(b=>b.classList.remove('on'));
-      btn.classList.add('on');
-      if(btn.dataset.sub==='plan'){planCont.style.display='';realCont.style.display='none';}
-      else{planCont.style.display='none';realCont.style.display='';}
-    };
-  });
 
   return wrap;
 }
