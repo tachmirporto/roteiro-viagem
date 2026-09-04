@@ -378,17 +378,42 @@ function propagarAPartirDe(paisId, diff){
     seg.fim = addDias(seg.fim, diff);
   }
 }
-// Recalcula dias do país a partir da soma das cidades, ajusta fim, e empurra/recua
-// ini e fim de todos os países seguintes na mesma quantidade de dias (cascata).
-function propagarDatas(paisId){
-  const p = PAISES_DB[paisId];
-  const somaCidades = p.cid.reduce((s,c)=>s+c.dias,0);
-  const diasAntigos = p.dias;
-  const diff = somaCidades - diasAntigos;
-  if(diff === 0) return;
-  p.dias = somaCidades;
-  p.fim = addDias(p.fim, diff);
-  propagarAPartirDe(paisId, diff);
+// Duração (em dias) de uma cidade, calculada a partir de ini/fim (mesma convenção do país: fim inclusive).
+function duracaoCidade(c){ return diasEntre(c.ini,c.fim)+1; }
+// Garante continuidade entre as cidades de um país (cidade[i].ini === cidade[i-1].fim), preservando
+// a duração de cada cidade, e recalcula p.ini/p.fim/p.dias a partir da 1ª e última cidade.
+// Usada após adicionar/remover cidade (ajuste estrutural, "fecha buracos" automaticamente).
+function reconstruirPaisDeCidades(paisId){
+  const p=PAISES_DB[paisId];
+  if(!p.cid || !p.cid.length) return;
+  for(let i=1;i<p.cid.length;i++){
+    const diff=diasEntre(p.cid[i].ini, p.cid[i-1].fim);
+    if(diff!==0){
+      p.cid[i].ini=addDias(p.cid[i].ini,diff);
+      p.cid[i].fim=addDias(p.cid[i].fim,diff);
+    }
+  }
+  p.ini=p.cid[0].ini;
+  p.fim=p.cid[p.cid.length-1].fim;
+  recalcDias(p);
+}
+// Migração: preenche ini/fim de cidades antigas que só tinham "dias" (dado legado),
+// encadeando a partir do início do país. Roda uma vez ao carregar os dados.
+function migrarDatasCidades(){
+  PAISES_INDEX.forEach(id=>{
+    const p=PAISES_DB[id];
+    if(!p || !Array.isArray(p.cid)) return;
+    let cursor=p.ini;
+    p.cid.forEach(c=>{
+      if(!c.ini || !c.fim){
+        const dias = c.dias || 1;
+        c.ini = cursor;
+        c.fim = addDias(cursor, dias-1);
+      }
+      delete c.dias;
+      cursor = c.fim;
+    });
+  });
 }
 
 function pageRoteiro(){
@@ -513,7 +538,7 @@ function pageCustos(){
       const p=PAISES_DB[id]; const totPais=p.dias*p.dpd;
       const sub=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${FLAGS[id]} ${p.nome}</span><span class="tot">${p.dpd>0?fmtR(totPais):'hospedagem gratuita'}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
       const sb=sub.querySelector('.sub-acc-b');
-      p.cid.forEach(c=>{const v=c.dias*p.dpd;sb.appendChild(el(`<div class="crow2"><span class="nm">${c.nome}</span><span class="d">${c.dias}d × ${fmtR(p.dpd)}/dia</span><span class="v">${p.dpd>0?fmtR(v):'—'}</span></div>`))});
+      p.cid.forEach(c=>{const dc=duracaoCidade(c);const v=dc*p.dpd;sb.appendChild(el(`<div class="crow2"><span class="nm">${c.nome}</span><span class="d">${dc}d × ${fmtR(p.dpd)}/dia</span><span class="v">${p.dpd>0?fmtR(v):'—'}</span></div>`))});
       body.appendChild(sub);
     });
     if(trensDoMes.length){
@@ -900,7 +925,7 @@ let pendingDet=false, novosIdsDet=new Set(), counterDet=0;
 
 function pageRoteiroDetalhado(){
   const wrap=el(`<div class="detwrap">
-    <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Adicione cidades e pontos de interesse (data + valor de ingresso). Alterar a <b>Data início</b> desloca o país inteiro (mantendo a duração) e empurra todos os seguintes junto; alterar a <b>Data fim</b> muda a duração daquele país e também empurra os seguintes. Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
+    <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Dentro de cada cidade, defina a <b>data início</b> e <b>data fim</b> — alterar a data início desloca aquela cidade (mantendo a duração) e empurra as cidades seguintes junto; alterar a data fim muda a duração daquela cidade e também empurra as seguintes. Isso também atualiza as datas do país e empurra os países seguintes, como já acontecia com a quantidade de dias. Adicione pontos de interesse (data + valor de ingresso). Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
     <div class="sect">Países do roteiro <span id="det-cnt" style="color:var(--dim)"></span></div>
     <div id="det-paises"></div>
     <button class="add addpais" id="det-btnAddPais">+ Adicionar país</button>
@@ -937,8 +962,7 @@ function pageRoteiroDetalhado(){
         console.warn('País sem dados válidos, pulado no render:', id, p);
         return;
       }
-      const somaC=p.cid.reduce((s,c)=>s+c.dias,0);
-      const mismatch=somaC!==p.dias;
+      const mismatch = p.cid.length && (p.cid[0].ini!==p.ini || p.cid[p.cid.length-1].fim!==p.fim);
       const climaDet=climaTropical(id,p);
       const climaDetTag=climaDet?`<span class="sg" style="background:${climaDet.status==='chuvosa'?'var(--warnd)':climaDet.status==='mista'?'var(--ac2d)':'var(--okd)'};color:${climaDet.status==='chuvosa'?'var(--warn)':climaDet.status==='mista'?'var(--ac2)':'var(--ok)'}">${climaDet.label}</span>`:'';
       const card=el(`<div class="pcard ${novosIdsDet.has(id)?'new':''}" id="det-pc-${id}">
@@ -949,7 +973,7 @@ function pageRoteiroDetalhado(){
           <span class="db">${p.dias}d</span>
           <span class="sg ${p.sch?'sy':'sn'}">${p.sch?'Schengen':'Fora Schengen'}</span>
           ${climaDetTag}
-          ${mismatch?`<span class="sg" style="background:var(--warnd);color:var(--warn)">⚠ cidades somam ${somaC}d</span>`:''}
+          ${mismatch?`<span class="sg" style="background:var(--warnd);color:var(--warn)">⚠ datas das cidades não fecham com o país</span>`:''}
           <button class="rmv" data-rm="${id}">✕</button>
           <div class="chv">▾</div>
         </div>
@@ -973,6 +997,15 @@ function pageRoteiroDetalhado(){
     });
   }
 
+  function datasCidadeHtml(paisId, ci, c){
+    const dias=duracaoCidade(c);
+    return `<div class="mrow" style="border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:10px">
+      <div class="mfld"><label>Data início</label><input type="date" class="f-cini" data-cini="${paisId}:${ci}" value="${c.ini}"></div>
+      <div class="mfld"><label>Data fim</label><input type="date" class="f-cfim" data-cfim="${paisId}:${ci}" value="${c.fim}"></div>
+      <div class="mfld"><label>Dias</label><span style="font-family:var(--m);font-size:13px;color:var(--ok);padding:6px 0;display:inline-block">${dias}d</span></div>
+    </div>`;
+  }
+
   function horarioHtml(paisId, ci, c){
     const padrao=tzOffsetPadrao(paisId, c.nome);
     const efetivo=(c.tzOffset!=null && c.tzOffset!=='') ? parseFloat(c.tzOffset) : padrao;
@@ -992,13 +1025,14 @@ function pageRoteiroDetalhado(){
         <div class="ch" data-pais="${paisId}" data-ci="${ci}">
           <span class="icn">📍</span>
           <input class="nm" value="${c.nome}">
-          <input class="dd" type="number" value="${c.dias}">
-          <span class="dl">dias</span>
+          <span class="dl" style="font-family:var(--m);font-size:11px;color:var(--mut);white-space:nowrap">${fmtD(c.ini)} → ${fmtD(c.fim)}</span>
+          <span class="db" style="font-family:var(--m);font-size:12px;font-weight:700;color:var(--ok);background:var(--okd);padding:3px 10px;border-radius:99px;white-space:nowrap">${duracaoCidade(c)}d</span>
           <input class="nm" style="width:110px" placeholder="transporte →" value="${c.transp_saida||''}" data-transp="${paisId}:${ci}">
           <button class="rmv" data-rmcid="${paisId}:${ci}">✕</button>
           <span class="chv">▾</span>
         </div>
         <div class="cb" id="det-cb-${paisId}-${ci}">
+          ${datasCidadeHtml(paisId,ci,c)}
           ${horarioHtml(paisId,ci,c)}
           <div id="det-poi-${paisId}-${ci}"></div>
           <button class="add addpoi" data-pais="${paisId}" data-ci="${ci}">+ Adicionar ponto de interesse</button>
@@ -1049,8 +1083,11 @@ function pageRoteiroDetalhado(){
     }
     if(e.target.dataset.rmcid){
       const[pid,ci]=e.target.dataset.rmcid.split(':');
-      PAISES_DB[pid].cid.splice(+ci,1);
-      propagarDatas(pid);
+      const p=PAISES_DB[pid];
+      const oldPaisFim=p.fim;
+      p.cid.splice(+ci,1);
+      reconstruirPaisDeCidades(pid);
+      propagarAPartirDe(pid, diasEntre(oldPaisFim, p.fim));
       marcarPendenteDet(); renderDet(capturarEstadoAberto());
     }
     if(e.target.dataset.rmpoi){
@@ -1060,8 +1097,9 @@ function pageRoteiroDetalhado(){
     }
     if(e.target.classList.contains('addcid')){
       const pid=e.target.dataset.pais;
-      PAISES_DB[pid].cid.push({nome:'Nova cidade',dias:1,poi:[]});
-      propagarDatas(pid);
+      const p=PAISES_DB[pid];
+      const base = p.cid.length ? p.cid[p.cid.length-1].fim : p.ini;
+      p.cid.push({nome:'Nova cidade', ini:base, fim:base, poi:[]});
       marcarPendenteDet(); renderDet(capturarEstadoAberto());
     }
     if(e.target.classList.contains('addpoi')){
@@ -1084,14 +1122,17 @@ function pageRoteiroDetalhado(){
         const diff=diasEntre(iniAntigo, e.target.value);
         p.ini=e.target.value;
         p.fim=addDias(p.fim, diff);
+        (p.cid||[]).forEach(c=>{c.ini=addDias(c.ini,diff); c.fim=addDias(c.fim,diff);});
         propagarAPartirDe(id, diff);
         marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
       }
       if(e.target.classList.contains('f-fim')){
         const fimAntigo=p.fim;
         p.fim=e.target.value;
+        const diffP=diasEntre(fimAntigo, p.fim);
+        if(p.cid && p.cid.length){ const last=p.cid[p.cid.length-1]; last.fim=addDias(last.fim, diffP); }
         recalcDias(p);
-        propagarAPartirDe(id, diasEntre(fimAntigo, p.fim));
+        propagarAPartirDe(id, diffP);
         marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
       }
       if(e.target.classList.contains('f-dpd')){p.dpd=parseFloat(e.target.value)||0; marcarPendenteDet(); return}
@@ -1099,12 +1140,33 @@ function pageRoteiroDetalhado(){
     }
     const ch=e.target.closest('.ch');
     if(ch && e.target.classList.contains('nm')){PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].nome=e.target.value; marcarPendenteDet(); return}
-    if(ch && e.target.classList.contains('dd')){
-      PAISES_DB[ch.dataset.pais].cid[ch.dataset.ci].dias=parseInt(e.target.value)||0;
-      propagarDatas(ch.dataset.pais);
-      marcarPendenteDet();
-      renderDet(capturarEstadoAberto());
-      return;
+    if(e.target.dataset.cini){
+      const[pid,ciStr]=e.target.dataset.cini.split(':'); const ci=+ciStr;
+      const p=PAISES_DB[pid]; const c=p.cid[ci];
+      const oldPaisFim=p.fim;
+      const iniAntigo=c.ini;
+      const diff=diasEntre(iniAntigo, e.target.value);
+      c.ini=e.target.value;
+      c.fim=addDias(c.fim, diff);
+      for(let i=ci+1;i<p.cid.length;i++){ p.cid[i].ini=addDias(p.cid[i].ini,diff); p.cid[i].fim=addDias(p.cid[i].fim,diff); }
+      p.ini=p.cid[0].ini;
+      p.fim=p.cid[p.cid.length-1].fim;
+      recalcDias(p);
+      propagarAPartirDe(pid, diasEntre(oldPaisFim, p.fim));
+      marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
+    }
+    if(e.target.dataset.cfim){
+      const[pid,ciStr]=e.target.dataset.cfim.split(':'); const ci=+ciStr;
+      const p=PAISES_DB[pid]; const c=p.cid[ci];
+      const oldPaisFim=p.fim;
+      const fimAntigo=c.fim;
+      c.fim=e.target.value;
+      const diff=diasEntre(fimAntigo, c.fim);
+      for(let i=ci+1;i<p.cid.length;i++){ p.cid[i].ini=addDias(p.cid[i].ini,diff); p.cid[i].fim=addDias(p.cid[i].fim,diff); }
+      p.fim=p.cid[p.cid.length-1].fim;
+      recalcDias(p);
+      propagarAPartirDe(pid, diasEntre(oldPaisFim, p.fim));
+      marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
     }
     if(e.target.dataset.transp){
       const[pid,ci]=e.target.dataset.transp.split(':');
@@ -1166,8 +1228,13 @@ function pageRoteiroDetalhado(){
     PAISES_INDEX.forEach(id=>{
       const p=PAISES_DB[id];
       if(!p.cid||!p.cid.length)return;
-      const soma=p.cid.reduce((s,c)=>s+c.dias,0);
-      if(soma!==p.dias) findings.push({t:'warn',tag:`⚠ ${p.nome} — dias não conferem`,txt:`Cidades somam ${soma}d, mas país está com ${p.dias}d. Ajuste recomendado.`});
+      const problemas=[];
+      if(p.cid[0].ini!==p.ini) problemas.push(`início do país (${fmtD(p.ini)}) ≠ início da 1ª cidade (${fmtD(p.cid[0].ini)})`);
+      if(p.cid[p.cid.length-1].fim!==p.fim) problemas.push(`fim do país (${fmtD(p.fim)}) ≠ fim da última cidade (${fmtD(p.cid[p.cid.length-1].fim)})`);
+      for(let i=1;i<p.cid.length;i++){
+        if(p.cid[i].ini!==p.cid[i-1].fim) problemas.push(`intervalo entre ${p.cid[i-1].nome} (fim ${fmtD(p.cid[i-1].fim)}) e ${p.cid[i].nome} (início ${fmtD(p.cid[i].ini)})`);
+      }
+      if(problemas.length) findings.push({t:'warn',tag:`⚠ ${p.nome} — datas das cidades não conferem`,txt:problemas.join('; ')+'. Ajuste recomendado.'});
     });
 
     PAISES_INDEX.forEach(id=>{
@@ -1247,16 +1314,17 @@ function pageRoteiroDetalhado(){
     });
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(roteiroRows), "Roteiro");
 
-    const detRows=[["País","Cidade","Dias","Transporte saída","Fuso (UTC)","Horário de Trabalho (local, 08-18h Brasília)","Ponto de interesse","Data","Valor (R$)"]];
+    const detRows=[["País","Cidade","Início","Fim","Dias","Transporte saída","Fuso (UTC)","Horário de Trabalho (local, 08-18h Brasília)","Ponto de interesse","Data","Valor (R$)"]];
     PAISES_INDEX.forEach(id=>{
       const p=PAISES_DB[id];
       (p.cid||[]).forEach(c=>{
         const efetivo = c.tzOffset!=null ? c.tzOffset : tzOffsetPadrao(id, c.nome);
         const horario = calcHorarioLocal(efetivo) || "não definido";
+        const dias = duracaoCidade(c);
         if(c.poi && c.poi.length){
-          c.poi.forEach(poi=>detRows.push([p.nome, c.nome, c.dias, c.transp_saida||"", efetivo!=null?efetivo:"", horario, poi.nome||"", poi.data?fmtD(poi.data):"", poi.valor||0]));
+          c.poi.forEach(poi=>detRows.push([p.nome, c.nome, fmtD(c.ini), fmtD(c.fim), dias, c.transp_saida||"", efetivo!=null?efetivo:"", horario, poi.nome||"", poi.data?fmtD(poi.data):"", poi.valor||0]));
         }else{
-          detRows.push([p.nome, c.nome, c.dias, c.transp_saida||"", efetivo!=null?efetivo:"", horario, "", "", ""]);
+          detRows.push([p.nome, c.nome, fmtD(c.ini), fmtD(c.fim), dias, c.transp_saida||"", efetivo!=null?efetivo:"", horario, "", "", ""]);
         }
       });
     });
@@ -1417,6 +1485,7 @@ async function semear(){
 
 (async()=>{
   await carregarDoFirestore();
+  migrarDatasCidades();
   renderApp();
 })();
 </script>
