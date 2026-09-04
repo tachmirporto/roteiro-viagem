@@ -1024,7 +1024,7 @@ function pageRoteiroDetalhado(){
       const card=el(`<div class="ccard">
         <div class="ch" data-pais="${paisId}" data-ci="${ci}">
           <span class="icn">📍</span>
-          <input class="nm" value="${c.nome}">
+          <input class="nm" placeholder="Nome da cidade" value="${c.nome}">
           <span class="dl" style="font-family:var(--m);font-size:11px;color:var(--mut);white-space:nowrap">${fmtD(c.ini)} → ${fmtD(c.fim)}</span>
           <span class="db" style="font-family:var(--m);font-size:12px;font-weight:700;color:var(--ok);background:var(--okd);padding:3px 10px;border-radius:99px;white-space:nowrap">${duracaoCidade(c)}d</span>
           <input class="nm" style="width:110px" placeholder="transporte →" value="${c.transp_saida||''}" data-transp="${paisId}:${ci}">
@@ -1099,7 +1099,7 @@ function pageRoteiroDetalhado(){
       const pid=e.target.dataset.pais;
       const p=PAISES_DB[pid];
       const base = p.cid.length ? p.cid[p.cid.length-1].fim : p.ini;
-      p.cid.push({nome:'Nova cidade', ini:base, fim:base, poi:[]});
+      p.cid.push({nome:'', ini:base, fim:base, poi:[]});
       marcarPendenteDet(); renderDet(capturarEstadoAberto());
     }
     if(e.target.classList.contains('addpoi')){
