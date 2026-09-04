@@ -379,7 +379,10 @@ function propagarAPartirDe(paisId, diff){
   }
 }
 // Duração (em dias) de uma cidade, calculada a partir de ini/fim (mesma convenção do país: fim inclusive).
-function duracaoCidade(c){ return diasEntre(c.ini,c.fim)+1; }
+// Duração (em dias/noites) de uma cidade. Diferente do país, aqui NÃO soma +1: o dia de fim
+// é o dia de saída (compartilhado com o início da próxima cidade), então não conta como dia extra
+// naquela cidade. Ex: chega dia 11, sai dia 12 → 1 dia/noite ali, não 2.
+function duracaoCidade(c){ return diasEntre(c.ini,c.fim); }
 // Garante continuidade entre as cidades de um país (cidade[i].ini === cidade[i-1].fim), preservando
 // a duração de cada cidade, e recalcula p.ini/p.fim/p.dias a partir da 1ª e última cidade.
 // Usada após adicionar/remover cidade (ajuste estrutural, "fecha buracos" automaticamente).
