@@ -1009,10 +1009,15 @@ function pageRoteiroDetalhado(){
     </div>`;
   }
 
-  function horarioHtml(paisId, ci, c){
+  function horarioEfetivo(paisId, c){
     const padrao=tzOffsetPadrao(paisId, c.nome);
     const efetivo=(c.tzOffset!=null && c.tzOffset!=='') ? parseFloat(c.tzOffset) : padrao;
-    const horario=calcHorarioLocal(efetivo);
+    return calcHorarioLocal(efetivo);
+  }
+
+  function horarioHtml(paisId, ci, c){
+    const padrao=tzOffsetPadrao(paisId, c.nome);
+    const horario=horarioEfetivo(paisId, c);
     return `<div class="mrow" style="border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:10px">
       <div class="mfld"><label>Fuso (UTC)</label><input type="number" step="0.25" class="f-tz" data-tz="${paisId}:${ci}" value="${c.tzOffset!=null && c.tzOffset!=='' ? c.tzOffset : ''}" placeholder="${padrao!=null?padrao:'?'}" style="width:70px"></div>
       <div class="mfld" style="flex:1;min-width:240px"><label>Horário de Trabalho — 08:00 às 18:00 (Brasília)</label><span id="det-hor-${paisId}-${ci}" style="font-family:var(--m);font-size:13px;${horario?'color:var(--ok)':'color:var(--warn)'}">${horario?horario+' (horário local)':'⚠ fuso não definido — clique em "Enviar atualização" para preencher'}</span></div>
@@ -1024,12 +1029,14 @@ function pageRoteiroDetalhado(){
     const p=PAISES_DB[paisId];
     const wrapC=$$('#det-cw-'+paisId); wrapC.innerHTML='';
     p.cid.forEach((c,ci)=>{
+      const horarioRow=horarioEfetivo(paisId, c);
       const card=el(`<div class="ccard">
         <div class="ch" data-pais="${paisId}" data-ci="${ci}">
           <span class="icn">📍</span>
           <input class="nm" placeholder="Nome da cidade" value="${c.nome}" data-cnome="${paisId}:${ci}">
           <span class="dl" style="font-family:var(--m);font-size:11px;color:var(--mut);white-space:nowrap">${fmtD(c.ini)} → ${fmtD(c.fim)}</span>
           <span class="db" style="font-family:var(--m);font-size:12px;font-weight:700;color:var(--ok);background:var(--okd);padding:3px 10px;border-radius:99px;white-space:nowrap">${duracaoCidade(c)}d</span>
+          <span class="sg" id="det-horrow-${paisId}-${ci}" style="background:${horarioRow?'var(--okd)':'var(--warnd)'};color:${horarioRow?'var(--ok)':'var(--warn)'};font-family:var(--m);white-space:nowrap" title="Horário de Trabalho — 08:00 às 18:00 (Brasília), convertido para o horário local">🕐 ${horarioRow?horarioRow:'fuso indefinido'}</span>
           <input class="nm" style="width:110px" placeholder="transporte →" value="${c.transp_saida||''}" data-transp="${paisId}:${ci}">
           <button class="rmv" data-rmcid="${paisId}:${ci}">✕</button>
           <span class="chv">▾</span>
@@ -1191,6 +1198,12 @@ function pageRoteiroDetalhado(){
       if(lbl){
         lbl.textContent = horario ? horario+' (horário local)' : '⚠ fuso não definido — clique em "Enviar atualização" para preencher';
         lbl.style.color = horario ? 'var(--ok)' : 'var(--warn)';
+      }
+      const badge=$$(`#det-horrow-${pid}-${ci}`);
+      if(badge){
+        badge.textContent = '🕐 '+(horario ? horario : 'fuso indefinido');
+        badge.style.background = horario ? 'var(--okd)' : 'var(--warnd)';
+        badge.style.color = horario ? 'var(--ok)' : 'var(--warn)';
       }
       marcarPendenteDet();
       return;
