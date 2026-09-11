@@ -376,6 +376,10 @@ function propagarAPartirDe(paisId, diff){
     if(!seg) continue;
     seg.ini = addDias(seg.ini, diff);
     seg.fim = addDias(seg.fim, diff);
+    (seg.cid||[]).forEach(c=>{
+      c.ini = addDias(c.ini, diff);
+      c.fim = addDias(c.fim, diff);
+    });
   }
 }
 // Duração (em dias) de uma cidade, calculada a partir de ini/fim (mesma convenção do país: fim inclusive).
