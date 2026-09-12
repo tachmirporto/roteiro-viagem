@@ -195,7 +195,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-<div class="hd"><div class="t">🌍 Roteiro Detalhado</div><div class="s">01/04/2027 → 31/03/2028 (viagem termina 14/01/28, 77d de buffer) · 41 destinos · Orçamento R$160mil</div></div>
+<div class="hd"><div class="t">🌍 Roteiro Detalhado</div><div class="s" id="hd-sub">01/04/2027 → 31/03/2028 (viagem termina 14/01/28, 77d de buffer) · 41 destinos · Orçamento R$160mil</div></div>
 <div class="tabs" id="tabs"></div>
 <div id="pages"></div>
 
@@ -645,20 +645,22 @@ function pageCustos(){
     contGD.innerHTML='';
     Object.entries(meses).forEach(([mk,ids])=>{
       const totMesReal = ids.reduce((s,id)=>s+gastosDePais(id),0);
-      const accM=el(`<div class="acc"><div class="acc-h" onclick="toggleAcc(this)"><div class="nm">${mk}</div><div class="sum"></div><div class="tot">${fmtR(totMesReal)}</div><div class="chv">▾</div></div><div class="acc-b"></div></div>`);
+      const accM=el(`<div class="acc"><div class="acc-h" onclick="toggleAcc(this)"><div class="nm">${mk}</div><div class="sum"></div><div class="tot" id="gd-mestot-${mk}">${fmtR(totMesReal)}</div><div class="chv">▾</div></div><div class="acc-b"></div></div>`);
       const bodyM=accM.querySelector('.acc-b');
       ids.forEach(id=>{
         const p=PAISES_DB[id];
         const planP=p.dias*p.dpd, realP=gastosDePais(id);
-        const subP=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${FLAGS[id]} ${p.nome}</span><span class="tot">${fmtR(realP)}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
+        const subP=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${FLAGS[id]} ${p.nome}</span><span class="tot" id="gd-paistot-${id}">${fmtR(realP)}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
         const sbP=subP.querySelector('.sub-acc-b');
-        sbP.appendChild(el(cmpBarHtml(realP, planP)));
-        p.cid.forEach(c=>{
+        const cmpWrap=el(`<div id="gd-cmp-${id}"></div>`);
+        cmpWrap.innerHTML=cmpBarHtml(realP, planP);
+        sbP.appendChild(cmpWrap);
+        p.cid.forEach((c,ci)=>{
           const entries=gastosDeCidade(id,c.nome);
           const totC=entries.reduce((s,g)=>s+(g.valor||0),0);
           const ccard=el(`<div style="background:var(--surf3);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;margin:8px 0">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:12px;font-weight:600">📍 ${c.nome}</span><span style="font-family:var(--m);font-size:12px;color:var(--ok)">${fmtR(totC)}</span></div>
-            <div class="glist"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:12px;font-weight:600">📍 ${c.nome}</span><span style="font-family:var(--m);font-size:12px;color:var(--ok)" id="gd-cidtot-${id}-${ci}">${fmtR(totC)}</span></div>
+            <div class="glist" id="gd-glist-${id}-${ci}"></div>
             <div class="gform" style="padding:8px 0 0">
               <select class="g-cat">${CATEGORIAS.map(ct=>`<option value="${ct.id}">${ct.ic} ${ct.label}</option>`).join('')}</select>
               <input type="text" class="g-desc" placeholder="Descrição" style="flex:1;min-width:110px">
@@ -667,19 +669,8 @@ function pageCustos(){
             </div>
           </div>`);
           const glist=ccard.querySelector('.glist');
-          entries.forEach(g=>{
-            const cat=CATEGORIAS.find(ct=>ct.id===g.categoria);
-            glist.appendChild(el(`<div class="crow2"><span class="cat-tag">${cat?cat.ic+' '+cat.label:g.categoria}</span><span class="nm">${g.descricao}</span><span class="d">${g.data?fmtD(g.data):''}</span><span class="v">${fmtR(g.valor)}</span><button class="rmv" data-rmg="${g.id}" style="margin-left:6px">✕</button></div>`));
-          });
-          glist.querySelectorAll('[data-rmg]').forEach(btn=>{
-            btn.onclick=async()=>{
-              const gid=btn.dataset.rmg;
-              GASTOS_REALIZADOS = GASTOS_REALIZADOS.filter(x=>x.id!==gid);
-              renderGastosDestino();
-              atualizarTop();
-              await removerGastoRealizado(gid);
-            };
-          });
+          entries.forEach(g=>glist.appendChild(linhaGasto(g)));
+
           ccard.querySelector('.g-salvar').onclick=async()=>{
             const cat=ccard.querySelector('.g-cat').value;
             const descI=ccard.querySelector('.g-desc');
@@ -692,7 +683,9 @@ function pageCustos(){
             if(novoId){
               item.id=novoId;
               GASTOS_REALIZADOS.push(item);
-              renderGastosDestino();
+              wrap.querySelector(`#gd-glist-${id}-${ci}`).appendChild(linhaGasto(item));
+              descI.value=''; valI.value='';
+              atualizarTotaisGastos(mk, id, ci);
               atualizarTop();
             }else{
               alert('Erro ao salvar — tente novamente.');
@@ -704,6 +697,43 @@ function pageCustos(){
       });
       contGD.appendChild(accM);
     });
+  }
+
+  // Cria uma linha de gasto (usada tanto no render inicial quanto ao adicionar um novo, sem re-renderizar tudo).
+  function linhaGasto(g){
+    const cat=CATEGORIAS.find(ct=>ct.id===g.categoria);
+    const row=el(`<div class="crow2"><span class="cat-tag">${cat?cat.ic+' '+cat.label:g.categoria}</span><span class="nm">${g.descricao}</span><span class="d">${g.data?fmtD(g.data):''}</span><span class="v">${fmtR(g.valor)}</span><button class="rmv" data-rmg="${g.id}" style="margin-left:6px">✕</button></div>`);
+    row.querySelector('[data-rmg]').onclick=async()=>{
+      GASTOS_REALIZADOS = GASTOS_REALIZADOS.filter(x=>x.id!==g.id);
+      row.remove();
+      const mk=mesKey(PAISES_DB[g.paisId].ini);
+      const ci=PAISES_DB[g.paisId].cid.findIndex(c=>c.nome===g.cidade);
+      atualizarTotaisGastos(mk, g.paisId, ci);
+      atualizarTop();
+      await removerGastoRealizado(g.id);
+    };
+    return row;
+  }
+
+  // Atualiza só os totais (cidade → país → mês → cmp bar) sem re-renderizar as listas/accordions,
+  // preservando o estado aberto/fechado de cada seção.
+  function atualizarTotaisGastos(mk, paisId, ci){
+    const p=PAISES_DB[paisId];
+    if(ci!=null && ci>=0){
+      const c=p.cid[ci];
+      const totC=gastosDeCidade(paisId,c.nome).reduce((s,g)=>s+(g.valor||0),0);
+      const elCid=wrap.querySelector(`#gd-cidtot-${paisId}-${ci}`);
+      if(elCid) elCid.textContent=fmtR(totC);
+    }
+    const realP=gastosDePais(paisId), planP=p.dias*p.dpd;
+    const elPais=wrap.querySelector(`#gd-paistot-${paisId}`);
+    if(elPais) elPais.textContent=fmtR(realP);
+    const elCmp=wrap.querySelector(`#gd-cmp-${paisId}`);
+    if(elCmp) elCmp.innerHTML=cmpBarHtml(realP, planP);
+    const idsDoMes=meses[mk]||[];
+    const totMes=idsDoMes.reduce((s,id)=>s+gastosDePais(id),0);
+    const elMes=wrap.querySelector(`#gd-mestot-${mk}`);
+    if(elMes) elMes.textContent=fmtR(totMes);
   }
   renderGastosDestino();
 
@@ -1007,6 +1037,7 @@ function pageRoteiroDetalhado(){
       $$('#det-meta-dur').textContent=`${usados}d usados de ${limite}d disponíveis (${fmtD(META.inicio)} → ${fmtD(META.fim)})`;
       $$('#det-meta-dur').style.color = usados>limite ? 'var(--bad)' : 'var(--ok)';
     }
+    atualizarHeader();
     PAISES_INDEX.forEach((id,idx)=>{
       const p=PAISES_DB[id];
       if(!p || !Array.isArray(p.cid)){
@@ -1475,7 +1506,20 @@ function pageRoteiroDetalhado(){
 
 const PAGES=[["roteiro","📍 Roteiro",pageRoteiro],["custos","💰 Custos",pageCustos],["vistos","🛂 Vistos",pageVistos],["vacinas","💉 Vacinas",pageVacinas],["preparativos","✅ Preparativos",pagePrep],["detalhado","✏️ Roteiro Detalhado",pageRoteiroDetalhado]];
 let abaAtiva='roteiro';
+function atualizarHeader(){
+  const hd=$('#hd-sub');
+  if(!hd) return;
+  const ultimoId=PAISES_INDEX[PAISES_INDEX.length-1];
+  const ultimoFim=ultimoId && PAISES_DB[ultimoId] ? PAISES_DB[ultimoId].fim : META.inicio;
+  const usados=diasEntre(META.inicio, ultimoFim);
+  const limite=diasEntre(META.inicio, META.fim);
+  const buffer=limite-usados;
+  const totalDestinos=PAISES_INDEX.length;
+  hd.textContent=`${fmtD(META.inicio)} → ${fmtD(META.fim)} (viagem termina ${fmtD(ultimoFim)}, ${buffer}d de buffer) · ${totalDestinos} destinos · Orçamento R$${(META.orcamento/1000).toFixed(0)}mil`;
+}
+
 function renderApp(){
+  atualizarHeader();
   const tabsEl=$('#tabs'), pagesEl=$('#pages');
   tabsEl.innerHTML=''; pagesEl.innerHTML='';
   PAGES.forEach(([id,label,fn])=>{
