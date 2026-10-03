@@ -126,6 +126,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
 
 /* ===== Roteiro Detalhado (editor) — escopado sob .detwrap ===== */
+.detwrap{padding-bottom:90px}
 .detwrap .info{margin-bottom:20px}
 .detwrap .info b{color:var(--ok)}
 .detwrap .pcard{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
@@ -1341,13 +1342,8 @@ function pageRoteiroDetalhado(){
       ? {t:'danger',tag:'🇪🇺 Limite Schengen excedido',txt:`${sch} dias Schengen, ${sch-META.schengen_max} acima do limite de ${META.schengen_max}. Reduza dias em algum país Schengen.`}
       : {t:'ok',tag:'🇪🇺 Espaço Schengen',txt:`${sch}/${META.schengen_max} dias — dentro do limite (margem de ${META.schengen_max-sch} dias).`});
 
-    if(PAISES_DB['AU']){
-      const goldCoast=(PAISES_DB['AU'].cid||[]).find(c=>c.nome==='Gold Coast');
-      if(goldCoast){
-        const diasGC=duracaoCidade(goldCoast);
-        if(diasGC>15) findings.push({t:'danger',tag:'🇦🇺 Regra Gold Coast violada',txt:`Gold Coast com ${diasGC} dias, acima do máximo de 15 (casa da Michele).`});
-      }
-    }
+    if(PAISES_DB['AU'] && PAISES_DB['AU'].dias>15)
+      findings.push({t:'danger',tag:'🇦🇺 Regra Austrália violada',txt:`Austrália com ${PAISES_DB['AU'].dias} dias, acima do máximo de 15 (casa da Michele em Gold Coast).`});
 
     PAISES_INDEX.forEach(id=>{
       const p=PAISES_DB[id];
