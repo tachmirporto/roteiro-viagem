@@ -297,7 +297,8 @@ const CATEGORIAS=[{id:"visto",label:"Visto",ic:"🛂"},{id:"voo",label:"Voo",ic:
 const TZ_PAIS_DEFAULT={MA:1,PT:1,ES:2,FR1:2,MC:2,IT1:2,AT1:2,SK:2,AT2:2,DE1:2,DK:2,SE:2,NO:2,IS:0,IE:1,GB:1,NL:2,BE:2,LU:2,FR2:2,CH:2,FR3:2,IT2:2,AL:2,GR:3,TR:3,EG:3,AE:4,NP:5.75,CN:8,VN:7,PH:8,SG:8,ID:8,ZA:2,TZ:3,TH:7,AU:10,NZ:13,JP:9,KR:9};
 // Exceções por cidade (quando o país tem mais de um fuso), chave "PAISID:NomeDaCidade"
 const TZ_CIDADE_OVERRIDE={"ID:Yogyakarta":7};
-const TRENS=[{"origem":"Lisboa","destino":"Madrid","mes":"ABR27","eur":60,"brl":378,"noturno":true},{"origem":"Madrid","destino":"Barcelona","mes":"ABR27","eur":59,"brl":372,"noturno":false},{"origem":"Barcelona","destino":"Marselha","mes":"MAI27","eur":65,"brl":410,"noturno":false},{"origem":"Marselha","destino":"Nice","mes":"MAI27","eur":35,"brl":220,"noturno":false},{"origem":"Nice","destino":"Monte Carlo","mes":"MAI27","eur":8,"brl":50,"noturno":false},{"origem":"Monte Carlo","destino":"Milão","mes":"MAI27","eur":55,"brl":346,"noturno":false},{"origem":"Milão","destino":"Veneza","mes":"MAI27","eur":30,"brl":189,"noturno":false},{"origem":"Veneza","destino":"Viena","mes":"MAI27","eur":70,"brl":441,"noturno":true},{"origem":"Viena","destino":"Bratislava","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Bratislava","destino":"Viena","mes":"MAI27","eur":18,"brl":113,"noturno":false},{"origem":"Viena","destino":"Munique","mes":"MAI27","eur":60,"brl":378,"noturno":false},{"origem":"Munique","destino":"Berlim","mes":"MAI27","eur":70,"brl":441,"noturno":false},{"origem":"Berlim","destino":"Copenhague","mes":"MAI27","eur":75,"brl":472,"noturno":true},{"origem":"Copenhague","destino":"Estocolmo","mes":"MAI27","eur":80,"brl":504,"noturno":true},{"origem":"Estocolmo","destino":"Oslo","mes":"MAI27","eur":55,"brl":346,"noturno":false},{"origem":"Oslo","destino":"Bergen","mes":"MAI27","eur":65,"brl":410,"noturno":false},{"origem":"Edimburgo","destino":"Londres","mes":"JUN27","eur":60,"brl":378,"noturno":false},{"origem":"Londres","destino":"Amsterdã","mes":"JUN27","eur":75,"brl":472,"noturno":false},{"origem":"Amsterdã","destino":"Bruxelas","mes":"JUN27","eur":30,"brl":189,"noturno":false},{"origem":"Bruxelas","destino":"Luxemburgo","mes":"JUN27","eur":25,"brl":158,"noturno":false},{"origem":"Luxemburgo","destino":"Paris","mes":"JUN27","eur":50,"brl":315,"noturno":false},{"origem":"Paris","destino":"Zurique","mes":"JUN27","eur":70,"brl":441,"noturno":false},{"origem":"Zurique","destino":"Lyon","mes":"JUN27","eur":55,"brl":346,"noturno":false},{"origem":"Lyon","destino":"Turim","mes":"JUN27","eur":50,"brl":315,"noturno":false},{"origem":"Turim","destino":"Florença","mes":"JUN27","eur":35,"brl":220,"noturno":false},{"origem":"Florença","destino":"Roma","mes":"JUN27","eur":30,"brl":189,"noturno":false},{"origem":"Roma","destino":"Nápoles","mes":"JUN27","eur":28,"brl":176,"noturno":false},{"origem":"Nápoles","destino":"Bari","mes":"JUN27","eur":32,"brl":202,"noturno":false},{"origem":"Pequim","destino":"Xian","mes":"AGO27","eur":65,"brl":410,"noturno":false},{"origem":"Xian","destino":"Xangai","mes":"AGO27","eur":65,"brl":410,"noturno":false},{"origem":"Xangai","destino":"Guilin","mes":"AGO27","eur":70,"brl":441,"noturno":false},{"origem":"Tóquio","destino":"Quioto","mes":"DEZ27","eur":90,"brl":567,"noturno":false},{"origem":"Quioto","destino":"Osaka","mes":"DEZ27","eur":15,"brl":94,"noturno":false},{"origem":"Osaka","destino":"Hiroshima","mes":"DEZ27","eur":70,"brl":441,"noturno":false},{"origem":"Hiroshima","destino":"Fukuoka Airport","mes":"DEZ27","eur":55,"brl":346,"noturno":false},{"origem":"Busan","destino":"Seul","mes":"JAN28","eur":40,"brl":252,"noturno":false}];
+// Cada trem pertence ao país de ORIGEM (paisId): o custo acompanha esse país (e o mês em que ele começa).
+const TRENS=[{"origem":"Lisboa","destino":"Madrid","paisId":"PT","eur":60,"brl":378,"noturno":true},{"origem":"Madrid","destino":"Barcelona","paisId":"ES","eur":59,"brl":372,"noturno":false},{"origem":"Barcelona","destino":"Marselha","paisId":"ES","eur":65,"brl":410,"noturno":false},{"origem":"Marselha","destino":"Nice","paisId":"FR1","eur":35,"brl":220,"noturno":false},{"origem":"Nice","destino":"Monte Carlo","paisId":"FR1","eur":8,"brl":50,"noturno":false},{"origem":"Monte Carlo","destino":"Milão","paisId":"MC","eur":55,"brl":346,"noturno":false},{"origem":"Milão","destino":"Veneza","paisId":"IT1","eur":30,"brl":189,"noturno":false},{"origem":"Veneza","destino":"Viena","paisId":"IT1","eur":70,"brl":441,"noturno":true},{"origem":"Viena","destino":"Bratislava","paisId":"AT1","eur":18,"brl":113,"noturno":false},{"origem":"Bratislava","destino":"Viena","paisId":"SK","eur":18,"brl":113,"noturno":false},{"origem":"Viena","destino":"Munique","paisId":"AT2","eur":60,"brl":378,"noturno":false},{"origem":"Munique","destino":"Berlim","paisId":"DE1","eur":70,"brl":441,"noturno":false},{"origem":"Berlim","destino":"Copenhague","paisId":"DE1","eur":75,"brl":472,"noturno":true},{"origem":"Copenhague","destino":"Estocolmo","paisId":"DK","eur":80,"brl":504,"noturno":true},{"origem":"Estocolmo","destino":"Oslo","paisId":"SE","eur":55,"brl":346,"noturno":false},{"origem":"Oslo","destino":"Bergen","paisId":"NO","eur":65,"brl":410,"noturno":false},{"origem":"Edimburgo","destino":"Londres","paisId":"GB","eur":60,"brl":378,"noturno":false},{"origem":"Londres","destino":"Amsterdã","paisId":"GB","eur":75,"brl":472,"noturno":false},{"origem":"Amsterdã","destino":"Bruxelas","paisId":"NL","eur":30,"brl":189,"noturno":false},{"origem":"Bruxelas","destino":"Luxemburgo","paisId":"BE","eur":25,"brl":158,"noturno":false},{"origem":"Luxemburgo","destino":"Paris","paisId":"LU","eur":50,"brl":315,"noturno":false},{"origem":"Paris","destino":"Zurique","paisId":"FR2","eur":70,"brl":441,"noturno":false},{"origem":"Zurique","destino":"Lyon","paisId":"CH","eur":55,"brl":346,"noturno":false},{"origem":"Lyon","destino":"Turim","paisId":"FR3","eur":50,"brl":315,"noturno":false},{"origem":"Turim","destino":"Florença","paisId":"IT2","eur":35,"brl":220,"noturno":false},{"origem":"Florença","destino":"Roma","paisId":"IT2","eur":30,"brl":189,"noturno":false},{"origem":"Roma","destino":"Nápoles","paisId":"IT2","eur":28,"brl":176,"noturno":false},{"origem":"Nápoles","destino":"Bari","paisId":"IT2","eur":32,"brl":202,"noturno":false},{"origem":"Pequim","destino":"Xian","paisId":"CN","eur":65,"brl":410,"noturno":false},{"origem":"Xian","destino":"Xangai","paisId":"CN","eur":65,"brl":410,"noturno":false},{"origem":"Xangai","destino":"Guilin","paisId":"CN","eur":70,"brl":441,"noturno":false},{"origem":"Tóquio","destino":"Quioto","paisId":"JP","eur":90,"brl":567,"noturno":false},{"origem":"Quioto","destino":"Osaka","paisId":"JP","eur":15,"brl":94,"noturno":false},{"origem":"Osaka","destino":"Hiroshima","paisId":"JP","eur":70,"brl":441,"noturno":false},{"origem":"Hiroshima","destino":"Fukuoka Airport","paisId":"JP","eur":55,"brl":346,"noturno":false},{"origem":"Busan","destino":"Seul","paisId":"KR","eur":40,"brl":252,"noturno":false}];
 const VISTOS=[{id:"CN",prazo:"1-3 meses antes; validade 30-90d",forma:"online/embaixada",custo:250,alerta:"verificar isenção 2027"},{id:"NP",prazo:"na chegada; validade 15/30/90d",forma:"presencial ou online",custo:250,alerta:null},{id:"ID",prazo:"VOA; 30d renovável +30",forma:"presencial na chegada",custo:180,alerta:null},{id:"AU",prazo:"ETA 1 sem antes; validade 12 meses",forma:"online (app)",custo:30,alerta:"15 dias cobertos com folga"},{id:"NZ",prazo:"NZeTA antes embarque; validade 2 anos",forma:"online (app)",custo:50,alerta:null},{id:"TZ",prazo:"2-4 sem antes; validade 90d",forma:"online eVisa",custo:250,alerta:"seguro malária recomendado"},{id:null,nomeCustom:"EES e ETIAS (Espaço Schengen/Europa)",flagCustom:"🇪🇺",prazo:"ETIAS: solicitar online antes do embarque, de preferência alguns dias antes (aprovação costuma sair em minutos, mas pode levar até 30 dias em análise manual). Validade de 3 anos ou até o passaporte vencer, o que vier primeiro. EES: sem solicitação prévia — registro biométrico (foto + digitais) feito automaticamente na primeira entrada em qualquer país do Espaço Schengen.",forma:"ETIAS: 100% online, no site/app oficial (travel-europe.europa.eu/etias). EES: automático na fronteira/aeroporto, sem ação prévia.",custo:130,alerta:"ETIAS já sofreu vários adiamentos — pode não estar obrigatório ainda em abr/2027, mas as previsões mais recentes apontam para obrigatoriedade nessa época. Confirmar mais perto da data no site oficial. EES é gratuito; os R$130 aqui referem-se só à taxa do ETIAS (€20)."}];
 
 // Levantamento de vistos de nômade digital nos países do roteiro (situação levantada em ago/2026 — sujeita a mudança).
@@ -319,6 +320,9 @@ let PREP=[{"sec":"Inglês","tasks":[{"t":"Encontrar aulas de inglês para viagem
 
 const $=s=>document.querySelector(s);
 const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
+const trensDoPais=id=>TRENS.filter(t=>t.paisId===id);
+const custoTrensPais=id=>trensDoPais(id).reduce((s,t)=>s+t.brl,0);
+const custoPlanPais=id=>{const p=PAISES_DB[id];return p.dias*(p.dpd||0)+custoTrensPais(id)};
 const fmtR=v=>'R$ '+v.toLocaleString('pt-BR');
 const fmtD=iso=>{const[y,m,d]=iso.split('-');return `${d}/${m}/${y.slice(2)}`};
 const mesKey=iso=>{const ab=["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];const[y,m]=iso.split('-');return ab[+m-1]+y.slice(2)};
@@ -588,9 +592,7 @@ function cmpBarHtml(realizado, planejado){
 
 function pageCustos(){
   let totalPlan=0; const meses={};
-  PAISES_INDEX.forEach(id=>{const p=PAISES_DB[id];totalPlan+=p.dias*p.dpd;const mk=mesKey(p.ini);(meses[mk]=meses[mk]||[]).push(id)});
-  const totalTrens = TRENS.reduce((s,t)=>s+t.brl,0);
-  totalPlan += totalTrens;
+  PAISES_INDEX.forEach(id=>{const p=PAISES_DB[id];totalPlan+=custoPlanPais(id);const mk=mesKey(p.ini);(meses[mk]=meses[mk]||[]).push(id)});
   const totalExtrasCalc = ()=>CUSTOS_EXTRAS.reduce((s,c)=>s+(c.valor||0),0);
   const totalGastosCalc = ()=>GASTOS_REALIZADOS.reduce((s,g)=>s+(g.valor||0),0);
   const totalPlanComExtras = ()=>totalPlan + totalExtrasCalc();
@@ -629,27 +631,19 @@ function pageCustos(){
   planCont.appendChild(el(`<div><div class="sect">Custos por mês (estimativa)</div><div id="mc"></div></div>`));
   const cont=planCont.querySelector('#mc');
   Object.entries(meses).forEach(([mk,ids])=>{
-    const totMesHosp=ids.reduce((s,id)=>s+PAISES_DB[id].dias*PAISES_DB[id].dpd,0);
-    const trensDoMes = TRENS.filter(t=>t.mes===mk);
-    const totMesTrens = trensDoMes.reduce((s,t)=>s+t.brl,0);
-    const totMes = totMesHosp + totMesTrens;
+    const totMes=ids.reduce((s,id)=>s+custoPlanPais(id),0);
     const acc=el(`<div class="acc"><div class="acc-h" onclick="toggleAcc(this)"><div class="nm">${mk}</div><div class="sum"></div><div class="tot">${fmtR(totMes)}</div><div class="chv">▾</div></div><div class="acc-b"></div></div>`);
     const body=acc.querySelector('.acc-b');
     ids.forEach(id=>{
-      const p=PAISES_DB[id]; const totPais=p.dias*p.dpd;
-      const sub=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${flagDe(id)} ${p.nome}</span><span class="tot">${p.dpd>0?fmtR(totPais):'hospedagem gratuita'}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
+      const p=PAISES_DB[id]; const trens=trensDoPais(id); const totPais=custoPlanPais(id);
+      const sub=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${flagDe(id)} ${p.nome}</span><span class="tot">${totPais>0?fmtR(totPais):'hospedagem gratuita'}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
       const sb=sub.querySelector('.sub-acc-b');
       p.cid.forEach(c=>{const dc=duracaoCidade(c);const v=dc*p.dpd;sb.appendChild(el(`<div class="crow2"><span class="nm">${c.nome}</span><span class="d">${dc}d × ${fmtR(p.dpd)}/dia</span><span class="v">${p.dpd>0?fmtR(v):'—'}</span></div>`))});
+      trens.forEach(t=>{
+        sb.appendChild(el(`<div class="crow2"><span class="nm">🚆 ${t.origem} → ${t.destino}${t.noturno?' 🌙':''}</span><span class="d">${t.noturno?'noturno':'diurno'} · €${t.eur}</span><span class="v">${fmtR(t.brl)}</span></div>`));
+      });
       body.appendChild(sub);
     });
-    if(trensDoMes.length){
-      const subTrem=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">🚆 Passagens de trem</span><span class="tot">${fmtR(totMesTrens)}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
-      const sbt=subTrem.querySelector('.sub-acc-b');
-      trensDoMes.forEach(t=>{
-        sbt.appendChild(el(`<div class="crow2"><span class="nm">${t.origem} → ${t.destino}${t.noturno?' 🌙':''}</span><span class="d">${t.noturno?'noturno':'diurno'} · €${t.eur}</span><span class="v">${fmtR(t.brl)}</span></div>`));
-      });
-      body.appendChild(subTrem);
-    }
     cont.appendChild(acc);
   });
 
@@ -714,7 +708,7 @@ function pageCustos(){
       const bodyM=accM.querySelector('.acc-b');
       ids.forEach(id=>{
         const p=PAISES_DB[id];
-        const planP=p.dias*p.dpd, realP=gastosDePais(id);
+        const planP=custoPlanPais(id), realP=gastosDePais(id);
         const subP=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${flagDe(id)} ${p.nome}</span><span class="tot" id="gd-paistot-${id}">${fmtR(realP)}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
         const sbP=subP.querySelector('.sub-acc-b');
         const cmpWrap=el(`<div id="gd-cmp-${id}"></div>`);
@@ -790,7 +784,7 @@ function pageCustos(){
       const elCid=wrap.querySelector(`#gd-cidtot-${paisId}-${ci}`);
       if(elCid) elCid.textContent=fmtR(totC);
     }
-    const realP=gastosDePais(paisId), planP=p.dias*p.dpd;
+    const realP=gastosDePais(paisId), planP=custoPlanPais(paisId);
     const elPais=wrap.querySelector(`#gd-paistot-${paisId}`);
     if(elPais) elPais.textContent=fmtR(realP);
     const elCmp=wrap.querySelector(`#gd-cmp-${paisId}`);
@@ -1465,7 +1459,7 @@ function pageRoteiroDetalhado(){
     });
 
     let custo=0;
-    PAISES_INDEX.forEach(id=>{custo+=PAISES_DB[id].dias*(PAISES_DB[id].dpd||0)});
+    PAISES_INDEX.forEach(id=>{custo+=custoPlanPais(id)});
     const pct=custo/META.orcamento*100;
     findings.push(pct>100
       ? {t:'danger',tag:'💰 Orçamento excedido',txt:`R$ ${custo.toLocaleString('pt-BR')} (${pct.toFixed(1)}%). Excedente de R$ ${(custo-META.orcamento).toLocaleString('pt-BR')}.`}
