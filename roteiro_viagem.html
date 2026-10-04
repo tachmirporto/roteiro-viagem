@@ -339,27 +339,38 @@ function toggleAcc(h){h.classList.toggle('on');h.nextElementSibling.classList.to
 window.toggleAcc = toggleAcc;
 
 const diasEntre=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
-// ===== Horário de Trabalho local (08:00–17:00 horário de Brasília, sem horário de verão) =====
+// ===== Horário de Trabalho local (padrão 07:00–16:00 horário de Brasília, sem horário de verão; ajustável por país) =====
 const BRASILIA_OFFSET=-3;
+const HORA_INI_PADRAO='07:00', HORA_FIM_PADRAO='16:00';
+const horaValida=h=>/^([01]\d|2[0-3]):[0-5]\d$/.test(h||'');
+const hhmmParaMin=h=>{const[a,b]=h.split(':').map(Number);return a*60+b};
+// Horário de trabalho (base Brasília) de um país; usa o padrão quando não definido.
+function horaPais(p){
+  return {ini: horaValida(p&&p.horaIni)?p.horaIni:HORA_INI_PADRAO, fim: horaValida(p&&p.horaFim)?p.horaFim:HORA_FIM_PADRAO};
+}
 function tzOffsetPadrao(paisId, cidadeNome){
   const chave=paisId+':'+cidadeNome;
   if(TZ_CIDADE_OVERRIDE[chave]!=null) return TZ_CIDADE_OVERRIDE[chave];
   if(TZ_PAIS_DEFAULT[paisId]!=null) return TZ_PAIS_DEFAULT[paisId];
   return null;
 }
-function calcHorarioLocal(offsetHoras){
+function calcHorarioLocal(offsetHoras, hIni, hFim){
+  hIni=horaValida(hIni)?hIni:HORA_INI_PADRAO; hFim=horaValida(hFim)?hFim:HORA_FIM_PADRAO;
   if(offsetHoras==null || isNaN(offsetHoras)) return null;
   const diffMin=Math.round((offsetHoras-BRASILIA_OFFSET)*60);
   const norm=m=>((m%1440)+1440)%1440;
   const fmt=m=>{const h=Math.floor(m/60).toString().padStart(2,'0');const mi=(m%60).toString().padStart(2,'0');return `${h}:${mi}`};
-  return `${fmt(norm(8*60+diffMin))} às ${fmt(norm(17*60+diffMin))}`;
+  return `${fmt(norm(hhmmParaMin(hIni)+diffMin))} às ${fmt(norm(hhmmParaMin(hFim)+diffMin))}`;
 }
 // Preenche o fuso (tzOffset) de toda cidade que ainda não tenha, usando a tabela padrão.
 // Retorna o que foi preenchido automaticamente e o que ficou sem dado (precisa definição manual).
 function preencherFusosFaltantes(){
-  const preenchidos=[], semDados=[];
+  const preenchidos=[], semDados=[], horasPadrao=[];
   PAISES_INDEX.forEach(id=>{
     const p=PAISES_DB[id];
+    if(!horaValida(p.horaIni) || !horaValida(p.horaFim)){
+      const h=horaPais(p); p.horaIni=h.ini; p.horaFim=h.fim; horasPadrao.push(p.nome);
+    }
     (p.cid||[]).forEach(c=>{
       if(c.tzOffset==null || c.tzOffset===''){
         const def=tzOffsetPadrao(id, c.nome);
@@ -368,7 +379,7 @@ function preencherFusosFaltantes(){
       }
     });
   });
-  return {preenchidos, semDados};
+  return {preenchidos, semDados, horasPadrao};
 }
 function addDias(iso, n){
   const d = new Date(iso+'T00:00:00');
@@ -1113,6 +1124,8 @@ function pageRoteiroDetalhado(){
             <div class="mfld"><label>Data início</label><input type="date" class="f-ini" value="${p.ini}"></div>
             <div class="mfld"><label>Data fim</label><input type="date" class="f-fim" value="${p.fim}"></div>
             <div class="mfld"><label>Custo/dia (R$)</label><input type="number" class="f-dpd" value="${p.dpd}"></div>
+            <div class="mfld"><label>Trabalho início (Brasília)</label><input type="time" class="f-hini" value="${horaPais(p).ini}" style="width:100px"></div>
+            <div class="mfld"><label>Trabalho fim (Brasília)</label><input type="time" class="f-hfim" value="${horaPais(p).fim}" style="width:100px"></div>
             <div class="mfld"><label>Schengen?</label><select class="f-sch"><option value="1" ${p.sch?'selected':''}>Sim</option><option value="0" ${!p.sch?'selected':''}>Não</option></select></div>
           </div>
           <div class="cwrap" id="det-cw-${id}"></div>
@@ -1140,7 +1153,8 @@ function pageRoteiroDetalhado(){
   function horarioEfetivo(paisId, c){
     const padrao=tzOffsetPadrao(paisId, c.nome);
     const efetivo=(c.tzOffset!=null && c.tzOffset!=='') ? parseFloat(c.tzOffset) : padrao;
-    return calcHorarioLocal(efetivo);
+    const h=horaPais(PAISES_DB[paisId]);
+    return calcHorarioLocal(efetivo, h.ini, h.fim);
   }
 
   function horarioHtml(paisId, ci, c){
@@ -1148,7 +1162,7 @@ function pageRoteiroDetalhado(){
     const horario=horarioEfetivo(paisId, c);
     return `<div class="mrow" style="border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:10px">
       <div class="mfld"><label>Fuso (UTC)</label><input type="number" step="0.25" class="f-tz" data-tz="${paisId}:${ci}" value="${c.tzOffset!=null && c.tzOffset!=='' ? c.tzOffset : ''}" placeholder="${padrao!=null?padrao:'?'}" style="width:70px"></div>
-      <div class="mfld" style="flex:1;min-width:240px"><label>Horário de Trabalho — 08:00 às 17:00 (Brasília)</label><span id="det-hor-${paisId}-${ci}" style="font-family:var(--m);font-size:13px;${horario?'color:var(--ok)':'color:var(--warn)'}">${horario?horario+' (horário local)':'⚠ fuso não definido — clique em "Enviar atualização" para preencher'}</span></div>
+      <div class="mfld" style="flex:1;min-width:240px"><label>Horário de Trabalho — ${horaPais(PAISES_DB[paisId]).ini} às ${horaPais(PAISES_DB[paisId]).fim} (Brasília)</label><span id="det-hor-${paisId}-${ci}" style="font-family:var(--m);font-size:13px;${horario?'color:var(--ok)':'color:var(--warn)'}">${horario?horario+' (horário local)':'⚠ fuso não definido — clique em "Enviar atualização" para preencher'}</span></div>
     </div>`;
   }
 
@@ -1164,7 +1178,7 @@ function pageRoteiroDetalhado(){
           <input class="nm" placeholder="Nome da cidade" value="${c.nome}" data-cnome="${paisId}:${ci}">
           <span class="dl" style="font-family:var(--m);font-size:11px;color:var(--mut);white-space:nowrap">${fmtD(c.ini)} → ${fmtD(c.fim)}</span>
           <span class="db" style="font-family:var(--m);font-size:12px;font-weight:700;color:var(--ok);background:var(--okd);padding:3px 10px;border-radius:99px;white-space:nowrap">${duracaoCidade(c)}d</span>
-          <span class="sg" id="det-horrow-${paisId}-${ci}" style="background:${horarioRow?'var(--okd)':'var(--warnd)'};color:${horarioRow?'var(--ok)':'var(--warn)'};font-family:var(--m);white-space:nowrap" title="Horário de Trabalho — 08:00 às 17:00 (Brasília), convertido para o horário local">🕐 ${horarioRow?horarioRow:'fuso indefinido'}</span>
+          <span class="sg" id="det-horrow-${paisId}-${ci}" style="background:${horarioRow?'var(--okd)':'var(--warnd)'};color:${horarioRow?'var(--ok)':'var(--warn)'};font-family:var(--m);white-space:nowrap" title="Horário de Trabalho — ${horaPais(p).ini} às ${horaPais(p).fim} (Brasília), convertido para o horário local">🕐 ${horarioRow?horarioRow:'fuso indefinido'}</span>
           <input class="nm" style="width:110px" placeholder="transporte →" value="${c.transp_saida||''}" data-transp="${paisId}:${ci}">
           <button class="rmv" data-rmcid="${paisId}:${ci}">✕</button>
           <span class="chv">▾</span>
@@ -1294,6 +1308,14 @@ function pageRoteiroDetalhado(){
         marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
       }
       if(e.target.classList.contains('f-dpd')){p.dpd=parseFloat(e.target.value)||0; marcarPendenteDet(); return}
+      if(e.target.classList.contains('f-hini') || e.target.classList.contains('f-hfim')){
+        const ehIni=e.target.classList.contains('f-hini');
+        if(!horaValida(e.target.value)) e.target.value = ehIni?HORA_INI_PADRAO:HORA_FIM_PADRAO;
+        if(ehIni) p.horaIni=e.target.value; else p.horaFim=e.target.value;
+        const h=horaPais(p);
+        if(hhmmParaMin(h.fim)<=hhmmParaMin(h.ini)) alert('Atenção: o horário de fim é anterior ou igual ao de início. Confira os horários de '+p.nome+'.');
+        marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
+      }
       if(e.target.classList.contains('f-sch')){p.sch=parseInt(e.target.value); marcarPendenteDet(); return}
     }
     if(e.target.dataset.cnome){
@@ -1341,7 +1363,8 @@ function pageRoteiroDetalhado(){
       const c=PAISES_DB[pid].cid[+ci];
       c.tzOffset = raw===''? null : parseFloat(raw);
       const efetivo = c.tzOffset!=null ? c.tzOffset : tzOffsetPadrao(pid, c.nome);
-      const horario = calcHorarioLocal(efetivo);
+      const hp=horaPais(PAISES_DB[pid]);
+      const horario = calcHorarioLocal(efetivo, hp.ini, hp.fim);
       const lbl=$$(`#det-hor-${pid}-${ci}`);
       if(lbl){
         lbl.textContent = horario ? horario+' (horário local)' : '⚠ fuso não definido — clique em "Enviar atualização" para preencher';
@@ -1450,10 +1473,11 @@ function pageRoteiroDetalhado(){
   }
 
   $$('#det-benv').onclick=()=>{
-    const {preenchidos, semDados} = preencherFusosFaltantes();
-    if(preenchidos.length) renderDet(capturarEstadoAberto());
+    const {preenchidos, semDados, horasPadrao} = preencherFusosFaltantes();
+    if(preenchidos.length || horasPadrao.length) renderDet(capturarEstadoAberto());
     const findings=gerarRevisaoDet();
-    if(preenchidos.length) findings.unshift({t:'ok',tag:'🕐 Horário de trabalho preenchido',txt:`Fuso horário calculado e horário de trabalho (08:00–17:00 Brasília) preenchido para: ${preenchidos.join(', ')}.`});
+    if(preenchidos.length) findings.unshift({t:'ok',tag:'🕐 Horário de trabalho preenchido',txt:`Fuso horário calculado e horário de trabalho (horário de Brasília definido por país) preenchido para: ${preenchidos.join(', ')}.`});
+    if(horasPadrao.length) findings.unshift({t:'ok',tag:'🕐 Horário padrão aplicado',txt:`Horário de trabalho padrão (${HORA_INI_PADRAO}–${HORA_FIM_PADRAO} Brasília) definido para: ${horasPadrao.join(', ')}.`});
     if(semDados.length) findings.unshift({t:'warn',tag:'🕐 Fuso horário não identificado',txt:`Sem fuso cadastrado para: ${semDados.join(', ')}. Defina manualmente o campo "Fuso (UTC)" na cidade.`});
     const c=$$('#det-rcontent'); c.innerHTML='';
     findings.forEach(f=>c.appendChild(el(`<div class="ritem ${f.t}"><span class="tg">${f.tag}</span>${f.txt}</div>`)));
@@ -1495,17 +1519,19 @@ function pageRoteiroDetalhado(){
     });
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(roteiroRows), "Roteiro");
 
-    const detRows=[["País","Cidade","Início","Fim","Dias","Transporte saída","Fuso (UTC)","Horário de Trabalho (local, 08-17h Brasília)","Ponto de interesse","Data","Valor (R$)"]];
+    const detRows=[["País","Cidade","Início","Fim","Dias","Transporte saída","Fuso (UTC)","Horário base (Brasília)","Horário de Trabalho (local)","Ponto de interesse","Data","Valor (R$)"]];
     PAISES_INDEX.forEach(id=>{
       const p=PAISES_DB[id];
       (p.cid||[]).forEach(c=>{
         const efetivo = c.tzOffset!=null ? c.tzOffset : tzOffsetPadrao(id, c.nome);
-        const horario = calcHorarioLocal(efetivo) || "não definido";
+        const hp=horaPais(p);
+        const horarioBase = hp.ini+' às '+hp.fim;
+        const horario = calcHorarioLocal(efetivo, hp.ini, hp.fim) || "não definido";
         const dias = duracaoCidade(c);
         if(c.poi && c.poi.length){
-          c.poi.forEach(poi=>detRows.push([p.nome, c.nome, fmtD(c.ini), fmtD(c.fim), dias, c.transp_saida||"", efetivo!=null?efetivo:"", horario, poi.nome||"", poi.data?fmtD(poi.data):"", poi.valor||0]));
+          c.poi.forEach(poi=>detRows.push([p.nome, c.nome, fmtD(c.ini), fmtD(c.fim), dias, c.transp_saida||"", efetivo!=null?efetivo:"", horarioBase, horario, poi.nome||"", poi.data?fmtD(poi.data):"", poi.valor||0]));
         }else{
-          detRows.push([p.nome, c.nome, fmtD(c.ini), fmtD(c.fim), dias, c.transp_saida||"", efetivo!=null?efetivo:"", horario, "", "", ""]);
+          detRows.push([p.nome, c.nome, fmtD(c.ini), fmtD(c.fim), dias, c.transp_saida||"", efetivo!=null?efetivo:"", horarioBase, horario, "", "", ""]);
         }
       });
     });
