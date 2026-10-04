@@ -47,6 +47,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 .tg{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
 .tg-eu{background:rgba(108,142,255,.15);color:#6c8eff}.tg-om{background:rgba(255,184,77,.15);color:#ffb84d}
 .tg-as{background:rgba(255,126,179,.15);color:#ff7eb3}.tg-hs{background:rgba(0,212,170,.15);color:#00d4aa}.tg-buf{background:rgba(155,143,255,.15);color:#9b8fff}
+.tg-af{background:rgba(255,140,66,.15);color:#ff8c42}.tg-oc{background:rgba(64,196,255,.15);color:#40c4ff}.tg-am{background:rgba(129,199,132,.15);color:#81c784}.tg-nd{background:rgba(122,127,142,.15);color:#7a7f8e}
 .acc{margin-bottom:10px}
 .acc-h{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer}
 .acc-h:hover{background:var(--surf2)}
@@ -177,6 +178,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 .detwrap .addbox input:focus{outline:1px solid var(--ok)}
 .detwrap .addbox #det-new-sigla{width:84px;font-family:var(--m);text-transform:uppercase;text-align:center}
 .detwrap .addbox #det-new-nome{width:170px}
+.detwrap .addbox select{background:var(--surf2);border:1px solid var(--bd);color:var(--tx);font-family:var(--f);font-size:13px;padding:9px 8px;border-radius:var(--rs)}
 .detwrap .addbox .add{width:auto;white-space:nowrap;padding:9px 14px;color:var(--ok);border-color:rgba(0,212,170,.4)}
 .detwrap .bar .info2{font-size:12px;color:var(--mut);flex:1}
 .detwrap .bar .info2 b{color:var(--tx)}
@@ -328,13 +330,18 @@ function flagDe(id){
   return [...m[1].toUpperCase()].map(ch=>String.fromCodePoint(0x1F1E6+ch.charCodeAt(0)-65)).join('');
 }
 function reg(id){
+  // Região definida manualmente no país (p.regiao) tem prioridade; senão usa a tabela dos países originais.
+  const pp=PAISES_DB[id];
+  if(pp && pp.regiao && REGLBL[pp.regiao]) return pp.regiao;
   if(["MA","PT","ES","FR1","MC","IT1","AT1","SK","AT2","DE1","DK","SE","NO","IS","IE","GB","NL","BE","LU","FR2","CH","FR3","IT2","AL","GR"].includes(id))return"eu";
   if(["TR","EG","AE"].includes(id))return"om";
   if(["ZA","TZ","AU","NZ"].includes(id))return"hs";
   if(id==="BUFFER")return"buf";
-  return"as";
+  if(["CN","NP","VN","PH","SG","ID","TH","JP","KR"].includes(id))return"as";
+  return"nd"; // país novo sem região definida: não chuta, pede para definir
 }
-const REGLBL={eu:"Europa",om:"Oriente Médio",as:"Ásia",hs:"Hemisfério Sul",buf:"Buffer"};
+const REGLBL={eu:"Europa",af:"África",om:"Oriente Médio",as:"Ásia",oc:"Oceania",am:"Américas",hs:"Hemisfério Sul",buf:"Buffer",nd:"Região indefinida"};
+const REG_OPCOES=["eu","af","om","as","oc","am","hs"];
 function toggleAcc(h){h.classList.toggle('on');h.nextElementSibling.classList.toggle('on')}
 window.toggleAcc = toggleAcc;
 
@@ -1047,6 +1054,10 @@ function pagePrep(){
 /* ===== Aba Roteiro Detalhado (editor) ===== */
 let pendingDet=false, novosIdsDet=new Set(), counterDet=0;
 
+function regOptsHtml(id, selecionada){
+  const atual=selecionada||reg(id);
+  return (atual==='nd'?'<option value="nd" selected>— definir —</option>':'')+REG_OPCOES.map(r=>`<option value="${r}" ${r===atual?'selected':''}>${REGLBL[r]}</option>`).join('');
+}
 function pageRoteiroDetalhado(){
   const wrap=el(`<div class="detwrap">
     <div class="info"><b>Como usar:</b> clique em um país para expandir. Edite direto nos campos. Use as setas ↑/↓ para reordenar os países (recalcula as datas automaticamente). Dentro de cada cidade, defina a <b>data início</b> e <b>data fim</b> — alterar a data início desloca aquela cidade (mantendo a duração) e empurra as cidades seguintes junto; alterar a data fim muda a duração daquela cidade e também empurra as seguintes. Isso também atualiza as datas do país e empurra os países seguintes. Adicione pontos de interesse (data + valor de ingresso). Ao terminar, clique em <b>"Enviar atualização"</b> — o roteiro será revisado automaticamente.</div>
@@ -1058,7 +1069,7 @@ function pageRoteiroDetalhado(){
     <div class="sect">Países do roteiro <span id="det-cnt" style="color:var(--dim)"></span></div>
     <div id="det-paises"></div>
     <div class="bar">
-      <div class="addbox"><input id="det-new-sigla" maxlength="4" placeholder="Sigla" title="Sigla do país (ex: IT, GR, TZ). Define a bandeira e o ID."><input id="det-new-nome" placeholder="Nome do país"><button class="add" id="det-btnAddPais">+ Adicionar país</button></div>
+      <div class="addbox"><input id="det-new-sigla" maxlength="4" placeholder="Sigla" title="Sigla do país (ex: IT, GR, TZ). Define a bandeira e o ID."><input id="det-new-nome" placeholder="Nome do país"><select id="det-new-reg" title="Região/continente">${'<option value="">Região…</option>'+REG_OPCOES.map(r=>`<option value="${r}">${REGLBL[r]}</option>`).join('')}</select><select id="det-new-sch" title="Espaço Schengen?"><option value="0">Fora Schengen</option><option value="1">Schengen</option></select><button class="add" id="det-btnAddPais">+ Adicionar país</button></div>
       <div class="info2"><span id="det-pinfo">Nenhuma alteração pendente</span></div>
       <span class="pend" id="det-pbadge" style="display:none">alterações não enviadas</span>
       <button class="benv" id="det-fechar" style="background:var(--ac2);color:#fff">📊 Fechar roteiro (.xlsx)</button>
@@ -1114,6 +1125,7 @@ function pageRoteiroDetalhado(){
           <span class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</span>
           <span class="db">${p.dias}d</span>
           <span class="sg ${p.sch?'sy':'sn'}">${p.sch?'Schengen':'Fora Schengen'}</span>
+          <span class="tg tg-${reg(id)}" style="font-size:10px">${REGLBL[reg(id)]}</span>
           ${climaDetTag}
           ${mismatch?`<span class="sg" style="background:var(--warnd);color:var(--warn)">⚠ datas das cidades não fecham com o país</span>`:''}
           <button class="rmv" data-rm="${id}">✕</button>
@@ -1126,6 +1138,7 @@ function pageRoteiroDetalhado(){
             <div class="mfld"><label>Custo/dia (R$)</label><input type="number" class="f-dpd" value="${p.dpd}"></div>
             <div class="mfld"><label>Trabalho início (Brasília)</label><input type="time" class="f-hini" value="${horaPais(p).ini}" style="width:100px"></div>
             <div class="mfld"><label>Trabalho fim (Brasília)</label><input type="time" class="f-hfim" value="${horaPais(p).fim}" style="width:100px"></div>
+            <div class="mfld"><label>Região</label><select class="f-reg">${regOptsHtml(id)}</select></div>
             <div class="mfld"><label>Schengen?</label><select class="f-sch"><option value="1" ${p.sch?'selected':''}>Sim</option><option value="0" ${!p.sch?'selected':''}>Não</option></select></div>
           </div>
           <div class="cwrap" id="det-cw-${id}"></div>
@@ -1316,7 +1329,8 @@ function pageRoteiroDetalhado(){
         if(hhmmParaMin(h.fim)<=hhmmParaMin(h.ini)) alert('Atenção: o horário de fim é anterior ou igual ao de início. Confira os horários de '+p.nome+'.');
         marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
       }
-      if(e.target.classList.contains('f-sch')){p.sch=parseInt(e.target.value); marcarPendenteDet(); return}
+      if(e.target.classList.contains('f-sch')){p.sch=parseInt(e.target.value)?1:0; marcarPendenteDet(); renderDet(capturarEstadoAberto()); return}
+      if(e.target.classList.contains('f-reg')){p.regiao=e.target.value; marcarPendenteDet(); renderDet(capturarEstadoAberto()); return}
     }
     if(e.target.dataset.cnome){
       const[pid,ciS]=e.target.dataset.cnome.split(':');
@@ -1393,9 +1407,11 @@ function pageRoteiroDetalhado(){
     if(!/^[A-Z]{2}[A-Z0-9]{0,2}$/.test(id)){ alert('Informe a sigla do país com 2 letras (ex: IT, GR, TZ). Se o país já aparece no roteiro, use um sufixo (ex: IT3).'); siglaI.focus(); return; }
     if(PAISES_DB[id]){ alert(`A sigla ${id} já existe (${PAISES_DB[id].nome}). Use outra, por exemplo ${id}3.`); siglaI.focus(); return; }
     const nome=nomeI.value.trim()||'Novo país';
-    PAISES_DB[id]={nome,ini:META.fim,fim:META.fim,dias:1,sch:0,dpd:150,cid:[]};
+    const regSel=$$('#det-new-reg').value, schSel=parseInt($$('#det-new-sch').value)?1:0;
+    if(!regSel){ alert('Escolha a região/continente do país.'); $$('#det-new-reg').focus(); return; }
+    PAISES_DB[id]={nome,ini:META.fim,fim:META.fim,dias:1,sch:schSel,regiao:regSel,dpd:150,cid:[]};
     PAISES_INDEX.push(id); novosIdsDet.add(id);
-    siglaI.value=''; nomeI.value='';
+    siglaI.value=''; nomeI.value=''; $$('#det-new-reg').value=''; $$('#det-new-sch').value='0';
     marcarPendenteDet(); renderDet(capturarEstadoAberto());
     const card=$$('#det-pc-'+id);
     card.querySelector('.ph').classList.add('on'); card.querySelector('.pb').classList.add('on');
@@ -1512,10 +1528,10 @@ function pageRoteiroDetalhado(){
   function gerarXLSX(){
     const wb = XLSX.utils.book_new();
 
-    const roteiroRows=[["Mês","País","Início","Fim","Dias","Schengen","Descrição"]];
+    const roteiroRows=[["Mês","País","Região","Início","Fim","Dias","Schengen","Descrição"]];
     PAISES_INDEX.forEach(id=>{
       const p=PAISES_DB[id];
-      roteiroRows.push([mesKey(p.ini), p.nome, fmtD(p.ini), fmtD(p.fim), p.dias, p.sch?"Sim":"Não", DESC[id]||""]);
+      roteiroRows.push([mesKey(p.ini), p.nome, REGLBL[reg(id)], fmtD(p.ini), fmtD(p.fim), p.dias, p.sch?"Sim":"Não", DESC[id]||""]);
     });
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(roteiroRows), "Roteiro");
 
