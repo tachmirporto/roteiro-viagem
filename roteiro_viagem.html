@@ -126,7 +126,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
 
 /* ===== Roteiro Detalhado (editor) — escopado sob .detwrap ===== */
-.detwrap{padding-bottom:90px}
+.detwrap{padding-bottom:130px}
 .detwrap .info{margin-bottom:20px}
 .detwrap .info b{color:var(--ok)}
 .detwrap .pcard{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
@@ -171,7 +171,13 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 .detwrap .add{background:none;border:1px dashed var(--bd);color:var(--mut);font-family:var(--f);font-size:12px;padding:8px 14px;border-radius:var(--rs);cursor:pointer;width:100%;text-align:left}
 .detwrap .add:hover{border-color:var(--ok);color:var(--ok);background:var(--okd)}
 .detwrap .addpais{margin-top:14px;padding:12px 16px}
-.detwrap .bar{position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--bd);padding:14px 24px;display:flex;align-items:center;gap:16px;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.detwrap .bar{position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--bd);padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.detwrap .addbox{display:flex;gap:8px;align-items:center}
+.detwrap .addbox input{background:var(--surf2);border:1px solid var(--bd);color:var(--tx);font-family:var(--f);font-size:13px;padding:9px 10px;border-radius:var(--rs)}
+.detwrap .addbox input:focus{outline:1px solid var(--ok)}
+.detwrap .addbox #det-new-sigla{width:84px;font-family:var(--m);text-transform:uppercase;text-align:center}
+.detwrap .addbox #det-new-nome{width:170px}
+.detwrap .addbox .add{width:auto;white-space:nowrap;padding:9px 14px;color:var(--ok);border-color:rgba(0,212,170,.4)}
 .detwrap .bar .info2{font-size:12px;color:var(--mut);flex:1}
 .detwrap .bar .info2 b{color:var(--tx)}
 .detwrap .benv{background:var(--ok);color:#08110d;border:none;font-family:var(--f);font-size:14px;font-weight:700;padding:12px 24px;border-radius:var(--rs);cursor:pointer}
@@ -314,6 +320,13 @@ const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();ret
 const fmtR=v=>'R$ '+v.toLocaleString('pt-BR');
 const fmtD=iso=>{const[y,m,d]=iso.split('-');return `${d}/${m}/${y.slice(2)}`};
 const mesKey=iso=>{const ab=["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];const[y,m]=iso.split('-');return ab[+m-1]+y.slice(2)};
+// Bandeira a partir da sigla (ISO-2 nas 2 primeiras letras; sufixos como FR1/IT2 são ignorados).
+function flagDe(id){
+  if(FLAGS[id]) return FLAGS[id];
+  const m=/^([A-Za-z]{2})/.exec(id||'');
+  if(!m) return '🏳️';
+  return [...m[1].toUpperCase()].map(ch=>String.fromCodePoint(0x1F1E6+ch.charCodeAt(0)-65)).join('');
+}
 function reg(id){
   if(["MA","PT","ES","FR1","MC","IT1","AT1","SK","AT2","DE1","DK","SE","NO","IS","IE","GB","NL","BE","LU","FR2","CH","FR3","IT2","AL","GR"].includes(id))return"eu";
   if(["TR","EG","AE"].includes(id))return"om";
@@ -472,7 +485,7 @@ function pageRoteiro(){
       const hijabTag=p.hijab==='zanzibar'?' <span class="pill p-warn">🧕 hijab indicado</span>':'';
       const clima=climaTropical(id,p);
       const climaTag=clima?` <span class="pill ${clima.cls}">${clima.label}</span>`:'';
-      body.appendChild(el(`<div class="crow"><div class="flag">${FLAGS[id]}</div><div class="info"><div class="nm">${p.nome}${extra} <span class="pill ${p.sch?'p-ok':'p-ac2'}">${p.sch?'Schengen':'Fora Schengen'}</span>${hijabTag}${climaTag}</div><div class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</div><div class="desc">${DESC[id]||''}</div></div><div class="days">${p.dias}d<small>dias</small></div></div>`));
+      body.appendChild(el(`<div class="crow"><div class="flag">${flagDe(id)}</div><div class="info"><div class="nm">${p.nome}${extra} <span class="pill ${p.sch?'p-ok':'p-ac2'}">${p.sch?'Schengen':'Fora Schengen'}</span>${hijabTag}${climaTag}</div><div class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</div><div class="desc">${DESC[id]||''}</div></div><div class="days">${p.dias}d<small>dias</small></div></div>`));
     });
     cont.appendChild(acc);
   });
@@ -606,7 +619,7 @@ function pageCustos(){
     const body=acc.querySelector('.acc-b');
     ids.forEach(id=>{
       const p=PAISES_DB[id]; const totPais=p.dias*p.dpd;
-      const sub=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${FLAGS[id]} ${p.nome}</span><span class="tot">${p.dpd>0?fmtR(totPais):'hospedagem gratuita'}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
+      const sub=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${flagDe(id)} ${p.nome}</span><span class="tot">${p.dpd>0?fmtR(totPais):'hospedagem gratuita'}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
       const sb=sub.querySelector('.sub-acc-b');
       p.cid.forEach(c=>{const dc=duracaoCidade(c);const v=dc*p.dpd;sb.appendChild(el(`<div class="crow2"><span class="nm">${c.nome}</span><span class="d">${dc}d × ${fmtR(p.dpd)}/dia</span><span class="v">${p.dpd>0?fmtR(v):'—'}</span></div>`))});
       body.appendChild(sub);
@@ -684,7 +697,7 @@ function pageCustos(){
       ids.forEach(id=>{
         const p=PAISES_DB[id];
         const planP=p.dias*p.dpd, realP=gastosDePais(id);
-        const subP=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${FLAGS[id]} ${p.nome}</span><span class="tot" id="gd-paistot-${id}">${fmtR(realP)}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
+        const subP=el(`<div><div class="sub-acc-h" onclick="toggleAcc(this)"><span class="nm">${flagDe(id)} ${p.nome}</span><span class="tot" id="gd-paistot-${id}">${fmtR(realP)}</span><span class="chv">▾</span></div><div class="sub-acc-b"></div></div>`);
         const sbP=subP.querySelector('.sub-acc-b');
         const cmpWrap=el(`<div id="gd-cmp-${id}"></div>`);
         cmpWrap.innerHTML=cmpBarHtml(realP, planP);
@@ -780,7 +793,7 @@ function pageVistos(){
   VISTOS.forEach(v=>{
     totalV+=v.custo;
     const nome = v.id ? PAISES_DB[v.id].nome : v.nomeCustom;
-    const flag = v.id ? FLAGS[v.id] : (v.flagCustom||'🌍');
+    const flag = v.id ? flagDe(v.id) : (v.flagCustom||'🌍');
     cont.appendChild(el(`<div class="vcard"><div class="pais">${flag} ${nome}</div><div class="fld"><label>Prazo/Validade</label><span>${v.prazo}</span></div><div class="fld"><label>Como tirar</label><span>${v.forma}</span></div><div class="fld vlr"><label>Custo estimado</label><div class="num">${fmtR(v.custo)}</div></div>${v.alerta?`<div class="valert">⚠️ ${v.alerta}</div>`:''}</div>`));
   });
   cont.insertBefore(el(`<div class="info"><b>Total estimado em vistos: ${fmtR(totalV)}</b> — incluído no contador de custos.</div>`), cont.firstChild);
@@ -1033,8 +1046,8 @@ function pageRoteiroDetalhado(){
     </div>
     <div class="sect">Países do roteiro <span id="det-cnt" style="color:var(--dim)"></span></div>
     <div id="det-paises"></div>
-    <button class="add addpais" id="det-btnAddPais">+ Adicionar país</button>
     <div class="bar">
+      <div class="addbox"><input id="det-new-sigla" maxlength="4" placeholder="Sigla" title="Sigla do país (ex: IT, GR, TZ). Define a bandeira e o ID."><input id="det-new-nome" placeholder="Nome do país"><button class="add" id="det-btnAddPais">+ Adicionar país</button></div>
       <div class="info2"><span id="det-pinfo">Nenhuma alteração pendente</span></div>
       <span class="pend" id="det-pbadge" style="display:none">alterações não enviadas</span>
       <button class="benv" id="det-fechar" style="background:var(--ac2);color:#fff">📊 Fechar roteiro (.xlsx)</button>
@@ -1085,7 +1098,7 @@ function pageRoteiroDetalhado(){
         <div class="ph" data-id="${id}">
           <button class="ordbtn" data-mvup="${id}" title="Mover para cima" ${idx===0?'disabled':''}>↑</button>
           <button class="ordbtn" data-mvdown="${id}" title="Mover para baixo" ${idx===PAISES_INDEX.length-1?'disabled':''}>↓</button>
-          <div class="flag">${FLAGS[id]||'🏳️'}</div>
+          <div class="flag">${flagDe(id)}</div>
           <input class="nm" value="${p.nome}">
           <span class="per">${fmtD(p.ini)} → ${fmtD(p.fim)}</span>
           <span class="db">${p.dias}d</span>
@@ -1352,12 +1365,20 @@ function pageRoteiroDetalhado(){
   });
 
   $$('#det-btnAddPais').onclick=()=>{
-    const id='NOVO'+(++counterDet);
-    PAISES_DB[id]={nome:'Novo país',ini:META.fim,fim:META.fim,dias:1,sch:0,dpd:150,cid:[]};
-    PAISES_INDEX.push(id); novosIdsDet.add(id); FLAGS[id]=FLAGS[id]||'🏳️';
+    const siglaI=$$('#det-new-sigla'), nomeI=$$('#det-new-nome');
+    const id=siglaI.value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!/^[A-Z]{2}[A-Z0-9]{0,2}$/.test(id)){ alert('Informe a sigla do país com 2 letras (ex: IT, GR, TZ). Se o país já aparece no roteiro, use um sufixo (ex: IT3).'); siglaI.focus(); return; }
+    if(PAISES_DB[id]){ alert(`A sigla ${id} já existe (${PAISES_DB[id].nome}). Use outra, por exemplo ${id}3.`); siglaI.focus(); return; }
+    const nome=nomeI.value.trim()||'Novo país';
+    PAISES_DB[id]={nome,ini:META.fim,fim:META.fim,dias:1,sch:0,dpd:150,cid:[]};
+    PAISES_INDEX.push(id); novosIdsDet.add(id);
+    siglaI.value=''; nomeI.value='';
     marcarPendenteDet(); renderDet(capturarEstadoAberto());
-    $$('#det-pc-'+id).scrollIntoView({behavior:'smooth',block:'center'});
+    const card=$$('#det-pc-'+id);
+    card.querySelector('.ph').classList.add('on'); card.querySelector('.pb').classList.add('on');
+    card.scrollIntoView({behavior:'smooth',block:'center'});
   };
+  wrap.addEventListener('keydown', e=>{ if(e.key==='Enter' && (e.target.id==='det-new-sigla'||e.target.id==='det-new-nome')){ e.preventDefault(); $$('#det-btnAddPais').click(); } });
 
   /* ===== Revisão / Enviar atualização ===== */
   function gerarRevisaoDet(){
