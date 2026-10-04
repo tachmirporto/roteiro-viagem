@@ -126,6 +126,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
 
 /* ===== Roteiro Detalhado (editor) — escopado sob .detwrap ===== */
+.detwrap{padding-bottom:90px}
 .detwrap .info{margin-bottom:20px}
 .detwrap .info b{color:var(--ok)}
 .detwrap .pcard{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
@@ -280,7 +281,7 @@ function climaTropical(id,p){
 }
 let PAISES_INDEX=["MA", "PT", "ES", "FR1", "MC", "IT1", "AT1", "SK", "AT2", "DE1", "DK", "SE", "NO", "IS", "IE", "GB", "NL", "BE", "LU", "FR2", "CH", "FR3", "IT2", "AL", "GR", "TR", "EG", "AE", "NP", "VN", "PH", "SG", "ID", "ZA", "TZ", "TH", "AU", "NZ", "JP", "KR", "CN"];
 const PAISES_DB={"MA": {"nome": "Marrocos", "ini": "2027-04-01", "fim": "2027-04-12", "dias": 12, "sch": 0, "dpd": 130, "cid": [{"nome": "Marrakech", "poi": [], "transp_saida": "avião", "ini": "2027-04-01", "fim": "2027-04-07"}]}, "PT": {"nome": "Portugal", "ini": "2027-04-12", "fim": "2027-04-16", "dias": 5, "sch": 1, "dpd": 200, "cid": [{"nome": "Lisboa", "poi": [], "transp_saida": "trem", "ini": "2027-04-12", "fim": "2027-04-16"}]}, "ES": {"nome": "Espanha", "ini": "2027-04-16", "fim": "2027-04-22", "dias": 7, "sch": 1, "dpd": 220, "cid": [{"nome": "Madrid", "poi": [], "transp_saida": "trem", "ini": "2027-04-16", "fim": "2027-04-19"}, {"nome": "Barcelona", "poi": [], "transp_saida": "trem", "ini": "2027-04-19", "fim": "2027-04-21"}]}, "FR1": {"nome": "França (1)", "ini": "2027-04-22", "fim": "2027-04-25", "dias": 4, "sch": 1, "dpd": 250, "cid": [{"nome": "Marselha", "poi": [], "transp_saida": "trem", "ini": "2027-04-22", "fim": "2027-04-23"}, {"nome": "Nice", "poi": [], "transp_saida": "trem", "ini": "2027-04-23", "fim": "2027-04-24"}]}, "MC": {"nome": "Mônaco", "ini": "2027-04-25", "fim": "2027-04-25", "dias": 1, "sch": 1, "dpd": 280, "cid": [{"nome": "Monte Carlo", "poi": [], "transp_saida": "trem", "ini": "2027-04-25", "fim": "2027-04-25"}]}, "IT1": {"nome": "Itália (Milão-Veneza)", "ini": "2027-04-25", "fim": "2027-04-29", "dias": 5, "sch": 1, "dpd": 230, "cid": [{"nome": "Milão", "poi": [], "transp_saida": "trem", "ini": "2027-04-25", "fim": "2027-04-27"}, {"nome": "Veneza", "poi": [], "transp_saida": "trem", "ini": "2027-04-27", "fim": "2027-04-28"}]}, "AT1": {"nome": "Áustria (Viena)", "ini": "2027-04-29", "fim": "2027-05-01", "dias": 3, "sch": 1, "dpd": 210, "cid": [{"nome": "Viena", "poi": [], "transp_saida": "trem", "ini": "2027-04-29", "fim": "2027-05-01"}]}, "SK": {"nome": "Eslováquia", "ini": "2027-05-01", "fim": "2027-05-02", "dias": 2, "sch": 1, "dpd": 120, "cid": [{"nome": "Bratislava", "poi": [], "transp_saida": "trem", "ini": "2027-05-01", "fim": "2027-05-02"}]}, "AT2": {"nome": "Áustria (Viena retorno)", "ini": "2027-05-02", "fim": "2027-05-02", "dias": 1, "sch": 1, "dpd": 210, "cid": [{"nome": "Viena", "poi": [], "transp_saida": "trem", "ini": "2027-05-02", "fim": "2027-05-02"}]}, "DE1": {"nome": "Alemanha (Munique-Berlim)", "ini": "2027-05-02", "fim": "2027-05-06", "dias": 5, "sch": 1, "dpd": 200, "cid": [{"nome": "Munique", "poi": [], "transp_saida": "trem", "ini": "2027-05-02", "fim": "2027-05-04"}, {"nome": "Berlim", "poi": [], "transp_saida": "trem", "ini": "2027-05-04", "fim": "2027-05-05"}]}, "DK": {"nome": "Dinamarca", "ini": "2027-05-06", "fim": "2027-05-08", "dias": 3, "sch": 1, "dpd": 280, "cid": [{"nome": "Copenhague", "poi": [], "transp_saida": "trem", "ini": "2027-05-06", "fim": "2027-05-08"}]}, "SE": {"nome": "Suécia", "ini": "2027-05-08", "fim": "2027-05-11", "dias": 4, "sch": 1, "dpd": 260, "cid": [{"nome": "Estocolmo", "poi": [], "transp_saida": "trem", "ini": "2027-05-08", "fim": "2027-05-11"}]}, "NO": {"nome": "Noruega", "ini": "2027-05-11", "fim": "2027-05-14", "dias": 4, "sch": 1, "dpd": 320, "cid": [{"nome": "Oslo", "poi": [], "transp_saida": "trem", "ini": "2027-05-11", "fim": "2027-05-12"}, {"nome": "Bergen", "poi": [], "transp_saida": "avião", "ini": "2027-05-12", "fim": "2027-05-13"}]}, "IS": {"nome": "Islândia", "ini": "2027-05-14", "fim": "2027-05-17", "dias": 4, "sch": 1, "dpd": 350, "cid": [{"nome": "Reykjavik", "poi": [], "transp_saida": "avião", "ini": "2027-05-14", "fim": "2027-05-17"}]}, "IE": {"nome": "Irlanda", "ini": "2027-05-17", "fim": "2027-05-23", "dias": 7, "sch": 0, "dpd": 230, "cid": [{"nome": "Dublin", "poi": [], "transp_saida": "balsa/trem", "ini": "2027-05-17", "fim": "2027-05-23"}]}, "GB": {"nome": "Reino Unido", "ini": "2027-05-23", "fim": "2027-06-06", "dias": 15, "sch": 0, "dpd": 280, "cid": [{"nome": "Edimburgo", "poi": [], "transp_saida": "trem", "ini": "2027-05-23", "fim": "2027-05-30"}, {"nome": "Londres", "poi": [], "transp_saida": "trem", "ini": "2027-05-30", "fim": "2027-06-05"}]}, "NL": {"nome": "Países Baixos", "ini": "2027-06-06", "fim": "2027-06-08", "dias": 3, "sch": 1, "dpd": 220, "cid": [{"nome": "Amsterdã", "poi": [], "transp_saida": "trem", "ini": "2027-06-06", "fim": "2027-06-08"}]}, "BE": {"nome": "Bélgica", "ini": "2027-06-08", "fim": "2027-06-09", "dias": 2, "sch": 1, "dpd": 210, "cid": [{"nome": "Bruxelas", "poi": [], "transp_saida": "trem", "ini": "2027-06-08", "fim": "2027-06-09"}]}, "LU": {"nome": "Luxemburgo", "ini": "2027-06-09", "fim": "2027-06-10", "dias": 2, "sch": 1, "dpd": 230, "cid": [{"nome": "Luxemburgo", "poi": [], "transp_saida": "trem", "ini": "2027-06-09", "fim": "2027-06-10"}]}, "FR2": {"nome": "França (Paris)", "ini": "2027-06-10", "fim": "2027-06-13", "dias": 4, "sch": 1, "dpd": 250, "cid": [{"nome": "Paris", "poi": [], "transp_saida": "trem", "ini": "2027-06-10", "fim": "2027-06-13"}]}, "CH": {"nome": "Suíça", "ini": "2027-06-13", "fim": "2027-06-15", "dias": 3, "sch": 1, "dpd": 320, "cid": [{"nome": "Zurique", "poi": [], "transp_saida": "trem", "ini": "2027-06-13", "fim": "2027-06-15"}]}, "FR3": {"nome": "França (Lyon)", "ini": "2027-06-15", "fim": "2027-06-17", "dias": 3, "sch": 1, "dpd": 250, "cid": [{"nome": "Lyon", "poi": [], "transp_saida": "trem", "ini": "2027-06-15", "fim": "2027-06-17"}]}, "IT2": {"nome": "Itália (Turim-Bari)", "ini": "2027-06-17", "fim": "2027-06-28", "dias": 12, "sch": 1, "dpd": 230, "cid": [{"nome": "Turim", "poi": [], "transp_saida": "trem", "ini": "2027-06-17", "fim": "2027-06-19"}, {"nome": "Florença", "poi": [], "transp_saida": "trem", "ini": "2027-06-19", "fim": "2027-06-21"}, {"nome": "Roma", "poi": [], "transp_saida": "trem", "ini": "2027-06-21", "fim": "2027-06-22"}, {"nome": "Nápoles", "poi": [], "transp_saida": "trem", "ini": "2027-06-22", "fim": "2027-06-23"}, {"nome": "Bari", "poi": [], "transp_saida": "barco", "ini": "2027-06-23", "fim": "2027-06-24"}]}, "AL": {"nome": "Albânia", "ini": "2027-06-28", "fim": "2027-07-04", "dias": 7, "sch": 0, "dpd": 90, "cid": [{"nome": "Durrës", "poi": [], "transp_saida": "ônibus", "ini": "2027-06-28", "fim": "2027-06-29"}, {"nome": "Berat", "poi": [], "transp_saida": "ônibus", "ini": "2027-06-29", "fim": "2027-06-30"}, {"nome": "Gjirokastër", "poi": [], "transp_saida": "ônibus", "ini": "2027-06-30", "fim": "2027-07-01"}, {"nome": "Ksamil/Dhërmi", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-01", "fim": "2027-07-01"}]}, "GR": {"nome": "Grécia", "ini": "2027-07-04", "fim": "2027-07-09", "dias": 6, "sch": 1, "dpd": 160, "cid": [{"nome": "Meteora", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-04", "fim": "2027-07-04"}, {"nome": "Trikala", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-04", "fim": "2027-07-04"}, {"nome": "Atenas", "poi": [], "transp_saida": "balsa", "ini": "2027-07-04", "fim": "2027-07-04"}, {"nome": "Mykonos/Santorini", "poi": [], "transp_saida": "balsa", "ini": "2027-07-04", "fim": "2027-07-04"}, {"nome": "Atenas (retorno)", "poi": [], "transp_saida": "barco", "ini": "2027-07-04", "fim": "2027-07-04"}, {"nome": "Ilha de Chios", "poi": [], "transp_saida": "barco", "ini": "2027-07-04", "fim": "2027-07-04"}]}, "TR": {"nome": "Turquia", "ini": "2027-07-09", "fim": "2027-07-18", "dias": 10, "sch": 0, "dpd": 130, "cid": [{"nome": "Porto de Çeşme", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-09", "fim": "2027-07-10"}, {"nome": "Izmir", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-10", "fim": "2027-07-11"}, {"nome": "Denizli", "poi": [], "transp_saida": "taxi", "ini": "2027-07-11", "fim": "2027-07-11"}, {"nome": "Pamukkale", "poi": [], "transp_saida": "taxi", "ini": "2027-07-11", "fim": "2027-07-11"}, {"nome": "Denizli (retorno)", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-11", "fim": "2027-07-11"}, {"nome": "Göreme/Capadócia", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-11", "fim": "2027-07-11"}, {"nome": "Aeroporto Nevşehir (NAV)", "poi": [], "transp_saida": "avião", "ini": "2027-07-11", "fim": "2027-07-11"}, {"nome": "Istambul", "poi": [], "transp_saida": "avião", "ini": "2027-07-11", "fim": "2027-07-11"}]}, "EG": {"nome": "Egito", "ini": "2027-07-18", "fim": "2027-07-25", "dias": 8, "sch": 0, "dpd": 110, "cid": [{"nome": "Cairo", "poi": [], "transp_saida": "avião", "ini": "2027-07-18", "fim": "2027-07-25"}]}, "AE": {"nome": "Dubai", "ini": "2027-07-25", "fim": "2027-07-29", "dias": 5, "sch": 0, "dpd": 220, "cid": [{"nome": "Dubai", "poi": [], "transp_saida": "avião", "ini": "2027-07-25", "fim": "2027-07-29"}]}, "NP": {"nome": "Nepal", "ini": "2027-07-29", "fim": "2027-08-07", "dias": 10, "sch": 0, "dpd": 100, "cid": [{"nome": "Pokhara", "poi": [], "transp_saida": "ônibus", "ini": "2027-07-29", "fim": "2027-08-02"}, {"nome": "Katmandu", "poi": [], "transp_saida": "avião", "ini": "2027-08-02", "fim": "2027-08-06"}]}, "CN": {"nome": "China", "ini": "2027-12-21", "fim": "2028-01-04", "dias": 15, "sch": 0, "dpd": 140, "cid": [{"nome": "Pequim", "poi": [], "transp_saida": "trem", "ini": "2027-12-21", "fim": "2027-12-24"}, {"nome": "Xian", "poi": [], "transp_saida": "trem", "ini": "2027-12-24", "fim": "2027-12-27"}, {"nome": "Xangai", "poi": [], "transp_saida": "trem", "ini": "2027-12-27", "fim": "2027-12-30"}, {"nome": "Guilin", "poi": [], "transp_saida": "avião", "ini": "2027-12-30", "fim": "2028-01-01"}]}, "VN": {"nome": "Vietnã", "ini": "2027-08-07", "fim": "2027-08-24", "dias": 18, "sch": 0, "dpd": 100, "cid": [{"nome": "Hanói", "poi": [], "transp_saida": "ônibus", "ini": "2027-08-07", "fim": "2027-08-11"}, {"nome": "Hạ Long Bay", "poi": [], "transp_saida": "avião", "ini": "2027-08-11", "fim": "2027-08-15"}, {"nome": "Hội An", "poi": [], "transp_saida": "ônibus", "ini": "2027-08-15", "fim": "2027-08-18"}, {"nome": "Aeroporto Da Nang (DAD)", "poi": [], "transp_saida": "avião", "ini": "2027-08-18", "fim": "2027-08-21"}]}, "PH": {"nome": "Filipinas", "ini": "2027-08-24", "fim": "2027-09-07", "dias": 15, "sch": 0, "dpd": 110, "cid": [{"nome": "Manila", "poi": [], "transp_saida": "avião", "ini": "2027-08-24", "fim": "2027-08-27"}, {"nome": "Palawan", "poi": [], "transp_saida": "avião", "ini": "2027-08-27", "fim": "2027-08-30"}, {"nome": "Cebu", "poi": [], "transp_saida": "balsa/avião", "ini": "2027-08-30", "fim": "2027-09-02"}, {"nome": "Bohol", "poi": [], "transp_saida": "avião", "ini": "2027-09-02", "fim": "2027-09-04"}]}, "SG": {"nome": "Singapura", "ini": "2027-09-07", "fim": "2027-09-10", "dias": 4, "sch": 0, "dpd": 200, "cid": [{"nome": "Singapura", "poi": [], "transp_saida": "avião", "ini": "2027-09-07", "fim": "2027-09-10"}]}, "ID": {"nome": "Indonésia", "ini": "2027-09-10", "fim": "2027-10-03", "dias": 24, "sch": 0, "dpd": 110, "cid": [{"nome": "Bali", "poi": [], "transp_saida": "balsa/ônibus", "ini": "2027-09-10", "fim": "2027-09-15"}, {"nome": "Komodo", "poi": [], "transp_saida": null, "ini": "2027-09-15", "fim": "2027-09-20"}, {"nome": "Yogyakarta", "poi": [], "transp_saida": null, "ini": "2027-09-20", "fim": "2027-09-25"}, {"nome": "Lombok", "poi": [], "transp_saida": "avião", "ini": "2027-09-25", "fim": "2027-09-30"}]}, "ZA": {"nome": "África do Sul", "ini": "2027-10-03", "fim": "2027-10-13", "dias": 11, "sch": 0, "dpd": 160, "cid": [{"nome": "Cidade do Cabo", "poi": [], "transp_saida": "avião", "ini": "2027-10-03", "fim": "2027-10-13"}]}, "TZ": {"nome": "Tanzânia", "ini": "2027-10-13", "fim": "2027-10-21", "dias": 9, "sch": 0, "dpd": 180, "cid": [{"nome": "Zanzibar", "poi": [], "transp_saida": "avião", "ini": "2027-10-13", "fim": "2027-10-14"}, {"nome": "Arusha", "poi": [], "transp_saida": "carro", "ini": "2027-10-14", "fim": "2027-10-15"}, {"nome": "Ngorongoro", "poi": [], "transp_saida": "carro", "ini": "2027-10-15", "fim": "2027-10-16"}, {"nome": "Serengeti", "poi": [], "transp_saida": "carro", "ini": "2027-10-16", "fim": "2027-10-16"}, {"nome": "Mwanza", "poi": [], "transp_saida": "avião", "ini": "2027-10-16", "fim": "2027-10-16"}, {"nome": "Dar es Salaam", "poi": [], "transp_saida": "avião", "ini": "2027-10-16", "fim": "2027-10-16"}]}, "TH": {"nome": "Tailândia", "ini": "2027-10-21", "fim": "2027-11-04", "dias": 15, "sch": 0, "dpd": 110, "cid": [{"nome": "Bangkok", "poi": [], "transp_saida": "avião", "ini": "2027-10-21", "fim": "2027-10-23"}, {"nome": "Chiang Mai", "poi": [], "transp_saida": "avião", "ini": "2027-10-23", "fim": "2027-10-25"}, {"nome": "Bangkok (retorno)", "poi": [], "transp_saida": "avião", "ini": "2027-10-25", "fim": "2027-10-27"}, {"nome": "Krabi", "poi": [], "transp_saida": "avião", "ini": "2027-10-27", "fim": "2027-10-29"}, {"nome": "Bangkok (retorno 2)", "poi": [], "transp_saida": "avião", "ini": "2027-10-29", "fim": "2027-10-31"}]}, "AU": {"nome": "Austrália", "ini": "2027-11-04", "fim": "2027-11-18", "dias": 15, "sch": 0, "dpd": 0, "cid": [{"nome": "Gold Coast", "poi": [], "transp_saida": "avião", "ini": "2027-11-04", "fim": "2027-11-18"}]}, "NZ": {"nome": "Nova Zelândia", "ini": "2027-11-18", "fim": "2027-11-29", "dias": 12, "sch": 0, "dpd": 200, "cid": [{"nome": "Auckland", "poi": [], "transp_saida": "ônibus", "ini": "2027-11-18", "fim": "2027-11-19"}, {"nome": "Rotorua", "poi": [], "transp_saida": "ônibus", "ini": "2027-11-19", "fim": "2027-11-20"}, {"nome": "Auckland (retorno)", "poi": [], "transp_saida": "avião", "ini": "2027-11-20", "fim": "2027-11-21"}, {"nome": "Queenstown", "poi": [], "transp_saida": "ônibus", "ini": "2027-11-21", "fim": "2027-11-22"}, {"nome": "Milford Sound", "poi": [], "transp_saida": "ônibus", "ini": "2027-11-22", "fim": "2027-11-23"}, {"nome": "Queenstown (retorno)", "poi": [], "transp_saida": "avião", "ini": "2027-11-23", "fim": "2027-11-24"}]}, "JP": {"nome": "Japão", "ini": "2027-11-29", "fim": "2027-12-12", "dias": 14, "sch": 0, "dpd": 200, "cid": [{"nome": "Tóquio", "poi": [], "transp_saida": "trem", "ini": "2027-11-29", "fim": "2027-12-01"}, {"nome": "Quioto", "poi": [], "transp_saida": "trem", "ini": "2027-12-01", "fim": "2027-12-03"}, {"nome": "Osaka", "poi": [], "transp_saida": "trem", "ini": "2027-12-03", "fim": "2027-12-05"}, {"nome": "Hiroshima", "poi": [], "transp_saida": "trem", "ini": "2027-12-05", "fim": "2027-12-07"}, {"nome": "Fukuoka Airport", "poi": [], "transp_saida": "avião", "ini": "2027-12-07", "fim": "2027-12-08"}]}, "KR": {"nome": "Coreia do Sul", "ini": "2027-12-12", "fim": "2027-12-21", "dias": 10, "sch": 0, "dpd": 150, "cid": [{"nome": "Busan", "poi": [], "transp_saida": "trem", "ini": "2027-12-12", "fim": "2027-12-16"}, {"nome": "Seul", "poi": [], "transp_saida": null, "ini": "2027-12-16", "fim": "2027-12-20"}]}};
-const TALVEZ=["Finlândia","Bulgária","Croácia","Itália","Marselha (França)","Islândia"];
+let TALVEZ=["Finlândia","Bulgária","Croácia","Itália","Marselha (França)","Islândia"];
 const CATEGORIAS=[{id:"visto",label:"Visto",ic:"🛂"},{id:"voo",label:"Voo",ic:"✈️"},{id:"trem",label:"Trem",ic:"🚆"},{id:"passeios",label:"Passeios",ic:"🎟️"},{id:"alimentacao",label:"Alimentação",ic:"🍽️"},{id:"hospedagem",label:"Hospedagem",ic:"🛏️"}];
 // Fuso horário padrão (offset em relação ao UTC, em horas — aceita fração, ex: 5.75 para o Nepal) por país,
 // já considerando o horário (padrão/verão) típico do período em que o roteiro passa por lá.
@@ -475,15 +476,48 @@ function pageRoteiro(){
     });
     cont.appendChild(acc);
   });
-  if(TALVEZ && TALVEZ.length){
+  {
     const accT=el(`<div class="acc"><div class="acc-h" onclick="toggleAcc(this)"><div class="nm">TALVEZ</div><div class="sum">Destinos em aberto — decidir durante a viagem</div><div><span class="tg" style="background:rgba(155,143,255,.15);color:#9b8fff">Sem data/custo definido</span></div><div class="chv">▾</div></div><div class="acc-b"></div></div>`);
     const bodyT=accT.querySelector('.acc-b');
-    TALVEZ.forEach(nome=>{
-      bodyT.appendChild(el(`<div class="crow"><div class="flag">🤔</div><div class="info"><div class="nm">${nome}</div><div class="desc">Sem data ou custo definido. Avaliar conforme andamento da viagem.</div></div></div>`));
-    });
+    function renderTalvez(){
+      bodyT.innerHTML='';
+      TALVEZ.forEach((nome,i)=>{
+        bodyT.appendChild(el(`<div class="crow"><div class="flag">🤔</div><div class="info"><div class="nm">${nome}</div><div class="desc">Sem data ou custo definido. Avaliar conforme andamento da viagem.</div></div><button class="rmv" data-rmtalvez="${i}">✕</button></div>`));
+      });
+      bodyT.querySelectorAll('[data-rmtalvez]').forEach(btn=>{
+        btn.onclick=async()=>{
+          const i=+btn.dataset.rmtalvez;
+          TALVEZ.splice(i,1);
+          renderTalvez();
+          await salvarTalvez();
+        };
+      });
+      const formRow=el(`<div class="gform">
+        <input type="text" id="talvez-novo" placeholder="Novo destino (ex: Croácia)" style="flex:1;min-width:160px">
+        <button class="add" id="talvez-add" style="width:auto;padding:8px 18px">+ Adicionar</button>
+      </div>`);
+      bodyT.appendChild(formRow);
+      formRow.querySelector('#talvez-add').onclick=async()=>{
+        const input=formRow.querySelector('#talvez-novo');
+        const nome=input.value.trim();
+        if(!nome) return;
+        TALVEZ.push(nome);
+        renderTalvez();
+        await salvarTalvez();
+      };
+      formRow.querySelector('#talvez-novo').addEventListener('keydown', e=>{
+        if(e.key==='Enter'){ e.preventDefault(); formRow.querySelector('#talvez-add').click(); }
+      });
+    }
+    renderTalvez();
     cont.appendChild(accT);
   }
   return wrap;
+}
+
+async function salvarTalvez(){
+  try{ await setDoc(doc(dbFs,'config','talvez'), {itens: TALVEZ}); }
+  catch(e){ console.error('Erro ao salvar Talvez:',e); }
 }
 
 async function salvarCustoExtra(item){
@@ -1176,10 +1210,11 @@ function pageRoteiroDetalhado(){
       return;
     }
     if(e.target.dataset.rm){
-      if(!confirm(`Remover ${PAISES_DB[e.target.dataset.rm].nome} do roteiro?`))return;
+      if(!confirm(`Remover ${PAISES_DB[e.target.dataset.rm].nome} do roteiro? As datas dos países seguintes serão recalculadas para fechar o espaço.`))return;
       const id=e.target.dataset.rm;
       PAISES_INDEX=PAISES_INDEX.filter(x=>x!==id);
       delete PAISES_DB[id]; novosIdsDet.delete(id);
+      reconstruirCronogramaCompleto();
       marcarPendenteDet(); renderDet(capturarEstadoAberto());
     }
     if(e.target.dataset.rmcid){
@@ -1605,6 +1640,12 @@ async function carregarDoFirestore(){
     const gastosSnap = await getDocs(collection(dbFs,'gastos_realizados'));
     GASTOS_REALIZADOS = [];
     gastosSnap.forEach(d=>{ GASTOS_REALIZADOS.push({id:d.id, ...d.data()}); });
+
+    // Talvez
+    const talvezSnap = await getDoc(doc(dbFs,'config','talvez'));
+    if(talvezSnap.exists() && Array.isArray(talvezSnap.data().itens)){
+      TALVEZ = talvezSnap.data().itens;
+    }
   }catch(e){
     console.error('Erro ao carregar do Firestore, usando dados locais:', e);
   }
@@ -1618,6 +1659,7 @@ async function semear(){
     for(let i=0;i<VACINAS.length;i++) await setDoc(doc(dbFs,'vacinas',String(i)), VACINAS[i]);
     for(let i=0;i<PREP.length;i++) await setDoc(doc(dbFs,'prep',String(i)), PREP[i]);
     await setDoc(doc(dbFs,'config','prep_index'), {total: PREP.length});
+    await setDoc(doc(dbFs,'config','talvez'), {itens: TALVEZ});
   }catch(e){console.error('Erro ao semear Firestore:',e)}
 }
 
