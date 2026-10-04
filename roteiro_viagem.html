@@ -204,12 +204,12 @@ body{background:var(--bg);color:var(--tx);font-family:var(--f);font-size:14px;li
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-<div class="hd"><div class="t">🌍 Roteiro Detalhado</div><div class="s" id="hd-sub">01/04/2027 → 31/03/2028 (viagem termina 14/01/28, 77d de buffer) · 41 destinos · Orçamento R$160mil</div></div>
+<div class="hd"><div class="t">🌍 Roteiro Detalhado</div><div class="s" id="hd-sub">01/04/2027 → 31/03/2028 (viagem termina 14/01/28, 77d de buffer) · 41 destinos · Orçamento R$200mil</div></div>
 <div class="tabs" id="tabs"></div>
 <div id="pages"></div>
 
 <script type="module">
-const META={inicio:"2027-04-01",fim:"2028-04-30",orcamento:160000,schengen_max:90};
+const META={inicio:"2027-04-01",fim:"2028-04-30",orcamento:200000,schengen_max:90};
 const FLAGS={MA:"🇲🇦",PT:"🇵🇹",ES:"🇪🇸",FR1:"🇫🇷",MC:"🇲🇨",IT1:"🇮🇹",AT1:"🇦🇹",SK:"🇸🇰",AT2:"🇦🇹",DE1:"🇩🇪",DK:"🇩🇰",SE:"🇸🇪",NO:"🇳🇴",IS:"🇮🇸",IE:"🇮🇪",GB:"🇬🇧",NL:"🇳🇱",BE:"🇧🇪",LU:"🇱🇺",FR2:"🇫🇷",CH:"🇨🇭",FR3:"🇫🇷",IT2:"🇮🇹",AL:"🇦🇱",GR:"🇬🇷",TR:"🇹🇷",EG:"🇪🇬",AE:"🇦🇪",NP:"🇳🇵",CN:"🇨🇳",VN:"🇻🇳",PH:"🇵🇭",SG:"🇸🇬",ID:"🇮🇩",ZA:"🇿🇦",TZ:"🇹🇿",TH:"🇹🇭",AU:"🇦🇺",NZ:"🇳🇿",JP:"🇯🇵",KR:"🇰🇷"};
 const DESC={MA:"Primavera ideal. Marrakech.",PT:"Lisboa. Primavera amena.",ES:"Madrid, Barcelona. Trens AVE.",FR1:"Marselha, Nice. Riviera Francesa.",MC:"Monte Carlo — cassino. 1 dia.",IT1:"Milão, Veneza.",AT1:"Viena — palácios, ópera.",SK:"Bratislava — 1h de Viena.",AT2:"Viena (retorno).",DE1:"Munique, Berlim.",DK:"Copenhague.",SE:"Estocolmo.",NO:"Oslo, Bergen.",IS:"Reykjavik — início do verão escandinavo.",IE:"7 dias — Dublin. Fora Schengen.",GB:"15 dias — Edimburgo, Londres. Fora Schengen. Verão.",NL:"Amsterdã.",BE:"Bruxelas.",LU:"Cidade de Luxemburgo.",FR2:"Paris.",CH:"Zurique.",FR3:"Lyon.",IT2:"12 dias — Turim, Florença, Roma, Nápoles, Bari. Calor de verão.",AL:"7 dias — Durrës, Berat, Gjirokastër, Ksamil/Dhërmi. Fora Schengen.",GR:"Meteora, Trikala, Atenas, Mykonos/Santorini, Chios.",TR:"Çeşme, Izmir, Pamukkale, Capadócia, Istambul.",EG:"Cairo. Hijab recomendado em templos.",AE:"Dubai. Hijab só em mesquitas.",NP:"Pokhara, Katmandu.",CN:"Pequim, Xian, Xangai, Guilin. VPN necessário.",VN:"Hanói, Hạ Long Bay, Hội An.",PH:"Manila, Palawan, Cebu, Bohol.",SG:"Singapura.",ID:"Bali, Komodo, Yogyakarta, Lombok.",ZA:"Cidade do Cabo.",TZ:"Zanzibar, Arusha, Ngorongoro, Serengeti, Mwanza, Dar es Salaam. Hijab indicado em Zanzibar fora das praias.",TH:"Bangkok, Chiang Mai, Krabi.",AU:"Gold Coast — casa da Michele 🏠, máx 15 dias.",NZ:"Auckland, Rotorua, Queenstown, Milford Sound.",JP:"Tóquio, Quioto, Osaka, Hiroshima, Fukuoka.",KR:"Busan, Seul."};
 
@@ -1058,6 +1058,7 @@ function pageRoteiroDetalhado(){
     <div class="mrow" style="background:var(--surf);border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;margin-bottom:16px">
       <div class="mfld"><label>Início da viagem</label><input type="date" id="det-meta-ini" value="${META.inicio}"></div>
       <div class="mfld"><label>Fim da viagem (limite)</label><input type="date" id="det-meta-fim" value="${META.fim}"></div>
+      <div class="mfld"><label>Orçamento (R$)</label><input type="number" id="det-meta-orc" min="0" step="1000" value="${META.orcamento}" style="width:110px"></div>
       <div class="mfld" style="flex:1;min-width:200px"><label>Duração total planejada</label><span id="det-meta-dur" style="font-family:var(--m);font-size:13px;color:var(--ok);padding:6px 0;display:inline-block"></span></div>
     </div>
     <div class="sect">Países do roteiro <span id="det-cnt" style="color:var(--dim)"></span></div>
@@ -1092,6 +1093,7 @@ function pageRoteiroDetalhado(){
     $$('#det-cnt').textContent=`(${PAISES_INDEX.length})`;
     if($$('#det-meta-ini')) $$('#det-meta-ini').value=META.inicio;
     if($$('#det-meta-fim')) $$('#det-meta-fim').value=META.fim;
+    if($$('#det-meta-orc')) $$('#det-meta-orc').value=META.orcamento;
     if($$('#det-meta-dur')){
       const ultimoId=PAISES_INDEX[PAISES_INDEX.length-1];
       const ultimoFim=ultimoId && PAISES_DB[ultimoId] ? PAISES_DB[ultimoId].fim : META.inicio;
@@ -1285,6 +1287,16 @@ function pageRoteiroDetalhado(){
       META.inicio=e.target.value;
       reconstruirCronogramaCompleto();
       marcarPendenteDet(); renderDet(capturarEstadoAberto()); return;
+    }
+    if(e.target.id==='det-meta-orc'){
+      const v=parseFloat(e.target.value);
+      if(!v || v<=0){ alert('Informe um orçamento válido.'); e.target.value=META.orcamento; return; }
+      META.orcamento=v;
+      // salva direto (é um valor único de configuração) e atualiza cabeçalho e aba Custos
+      (async()=>{ try{ await setDoc(doc(dbFs,'config','meta'), META); }catch(err){ console.error('Erro ao salvar orçamento:',err); alert('Erro ao salvar o orçamento — tente novamente.'); } })();
+      atualizarHeader();
+      const pgC=$('#pg-custos'); if(pgC){ pgC.innerHTML=''; pgC.appendChild(pageCustos()); }
+      return;
     }
     if(e.target.id==='det-meta-fim'){
       META.fim=e.target.value;
@@ -1668,6 +1680,11 @@ async function carregarDoFirestore(){
     Object.keys(PAISES_DB).forEach(k=>delete PAISES_DB[k]);
     Object.assign(PAISES_DB, novoDb);
     if(metaSnap.exists()) Object.assign(META, metaSnap.data());
+    // Migração única: o banco ainda guardava o orçamento antigo (R$160.000) — atualiza para o valor atual (R$200.000).
+    if(META.orcamento===160000){
+      META.orcamento=200000;
+      try{ await setDoc(doc(dbFs,'config','meta'), META); }catch(e){ console.error('Erro ao migrar orçamento:',e); }
+    }
 
     // Vacinas
     const vacSnap = await getDocs(collection(dbFs,'vacinas'));
